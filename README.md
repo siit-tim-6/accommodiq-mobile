@@ -1,1 +1,1 @@
-# booking-mobile
+# accommodiq-mobile
