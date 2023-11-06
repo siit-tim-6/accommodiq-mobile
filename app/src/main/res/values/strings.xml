@@ -5,7 +5,8 @@
     <string name="register_headline">Register</string>
     <string name="alredy_have_account">Already have an account?</string>
     <string name="login_headline">Login</string>
-    <string name="create_account">Don\'t have an account?</string>
+    <string name="create_account_question">Don\'t have an account?</string>
+    <string name="create_account">Create account</string>
     <string name="register_btn_text">Register</string>
     <string name="login_btn_text">Login</string>
 </resources>
