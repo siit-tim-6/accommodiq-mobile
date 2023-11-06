@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">AccommodIQ</string>
     <string name="welcome_header">Welcome to AccommodIQ</string>
-    <string name="welcome_subheader">Stay connected with your friends.</string>
+    <string name="welcome_subheader">Find the best appartment for you.</string>
     <string name="register_headline">Register</string>
     <string name="alredy_have_account">Already have an account?</string>
     <string name="login_headline">Login</string>
@@ -9,4 +9,5 @@
     <string name="create_account">Create account</string>
     <string name="register_btn_text">Register</string>
     <string name="login_btn_text">Login</string>
+    <string name="get_started_btn">Get Started</string>
 </resources>
