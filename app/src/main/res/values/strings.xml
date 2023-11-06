@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AccommodIQ</string>
+    <string name="welcome_header">Welcome to AccommodIQ</string>
+    <string name="welcome_subheader">Stay connected with your friends.</string>
 </resources>
