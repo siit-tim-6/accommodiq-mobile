@@ -27,19 +27,23 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
+        android:autofillHints="emailAddress"
         android:background="@drawable/input_bg"
-        android:drawableLeft="@drawable/ic_email"
+        android:drawableStart="@drawable/ic_email"
         android:drawablePadding="10dp"
         android:ems="10"
         android:hint="Email"
-        android:inputType="text"
-        android:paddingLeft="20dp"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginHeadline" />
+        app:layout_constraintTop_toBottomOf="@+id/loginHeadline"
+        tools:ignore="HardcodedText"
+        app:layout_constraintWidth_max="400dp"/>
 
     <EditText
         android:id="@+id/inputPassword"
@@ -47,30 +51,33 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/input_bg"
-        android:drawableLeft="@drawable/ic_security"
+        android:drawableStart="@drawable/ic_security"
         android:drawablePadding="10dp"
         android:ems="10"
         android:hint="Password"
-        android:inputType="text"
-        android:paddingLeft="20dp"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         app:layout_constraintEnd_toEndOf="@+id/inputEmail"
         app:layout_constraintStart_toStartOf="@+id/inputEmail"
-        app:layout_constraintTop_toBottomOf="@+id/inputEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/inputEmail"
+        tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/loginBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:backgroundTint="@color/black"
         android:text="@string/login_btn_text"
         app:layout_constraintEnd_toEndOf="@+id/inputPassword"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/inputPassword"
-        app:layout_constraintTop_toBottomOf="@+id/inputPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/inputPassword"
+        app:layout_constraintWidth_max="300dp" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -87,14 +94,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/create_account_question" />
+            android:text="@string/create_account_question"
+            />
 
         <TextView
             android:id="@+id/createAccountTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/create_account"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,7 +7,7 @@
     <string name="login_headline">Login</string>
     <string name="create_account_question">Don\'t have an account?</string>
     <string name="create_account">Create account</string>
-    <string name="register_btn_text">Register</string>
-    <string name="login_btn_text">Login</string>
+    <string name="register_btn_text">Sign up</string>
+    <string name="login_btn_text">Sign in</string>
     <string name="get_started_btn">Get Started</string>
 </resources>
