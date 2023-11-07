@@ -19,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.13" />
+        app:layout_constraintVertical_bias="0.050000012" />
 
     <EditText
         android:id="@+id/inputEmail"
@@ -29,18 +29,22 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/input_bg"
-        android:drawableLeft="@drawable/ic_email"
+        android:drawableStart="@drawable/ic_email"
         android:drawablePadding="10dp"
         android:ems="10"
         android:hint="Email"
-        android:inputType="text"
-        android:paddingLeft="20dp"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerHeadline" />
+        app:layout_constraintTop_toBottomOf="@+id/registerHeadline"
+        android:autofillHints="emailAddress"
+        tools:ignore="HardcodedText"
+        app:layout_constraintWidth_max="400dp"/>
 
     <EditText
         android:id="@+id/inputPassword"
@@ -48,18 +52,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/input_bg"
-        android:drawableLeft="@drawable/ic_security"
+        android:drawableStart="@drawable/ic_security"
         android:drawablePadding="10dp"
         android:ems="10"
         android:hint="Password"
-        android:inputType="text"
-        android:paddingLeft="20dp"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         app:layout_constraintEnd_toEndOf="@+id/inputEmail"
         app:layout_constraintStart_toStartOf="@+id/inputEmail"
-        app:layout_constraintTop_toBottomOf="@+id/inputEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/inputEmail"
+        tools:ignore="HardcodedText"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/inputRepeatPassword"
@@ -67,18 +74,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/input_bg"
-        android:drawableLeft="@drawable/ic_security"
+        android:drawableStart="@drawable/ic_security"
         android:drawablePadding="10dp"
         android:ems="10"
         android:hint="Repeat Password"
-        android:inputType="text"
-        android:paddingLeft="20dp"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         app:layout_constraintEnd_toEndOf="@+id/inputPassword"
         app:layout_constraintStart_toStartOf="@+id/inputPassword"
-        app:layout_constraintTop_toBottomOf="@+id/inputPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/inputPassword"
+        android:importantForAutofill="no"
+        tools:ignore="HardcodedText" />
 
     <EditText
         android:id="@+id/inputFirstName"
@@ -86,18 +96,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/input_bg"
-        android:drawableLeft="@drawable/ic_person"
+        android:drawableStart="@drawable/ic_person"
         android:drawablePadding="10dp"
         android:ems="10"
         android:hint="First Name"
         android:inputType="text"
-        android:paddingLeft="20dp"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         app:layout_constraintEnd_toEndOf="@+id/inputRepeatPassword"
         app:layout_constraintStart_toStartOf="@+id/inputRepeatPassword"
-        app:layout_constraintTop_toBottomOf="@+id/inputRepeatPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/inputRepeatPassword"
+        android:importantForAutofill="no"
+        tools:ignore="HardcodedText" />
 
     <EditText
         android:id="@+id/inputLastName"
@@ -105,18 +118,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/input_bg"
-        android:drawableLeft="@drawable/ic_person"
+        android:drawableStart="@drawable/ic_person"
         android:drawablePadding="10dp"
         android:ems="10"
         android:hint="Last Name"
         android:inputType="text"
-        android:paddingLeft="20dp"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         app:layout_constraintEnd_toEndOf="@+id/inputFirstName"
         app:layout_constraintStart_toStartOf="@+id/inputFirstName"
-        app:layout_constraintTop_toBottomOf="@+id/inputFirstName" />
+        app:layout_constraintTop_toBottomOf="@+id/inputFirstName"
+        android:importantForAutofill="no"
+        tools:ignore="HardcodedText" />
 
     <EditText
         android:id="@+id/inputAddress"
@@ -124,18 +140,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/input_bg"
-        android:drawableLeft="@drawable/ic_address"
+        android:drawableStart="@drawable/ic_address"
         android:drawablePadding="10dp"
         android:ems="10"
         android:hint="Address"
         android:inputType="text"
-        android:paddingLeft="20dp"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         app:layout_constraintEnd_toEndOf="@+id/inputLastName"
         app:layout_constraintStart_toStartOf="@+id/inputLastName"
-        app:layout_constraintTop_toBottomOf="@+id/inputLastName" />
+        app:layout_constraintTop_toBottomOf="@+id/inputLastName"
+        tools:ignore="HardcodedText"
+        android:autofillHints="postalAddress" />
 
     <EditText
         android:id="@+id/inputPhoneNumber"
@@ -143,18 +162,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/input_bg"
-        android:drawableLeft="@drawable/ic_phone_contact"
+        android:drawableStart="@drawable/ic_phone_contact"
         android:drawablePadding="10dp"
         android:ems="10"
         android:hint="Phone number"
-        android:inputType="text"
-        android:paddingLeft="20dp"
+        android:inputType="phone"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         app:layout_constraintEnd_toEndOf="@+id/inputAddress"
         app:layout_constraintStart_toStartOf="@+id/inputAddress"
-        app:layout_constraintTop_toBottomOf="@+id/inputAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/inputAddress"
+        tools:ignore="HardcodedText"
+        android:autofillHints="phone" />
 
     <Button
         android:id="@+id/registerBtn"
@@ -165,17 +187,20 @@
         android:text="@string/register_btn_text"
         app:layout_constraintEnd_toEndOf="@+id/inputPhoneNumber"
         app:layout_constraintStart_toStartOf="@+id/inputPhoneNumber"
-        app:layout_constraintTop_toBottomOf="@+id/inputPhoneNumber" />
+        app:layout_constraintTop_toBottomOf="@+id/inputPhoneNumber"
+        app:layout_constraintWidth_max="300dp"/>
 
     <TextView
         android:id="@+id/alreadyHaveAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="@string/alredy_have_account"
+        android:text="@string/already_have_account"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/registerBtn"
         app:layout_constraintStart_toStartOf="@+id/registerBtn"
-        app:layout_constraintTop_toBottomOf="@+id/registerBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/registerBtn"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
