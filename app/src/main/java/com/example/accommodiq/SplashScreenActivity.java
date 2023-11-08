@@ -38,7 +38,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     private void navigateToWelcomeScreenAfterDelay(int delayMilliseconds) {
-        new Handler(Looper.getMainLooper()).postDelayed((Runnable) this::navigateToWelcomeScreen,delayMilliseconds);
+        new Handler(Looper.getMainLooper()).postDelayed(this::navigateToWelcomeScreen,delayMilliseconds);
     }
 
     private void openWifiSettings() {
