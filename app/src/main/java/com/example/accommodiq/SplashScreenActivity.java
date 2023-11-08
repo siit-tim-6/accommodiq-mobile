@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.widget.Toast;
 
@@ -22,21 +24,22 @@ public class SplashScreenActivity extends AppCompatActivity {
         int SPLASH_TIME_OUT=5000;
 
         if(isConnectedToInternet()){
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(SplashScreenActivity.this, WelcomeScreenActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            },SPLASH_TIME_OUT);
+            new Handler(Looper.getMainLooper()).postDelayed((Runnable) () -> navigateToWelcomeScreen(),SPLASH_TIME_OUT);
         }else {
             Toast.makeText(this, "Device is not connected to the internet.", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
             startActivity(intent);
         }
+    }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isConnectedToInternet()) {
+            navigateToWelcomeScreen();
+        }else {
+            Toast.makeText(this, "Device is still not connected to the internet.The App will be closed soon!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private boolean isConnectedToInternet() {
@@ -46,5 +49,11 @@ public class SplashScreenActivity extends AppCompatActivity {
         return networkCapabilities != null &&
                 (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
                         networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI));
+    }
+
+    private void navigateToWelcomeScreen() {
+        Intent intent = new Intent(SplashScreenActivity.this, WelcomeScreenActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
