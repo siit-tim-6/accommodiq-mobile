@@ -13,6 +13,6 @@ public class WelcomeScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome_screen);
         TextView signUpBtn = findViewById(R.id.getStartedBtn);
-        signUpBtn.setOnClickListener(view -> startActivity(new Intent(WelcomeScreenActivity.this,RegisterActivity.class)));
+        signUpBtn.setOnClickListener(view -> startActivity(new Intent(WelcomeScreenActivity.this,LoginActivity.class)));
     }
 }
