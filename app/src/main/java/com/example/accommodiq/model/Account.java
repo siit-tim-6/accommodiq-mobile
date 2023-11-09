@@ -1,5 +1,7 @@
 package com.example.accommodiq.model;
 
+import androidx.annotation.NonNull;
+
 public class Account {
     private String email;
     private String password;
@@ -43,7 +45,7 @@ public class Account {
         return phoneNumber;
     }
 
-    // Setter methods (optional, depending on your use case)
+    // Create setter for each field
     public void setEmail(String email) {
         this.email = email;
     }
@@ -66,6 +68,20 @@ public class Account {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    // Create toString() method
+    @NonNull
+    @Override
+    public String toString() {
+        return "Account{" +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", address='" + address + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
     }
 }
 
