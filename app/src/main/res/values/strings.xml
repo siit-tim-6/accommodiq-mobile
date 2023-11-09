@@ -17,4 +17,6 @@
     <string name="title_favorites">Favorites</string>
     <string name="title_search">Search</string>
     <string name="title_my_profile">My Profile</string>
+    <string name="title_manage_profile">Manage profile</string>
+    <string name="confirm">Confirm</string>
 </resources>
