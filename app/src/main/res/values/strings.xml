@@ -10,4 +10,11 @@
     <string name="register_btn_text">Sign up</string>
     <string name="login_btn_text">Sign in</string>
     <string name="get_started_btn">Get Started</string>
+
+    <!--Navigation strings-->
+    <string name="title_reservations">Reservations</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_favorites">Favorites</string>
+    <string name="title_search">Search</string>
+    <string name="title_my_profile">My Profile</string>
 </resources>
