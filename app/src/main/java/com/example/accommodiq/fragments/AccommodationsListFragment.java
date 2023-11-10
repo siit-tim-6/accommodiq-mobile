@@ -32,7 +32,7 @@ public class AccommodationsListFragment extends ListFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceBundle) {
-        return inflater.inflate(R.layout.fragment_accommodation_list, container, false).getRootView();
+        return inflater.inflate(R.layout.fragment_accommodations_list, container, false);
     }
 
     @Override
