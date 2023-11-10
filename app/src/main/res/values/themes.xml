@@ -6,4 +6,9 @@
     </style>
 
     <style name="Theme.AccommodIQ" parent="Base.Theme.AccommodIQ" />
+    
+    <style name="roundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">15dp</item>
+    </style>
 </resources>
