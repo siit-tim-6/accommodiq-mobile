@@ -16,13 +16,13 @@ import com.example.accommodiq.models.Accommodation;
 
 import java.util.ArrayList;
 
-public class AccommodationListFragment extends ListFragment {
+public class AccommodationsListFragment extends ListFragment {
     private AccommodationListAdapter adapter;
     private static final String ARG_PARAM = "accommodation_list";
     private ArrayList<Accommodation> accommodations;
 
-    public static AccommodationListFragment newInstance(ArrayList<Accommodation> accommodations) {
-        AccommodationListFragment fragment = new AccommodationListFragment();
+    public static AccommodationsListFragment newInstance(ArrayList<Accommodation> accommodations) {
+        AccommodationsListFragment fragment = new AccommodationsListFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(ARG_PARAM, accommodations);
         fragment.setArguments(args);
