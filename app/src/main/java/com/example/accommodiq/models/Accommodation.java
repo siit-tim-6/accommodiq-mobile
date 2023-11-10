@@ -5,8 +5,6 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-import kotlinx.coroutines.channels.ProduceKt;
-
 public class Accommodation implements Parcelable {
     private long id;
     private String title;
@@ -16,10 +14,11 @@ public class Accommodation implements Parcelable {
     private String location;
     private int minGuests;
     private int maxGuests;
-    private String imageUrl;
+    // for demonstration purposes only, will be an URL later
+    private int image;
     private double price;
 
-    public Accommodation(long id, String title, String description, double rating, int reviewCount, String location, int minGuests, int maxGuests, String imageUrl, double price) {
+    public Accommodation(long id, String title, String description, double rating, int reviewCount, String location, int minGuests, int maxGuests, int image, double price) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -28,7 +27,7 @@ public class Accommodation implements Parcelable {
         this.location = location;
         this.minGuests = minGuests;
         this.maxGuests = maxGuests;
-        this.imageUrl = imageUrl;
+        this.image = image;
         this.price = price;
     }
 
@@ -45,7 +44,7 @@ public class Accommodation implements Parcelable {
         location = in.readString();
         minGuests = in.readInt();
         maxGuests = in.readInt();
-        imageUrl = in.readString();
+        image = in.readInt();
         price = in.readDouble();
     }
 
@@ -113,12 +112,12 @@ public class Accommodation implements Parcelable {
         this.maxGuests = maxGuests;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public int getImage() {
+        return image;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(int image) {
+        this.image = image;
     }
 
     public double getPrice() {
@@ -144,7 +143,7 @@ public class Accommodation implements Parcelable {
         parcel.writeString(location);
         parcel.writeInt(minGuests);
         parcel.writeInt(maxGuests);
-        parcel.writeString(imageUrl);
+        parcel.writeInt(image);
         parcel.writeDouble(price);
     }
 
