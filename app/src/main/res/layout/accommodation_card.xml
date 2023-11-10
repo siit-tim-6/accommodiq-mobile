@@ -1,6 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="250dp"
+    android:background="@drawable/border_background"
+    android:padding="10dp"
+    android:id="@+id/accommodation_card_item"
+    android:orientation="horizontal"
+    >
+    <ImageView
+        android:id="@+id/accommodation_image"
+        android:layout_width="170dp"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/city_center_apartment"
+        app:srcCompat="@drawable/accommodation_image"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/accommodation_title"
+            android:fontFamily="@font/inter"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:text="@string/city_center_apartment"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="horizontal">
+            <RatingBar
+                android:layout_weight="3"
+                android:layout_width="0dp"
+                android:layout_height="19dp"
+                style="?android:attr/ratingBarStyleSmall"
+                android:numStars="5"
+                android:rating="4.92"
+                android:max="5"
+                android:id="@+id/accommodation_rating_stars"
+                />
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/rating"
+                android:fontFamily="@font/inter"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:id="@+id/accommodation_rating"/>
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/review_count"
+                android:fontFamily="@font/inter"
+                android:textFontWeight="100"
+                android:id="@+id/accommodation_review_count"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="19dp"
+            android:layout_margin="5dp"
+            android:text="@string/location_address"
+            android:id="@+id/accommodation_location"/>
+
+    </LinearLayout>
+</LinearLayout>
