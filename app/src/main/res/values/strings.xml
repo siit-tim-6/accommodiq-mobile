@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">AccommodIQ</string>
+    <string name="city_center_apartment">City Center Apartment</string>
+    <string name="location_address">Mileticeva 23, 21000 Novi Sad, Serbia</string>
+    <string name="rating">4.92</string>
+    <string name="review_count">(390)</string>
 </resources>
