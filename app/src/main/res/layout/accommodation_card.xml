@@ -8,13 +8,13 @@
     android:id="@+id/accommodation_card_item"
     android:orientation="horizontal"
     >
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/accommodation_image"
         android:layout_width="170dp"
         android:layout_height="match_parent"
         android:contentDescription="@string/city_center_apartment"
         app:srcCompat="@drawable/accommodation_image"
-        />
+        app:shapeAppearanceOverlay="@style/roundedImageView"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
