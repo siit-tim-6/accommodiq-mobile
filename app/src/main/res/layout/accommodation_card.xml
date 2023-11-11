@@ -23,11 +23,11 @@
             android:id="@+id/accommodation_title"
             android:fontFamily="@font/inter"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="@string/city_center_apartment"
-            android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,40 +35,78 @@
             android:layout_margin="5dp"
             android:orientation="horizontal">
             <RatingBar
-                android:layout_weight="3"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="19dp"
                 style="?android:attr/ratingBarStyleSmall"
                 android:numStars="5"
                 android:rating="4.92"
                 android:max="5"
+                android:progressTint="@color/black"
                 android:id="@+id/accommodation_rating_stars"
+                android:paddingTop="2dp"
                 />
             <TextView
-                android:layout_weight="1"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/rating"
                 android:fontFamily="@font/inter"
                 android:textStyle="bold"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:textAlignment="center"
                 android:id="@+id/accommodation_rating"/>
             <TextView
-                android:layout_weight="1"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/review_count"
                 android:fontFamily="@font/inter"
                 android:textFontWeight="100"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:id="@+id/accommodation_review_count"/>
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="19dp"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="@string/location_address"
-            android:id="@+id/accommodation_location"/>
+            android:id="@+id/accommodation_location"
+            app:drawableStartCompat="@drawable/location_icon"
+            android:drawablePadding="2dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/guests"
+            app:drawableStartCompat="@drawable/guest_icon"
+            android:drawablePadding="2dp"
+            android:id="@+id/accommodation_guests"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/price_per_night"
+                android:fontFamily="@font/inter"
+                android:id="@+id/accommodation_price_per_night"/>
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/total_price"
+                android:fontFamily="@font/inter"
+                android:textStyle="bold"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textAlignment="textEnd"
+                android:id="@+id/accommodation_total_price"/>
+        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>
