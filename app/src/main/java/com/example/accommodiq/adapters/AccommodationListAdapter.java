@@ -58,15 +58,25 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
         TextView ratingTextView = convertView.findViewById(R.id.accommodation_rating);
         TextView reviewCountTextView = convertView.findViewById(R.id.accommodation_review_count);
         TextView locationTextView = convertView.findViewById(R.id.accommodation_location);
+        TextView guestsTextView = convertView.findViewById(R.id.accommodation_guests);
+        TextView pricePerNightTextView = convertView.findViewById(R.id.accommodation_price_per_night);
+        TextView totalPriceTextView = convertView.findViewById(R.id.accommodation_total_price);
 
         if (accommodation != null) {
             String reviewCount = "(" + accommodation.getReviewCount() + ")";
+            String guests = accommodation.getMinGuests() + "-" + accommodation.getMaxGuests() + " guests";
+            String pricePerNight = accommodation.getPrice() + "€ / night";
+            String totalPrice = accommodation.getPrice() + "€ total";
+
             imageView.setImageResource(accommodation.getImage());
             titleTextView.setText(accommodation.getTitle());
             ratingBar.setRating(((float) accommodation.getRating()));
             ratingTextView.setText(String.valueOf(accommodation.getRating()));
             reviewCountTextView.setText(reviewCount);
             locationTextView.setText(accommodation.getLocation());
+            guestsTextView.setText(guests);
+            pricePerNightTextView.setText(pricePerNight);
+            totalPriceTextView.setText(totalPrice);
             accommodationCard.setOnClickListener(v -> {
                 Log.i("AccommodIQ", "Clicked: " + accommodation.getTitle() + ", id: " + accommodation.getId());
                 Toast.makeText(getContext(), "Clicked: " + accommodation.getTitle() + ", id: " + accommodation.getId(),
