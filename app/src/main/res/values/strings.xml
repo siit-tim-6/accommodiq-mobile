@@ -7,4 +7,14 @@
     <string name="guests">2–4 guests</string>
     <string name="price_per_night">45€ / night</string>
     <string name="total_price">450€ total</string>
+    <string name="favorite_button">Favorite button</string>
+    <string name="host">Hosted by John Doe</string>
+    <string name="wifi">Wi-Fi</string>
+    <string name="ac">AC</string>
+    <string name="free_parking">Free parking</string>
+    <string name="description">Welcome to our stylish urban haven in the heart of the city center.
+        This contemporary accommodation seamlessly combines modern comfort with city energy. Step into tastefully designed rooms with sleek furnishings,
+        offering both convenience and style. Enjoy city views, stay connected with high-speed Wi-Fi, and relax in the rooftop terrace with a panoramic cityscape.
+        Whether for business or leisure, our prime location ensures easy access to the city\'s best dining, shopping, and entertainment.
+        Immerse yourself in the urban experience at our chic retreat.</string>
 </resources>
