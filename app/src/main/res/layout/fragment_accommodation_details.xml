@@ -1,6 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/accommodation_image"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:contentDescription="@string/city_center_apartment"
+                app:srcCompat="@drawable/accommodation_image"
+                app:shapeAppearanceOverlay="@style/roundedImageView"
+                android:scaleType="centerCrop"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/heart_icon"
+                android:background=""
+                android:layout_gravity="end"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:contentDescription="@string/favorite_button" />
+
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
+            android:textStyle="bold"
+            android:text="@string/city_center_apartment"
+            android:textSize="28sp"
+            android:textAlignment="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/host"
+                android:fontFamily="@font/inter"/>
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+                style="?android:attr/ratingBarStyleSmall"
+                android:numStars="5"
+                android:rating="4.92"
+                android:max="5"
+                android:progressTint="@color/black"
+                android:id="@+id/accommodation_details_host_stars"
+                android:paddingTop="2dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rating"
+                android:layout_marginEnd="5dp"
+                android:fontFamily="@font/inter"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/review_count"
+                android:fontFamily="@font/inter"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:gravity="center">
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:numStars="5"
+                android:rating="4.92"
+                android:max="5"
+                android:progressTint="@color/black"
+                android:id="@+id/accommodation_details_rating_stars" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/rating"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/inter"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/review_count"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:fontFamily="@font/inter"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/guests"
+                app:drawableStartCompat="@drawable/guest_icon"
+                android:drawablePadding="2dp"
+                android:fontFamily="@font/inter"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wifi"
+                app:drawableStartCompat="@drawable/wifi_icon"
+                android:drawablePadding="2dp"
+                android:fontFamily="@font/inter"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ac"
+                app:drawableStartCompat="@drawable/ac_icon"
+                android:drawablePadding="2dp"
+                android:fontFamily="@font/inter"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/free_parking"
+                app:drawableStartCompat="@drawable/parking_icon"
+                android:drawablePadding="2dp"
+                android:fontFamily="@font/inter"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/description"
+            android:justificationMode="inter_word"
+            android:fontFamily="@font/inter"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <CalendarView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
