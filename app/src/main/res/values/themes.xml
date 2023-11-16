@@ -1,11 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.AccommodIQ" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my>_light_primary</item> -->
-        <!-- <item name="android:windowIsTranslucent">true</item>-->
-        <item name="android:background">#FFFFFFFF</item>
+    <style name="Base.Theme.AccommodIQ" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:statusBarColor">@color/black</item>
     </style>
-
     <style name="Theme.AccommodIQ" parent="Base.Theme.AccommodIQ" />
 </resources>

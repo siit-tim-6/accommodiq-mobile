@@ -33,7 +33,8 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false"/>
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
     </application>
 
 </manifest>
