@@ -17,4 +17,9 @@
         offering both convenience and style. Enjoy city views, stay connected with high-speed Wi-Fi, and relax in the rooftop terrace with a panoramic cityscape.
         Whether for business or leisure, our prime location ensures easy access to the city\'s best dining, shopping, and entertainment.
         Immerse yourself in the urban experience at our chic retreat.</string>
+    <string name="select_dates">Select date range</string>
+    <string name="date_range">25/12/2022 – 30/12/2022</string>
+    <string name="guests_hint">Guests</string>
+    <string name="reserve">Reserve</string>
+    <string name="reviews">Reviews</string>
 </resources>
