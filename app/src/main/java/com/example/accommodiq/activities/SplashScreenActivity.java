@@ -1,4 +1,4 @@
-package com.example.accommodiq;
+package com.example.accommodiq.activities;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -13,6 +13,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.widget.Toast;
+
+import com.example.accommodiq.R;
 
 public class SplashScreenActivity extends AppCompatActivity {
     int SPLASH_TIME_OUT=5000;

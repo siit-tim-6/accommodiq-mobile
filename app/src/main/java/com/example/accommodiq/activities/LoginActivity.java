@@ -1,12 +1,12 @@
-package com.example.accommodiq;
+package com.example.accommodiq.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.accommodiq.R;
 import com.example.accommodiq.Utility.TextUtilities;
 
 public class LoginActivity extends AppCompatActivity {
@@ -16,7 +16,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         TextView createAccountTextView = findViewById(R.id.createAccountTextView);
-        createAccountTextView.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this,RegisterActivity.class)));
+        createAccountTextView.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
 
         TextUtilities.makeTextUnderlined(createAccountTextView);
     }

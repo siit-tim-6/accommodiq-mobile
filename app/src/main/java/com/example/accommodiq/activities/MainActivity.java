@@ -1,4 +1,4 @@
-package com.example.accommodiq;
+package com.example.accommodiq.activities;
 
 import android.os.Bundle;
 
@@ -8,6 +8,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.accommodiq.R;
 import com.example.accommodiq.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
