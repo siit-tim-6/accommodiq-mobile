@@ -16,11 +16,17 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        setUpAlreadyHaveAccountBtn();
+        setUpCloseBtn();
+    }
 
+    private void setUpAlreadyHaveAccountBtn() {
         TextView alreadyHaveAccountBtn = findViewById(R.id.alreadyHaveAccount);
         alreadyHaveAccountBtn.setOnClickListener(view -> startActivity(new Intent(RegisterActivity.this, LoginActivity.class)));
         TextUtilities.makeTextUnderlined(alreadyHaveAccountBtn);
+    }
 
+    private void setUpCloseBtn() {
         ImageView closeBtn = findViewById(R.id.closeButton);
         closeBtn.setOnClickListener(view -> startActivity(new Intent(RegisterActivity.this, MainActivity.class)));
     }
