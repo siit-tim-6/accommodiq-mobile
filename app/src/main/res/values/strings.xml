@@ -24,6 +24,9 @@
     <string name="reviews">Reviews</string>
     <string name="welcome_header">Welcome to AccommodIQ</string>
     <string name="welcome_subheader">Find the best apartment for you.</string>
+    <string name="guest_radio_btn">Guest</string>
+    <string name="owner_radio_btn">Owner</string>
+    <string name="close_img_description">Close btn</string>
     <string name="register_headline">Registration</string>
     <string name="already_have_account">Already have an account?</string>
     <string name="login_headline">Login</string>
