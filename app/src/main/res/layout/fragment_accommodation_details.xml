@@ -24,11 +24,12 @@
                 android:scaleType="centerCrop"/>
 
             <ImageButton
+                android:id="@+id/favorite_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/heart_icon"
-                android:background=""
                 android:layout_gravity="end"
+                android:background="@android:color/transparent"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
                 android:contentDescription="@string/favorite_button" />
@@ -183,15 +184,116 @@
             android:layout_margin="10dp"
             android:text="@string/description"
             android:justificationMode="inter_word"
-            android:fontFamily="@font/inter"/>
+            android:fontFamily="@font/inter" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
 
-            <CalendarView
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:srcCompat="@drawable/map"
+                android:scaleType="centerCrop"/>
+
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@string/location_address"
+                android:drawablePadding="5dp"
+                app:drawableStartCompat="@drawable/location_icon"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/inter"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/date_range_picker_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select_dates"
+                android:backgroundTint="@color/black"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/inter" />
+
+            <TextView
+                android:id="@+id/date_range_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter"
+                android:text="@string/date_range" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center" >
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/guests_hint"
+                android:textSize="14sp"
+                android:inputType="number"
+                android:fontFamily="@font/inter"
+                android:importantForAutofill="no"
+                android:layout_marginEnd="15dp"
+                android:drawableStart="@drawable/guest_icon"
+                android:drawablePadding="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/price_per_night"
+                android:fontFamily="@font/inter"
+                android:layout_marginEnd="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/total_price"
+                android:fontFamily="@font/inter"
+                android:layout_marginEnd="15dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="10dp">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reserve"
+                android:backgroundTint="@color/black"
+                android:fontFamily="@font/inter" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reviews"
+                android:fontFamily="@font/inter"
+                android:textSize="20sp"/>
 
         </LinearLayout>
 
