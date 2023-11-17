@@ -1,5 +1,6 @@
 package com.example.accommodiq.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,22 +11,27 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 
+import com.example.accommodiq.MainActivity;
 import com.example.accommodiq.R;
+import com.example.accommodiq.fragments.AccommodationDetailsFragment;
+import com.example.accommodiq.fragments.FragmentTransition;
 import com.example.accommodiq.models.Accommodation;
 
 import java.util.ArrayList;
 
 public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
     private ArrayList<Accommodation> accommodations;
+    private Context context;
 
     public AccommodationListAdapter(Context context, ArrayList<Accommodation> accommodations) {
         super(context, R.layout.accommodation_card, accommodations);
         this.accommodations = accommodations;
+        this.context = context;
     }
 
     @Override
@@ -78,9 +84,8 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
             pricePerNightTextView.setText(pricePerNight);
             totalPriceTextView.setText(totalPrice);
             accommodationCard.setOnClickListener(v -> {
-                Log.i("AccommodIQ", "Clicked: " + accommodation.getTitle() + ", id: " + accommodation.getId());
-                Toast.makeText(getContext(), "Clicked: " + accommodation.getTitle() + ", id: " + accommodation.getId(),
-                        Toast.LENGTH_SHORT).show();
+                FragmentTransition.to(AccommodationDetailsFragment.newInstance(), (FragmentActivity) context, true, R.id.fragment_main);
+                Log.i("AccommodIQ", "Clicked accommodation card with id: " + accommodation.getId());
             });
         }
 
