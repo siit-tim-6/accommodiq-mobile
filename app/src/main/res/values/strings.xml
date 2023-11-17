@@ -1,5 +1,27 @@
 <resources>
     <string name="app_name">AccommodIQ</string>
+    <string name="city_center_apartment">City Center Apartment</string>
+    <string name="location_address">Mileticeva 23, 21000 Novi Sad, Serbia</string>
+    <string name="rating">4.92</string>
+    <string name="review_count">(390)</string>
+    <string name="guests">2–4 guests</string>
+    <string name="price_per_night">45€ / night</string>
+    <string name="total_price">450€ total</string>
+    <string name="favorite_button">Favorite button</string>
+    <string name="host">Hosted by John Doe</string>
+    <string name="wifi">Wi-Fi</string>
+    <string name="ac">AC</string>
+    <string name="free_parking">Free parking</string>
+    <string name="description">Welcome to our stylish urban haven in the heart of the city center.
+        This contemporary accommodation seamlessly combines modern comfort with city energy. Step into tastefully designed rooms with sleek furnishings,
+        offering both convenience and style. Enjoy city views, stay connected with high-speed Wi-Fi, and relax in the rooftop terrace with a panoramic cityscape.
+        Whether for business or leisure, our prime location ensures easy access to the city\'s best dining, shopping, and entertainment.
+        Immerse yourself in the urban experience at our chic retreat.</string>
+    <string name="select_dates">Select date range</string>
+    <string name="date_range">25/12/2022 – 30/12/2022</string>
+    <string name="guests_hint">Guests</string>
+    <string name="reserve">Reserve</string>
+    <string name="reviews">Reviews</string>
     <string name="welcome_header">Welcome to AccommodIQ</string>
     <string name="welcome_subheader">Find the best apartment for you.</string>
     <string name="register_headline">Registration</string>
