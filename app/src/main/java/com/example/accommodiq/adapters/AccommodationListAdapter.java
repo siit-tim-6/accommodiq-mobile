@@ -82,7 +82,7 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
             pricePerNightTextView.setText(pricePerNight);
             totalPriceTextView.setText(totalPrice);
             accommodationCard.setOnClickListener(v -> {
-                // FragmentTransition.to(AccommodationDetailsFragment.newInstance(), (FragmentActivity) context, true, R.id.fragment_main);
+                FragmentTransition.to(AccommodationDetailsFragment.newInstance(), (FragmentActivity) context, true, R.id.accommodations_fragment);
                 Log.i("AccommodIQ", "Clicked accommodation card with id: " + accommodation.getId());
             });
         }
