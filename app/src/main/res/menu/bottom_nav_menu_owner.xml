@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_search"
+        android:icon="@drawable/icon_search"
+        android:title="@string/title_search" />
+
+    <item
+        android:id="@+id/navigation_reservations"
+        android:icon="@drawable/icon_listing"
+        android:title="@string/title_reservations" />
+
+
+    <item
+        android:id="@+id/navigation_favorites"
+        android:icon="@drawable/icon_add_accommodation"
+        android:title="@string/title_new_accommodation" />
+
+    <item
+        android:id="@+id/navigation_notifications"
+        android:icon="@drawable/icon_notifications"
+        android:title="@string/title_notifications" />
+
+
+    <item
+        android:id="@+id/navigation_my_profile"
+        android:icon="@drawable/icon_my_profile"
+        android:title="@string/title_my_profile" />
+
+</menu>
