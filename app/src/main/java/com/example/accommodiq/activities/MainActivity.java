@@ -9,28 +9,22 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.databinding.ActivityMainBinding;
-import com.example.accommodiq.models.Accommodation;
 import com.example.accommodiq.models.Account;
 import com.example.accommodiq.services.AccountService;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
-
-    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        com.example.accommodiq.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         Account loggedInAccount = AccountService.getInstance().getLoggedInAccount();
         if (loggedInAccount == null) {
             binding.navView.getMenu().clear();
             binding.navView.inflateMenu(R.menu.bottom_nav_menu_unauthorized);
-            return;
         }
         else {
             switch (loggedInAccount.getAccountType()) {
