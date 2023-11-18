@@ -191,7 +191,8 @@
             app:layout_constraintEnd_toEndOf="@+id/inputPhoneNumber"
             app:layout_constraintStart_toStartOf="@+id/inputPhoneNumber"
             app:layout_constraintTop_toBottomOf="@+id/ChoseRoleRadioGroup"
-            app:layout_constraintWidth_max="300dp" />
+            app:layout_constraintWidth_max="300dp"
+            android:onClick="register"/>
 
         <TextView
             android:id="@+id/alreadyHaveAccount"
