@@ -36,7 +36,11 @@ public class AccountService {
     }
 
     public boolean register(Account account) {
-        if (accounts.contains(account)) return false;
+        boolean emailExists = accounts.stream()
+                .anyMatch(existingAccount -> existingAccount.getEmail().equals(account.getEmail()));
+
+        if (emailExists) return false;
+
         accounts.add(account);
         loggedInAccount = account;
         return true;
