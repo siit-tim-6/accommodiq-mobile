@@ -1,16 +1,16 @@
 package com.example.accommodiq.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.accommodiq.R;
 import com.example.accommodiq.Utility.TextUtilities;
 import com.example.accommodiq.databinding.ActivityLoginBinding;
-import com.example.accommodiq.models.Account;
 import com.example.accommodiq.services.AccountService;
 
 public class LoginActivity extends AppCompatActivity {
@@ -45,8 +45,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setUpCloseBtn() {
         ImageView closeBtn = findViewById(R.id.closeButton);
-        closeBtn.setOnClickListener(view -> {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-        });
+        closeBtn.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, MainActivity.class)));
     }
 }
