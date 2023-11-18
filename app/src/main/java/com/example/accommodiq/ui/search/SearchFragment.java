@@ -5,16 +5,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.accommodiq.MainActivity;
 import com.example.accommodiq.R;
-import com.example.accommodiq.adapters.AccommodationListAdapter;
 import com.example.accommodiq.databinding.FragmentSearchBinding;
 import com.example.accommodiq.fragments.AccommodationsListFragment;
 import com.example.accommodiq.fragments.FragmentTransition;
