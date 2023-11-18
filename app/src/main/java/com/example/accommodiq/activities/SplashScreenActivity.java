@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.example.accommodiq.R;
 
 public class SplashScreenActivity extends AppCompatActivity {
-    int SPLASH_TIME_OUT=5000;
+    int SPLASH_TIME_OUT=2000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
