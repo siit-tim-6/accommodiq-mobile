@@ -25,4 +25,24 @@
     <string name="review_user_name">John Doe</string>
     <string name="review_date">25/12/2022</string>
     <string name="review_content">Perfect city escape! Stylish, central, and cozy. Loved the rooftop views. A gem in the heart of it all!</string>
+    <string name="welcome_header">Welcome to AccommodIQ</string>
+    <string name="welcome_subheader">Find the best apartment for you.</string>
+    <string name="register_headline">Registration</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="login_headline">Login</string>
+    <string name="create_account_question">Don\'t have an account?</string>
+    <string name="create_account">Create account</string>
+    <string name="register_btn_text">Sign up</string>
+    <string name="login_btn_text">Sign in</string>
+    <string name="get_started_btn">Get Started</string>
+
+    <!--Navigation strings-->
+    <string name="title_reservations">Reservations</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_favorites">Favorites</string>
+    <string name="title_search">Search</string>
+    <string name="title_my_profile">My Profile</string>
+    <string name="title_manage_profile">Manage profile</string>
+    <string name="confirm">Confirm</string>
+    <string name="delete_account">Delete Account</string>
 </resources>
