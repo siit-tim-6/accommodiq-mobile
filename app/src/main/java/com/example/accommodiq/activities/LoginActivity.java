@@ -9,20 +9,32 @@ import android.widget.TextView;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.Utility.TextUtilities;
+import com.example.accommodiq.databinding.ActivityLoginBinding;
+import com.example.accommodiq.models.Account;
+import com.example.accommodiq.services.AccountService;
 
 public class LoginActivity extends AppCompatActivity {
+
+    ActivityLoginBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         setUpCreateAccountTextView();
         setUpCloseBtn();
     }
 
     public void logIn(View view) {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
+        String email = binding.inputEmail.getText().toString();
+        String password = binding.inputPassword.getText().toString();
+        if (AccountService.getInstance().logIn(email, password)) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+        } else {
+            binding.inputPassword.setError("Invalid credentials");
+        }
     }
 
     private void setUpCreateAccountTextView() {
@@ -33,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setUpCloseBtn() {
         ImageView closeBtn = findViewById(R.id.closeButton);
-        closeBtn.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, MainActivity.class)));
+        closeBtn.setOnClickListener(view -> {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        });
     }
 }
