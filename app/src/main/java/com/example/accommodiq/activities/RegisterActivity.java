@@ -35,7 +35,10 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void setUpCloseBtn() {
         ImageView closeBtn = findViewById(R.id.closeButton);
-        closeBtn.setOnClickListener(view -> startActivity(new Intent(RegisterActivity.this, MainActivity.class)));
+        closeBtn.setOnClickListener(view -> {
+            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+            AccountService.getInstance().signOut();
+        });
     }
 
     public void register(View view) {

@@ -45,6 +45,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setUpCloseBtn() {
         ImageView closeBtn = findViewById(R.id.closeButton);
-        closeBtn.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, MainActivity.class)));
+        closeBtn.setOnClickListener(view -> {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
+        });
     }
 }
