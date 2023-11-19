@@ -8,13 +8,33 @@
     android:id="@+id/accommodation_card_item"
     android:orientation="horizontal"
     >
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/accommodation_image"
-        android:layout_width="170dp"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/city_center_apartment"
-        app:srcCompat="@drawable/accommodation_image"
-        app:shapeAppearanceOverlay="@style/roundedImageView"/>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/accommodation_image"
+            android:layout_width="170dp"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/city_center_apartment"
+            app:srcCompat="@drawable/accommodation_image"
+            app:shapeAppearanceOverlay="@style/roundedImageView"/>
+
+        <ImageButton
+            android:id="@+id/favorite_button_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/heart_icon"
+            android:layout_gravity="end"
+            android:background="@android:color/transparent"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:contentDescription="@string/favorite_button" />
+
+    </FrameLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

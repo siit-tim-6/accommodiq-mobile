@@ -6,10 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -65,6 +67,7 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
         TextView guestsTextView = convertView.findViewById(R.id.accommodation_guests);
         TextView pricePerNightTextView = convertView.findViewById(R.id.accommodation_price_per_night);
         TextView totalPriceTextView = convertView.findViewById(R.id.accommodation_total_price);
+        ImageButton favoriteButton = convertView.findViewById(R.id.favorite_button_card);
 
         if (accommodation != null) {
             String reviewCount = "(" + accommodation.getReviewCount() + ")";
@@ -81,6 +84,9 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
             guestsTextView.setText(guests);
             pricePerNightTextView.setText(pricePerNight);
             totalPriceTextView.setText(totalPrice);
+            favoriteButton.setOnClickListener(v -> {
+                Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show();
+            });
             accommodationCard.setOnClickListener(v -> {
                 FragmentTransition.to(AccommodationDetailsFragment.newInstance(), (FragmentActivity) context, true, R.id.accommodations_fragment);
                 Log.i("AccommodIQ", "Clicked accommodation card with id: " + accommodation.getId());
