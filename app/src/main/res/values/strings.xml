@@ -27,6 +27,9 @@
     <string name="review_content">Perfect city escape! Stylish, central, and cozy. Loved the rooftop views. A gem in the heart of it all!</string>
     <string name="welcome_header">Welcome to AccommodIQ</string>
     <string name="welcome_subheader">Find the best apartment for you.</string>
+    <string name="guest_radio_btn">Guest</string>
+    <string name="owner_radio_btn">Owner</string>
+    <string name="close_img_description">Close btn</string>
     <string name="register_headline">Registration</string>
     <string name="already_have_account">Already have an account?</string>
     <string name="login_headline">Login</string>
@@ -45,4 +48,7 @@
     <string name="title_manage_profile">Manage profile</string>
     <string name="confirm">Confirm</string>
     <string name="delete_account">Delete Account</string>
+    <string name="title_new_accommodation">New Accommodation</string>
+    <string name="log_in_or_sign_up_btn_text">Log in or Sign up</string>
+    <string name="sign_out">Sign Out</string>
 </resources>

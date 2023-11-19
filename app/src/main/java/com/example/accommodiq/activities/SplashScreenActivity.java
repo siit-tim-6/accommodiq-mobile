@@ -1,4 +1,4 @@
-package com.example.accommodiq;
+package com.example.accommodiq.activities;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -14,8 +14,10 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.widget.Toast;
 
+import com.example.accommodiq.R;
+
 public class SplashScreenActivity extends AppCompatActivity {
-    int SPLASH_TIME_OUT=5000;
+    int SPLASH_TIME_OUT=2000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +40,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     private void navigateToWelcomeScreenAfterDelay(int delayMilliseconds) {
-        new Handler(Looper.getMainLooper()).postDelayed(this::navigateToWelcomeScreen,delayMilliseconds);
+        new Handler(Looper.getMainLooper()).postDelayed(this::navigateToLogin,delayMilliseconds);
     }
 
     private void openWifiSettings() {
@@ -48,8 +50,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         networkSettingsLauncher.launch(intent);
     }
 
-    private void navigateToWelcomeScreen() {
-        Intent intent = new Intent(SplashScreenActivity.this, WelcomeScreenActivity.class);
+    private void navigateToLogin() {
+        Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
@@ -57,8 +59,8 @@ public class SplashScreenActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> registerForNetworkSettings() {
         return registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (isConnectedToInternet()) {
-                navigateToWelcomeScreen();Toast.makeText(this, "Device is connected to the internet successfully.", Toast.LENGTH_SHORT).show();
-                navigateToWelcomeScreen();
+                navigateToLogin();Toast.makeText(this, "Device is connected to the internet successfully.", Toast.LENGTH_SHORT).show();
+                navigateToLogin();
             } else {
                 showNoInternetMessageAndExit();
             }

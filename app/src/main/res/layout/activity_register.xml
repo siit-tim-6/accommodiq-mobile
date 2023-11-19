@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterActivity">
+    tools:context=".activities.RegisterActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -164,6 +164,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:autofillHints="phone"
             android:background="@drawable/input_bg"
             android:drawableStart="@drawable/ic_phone_contact"
             android:drawablePadding="10dp"
@@ -178,8 +179,7 @@
             app:layout_constraintEnd_toEndOf="@+id/inputAddress"
             app:layout_constraintStart_toStartOf="@+id/inputAddress"
             app:layout_constraintTop_toBottomOf="@+id/inputAddress"
-            tools:ignore="HardcodedText"
-            android:autofillHints="phone" />
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/registerBtn"
@@ -190,8 +190,9 @@
             android:text="@string/register_btn_text"
             app:layout_constraintEnd_toEndOf="@+id/inputPhoneNumber"
             app:layout_constraintStart_toStartOf="@+id/inputPhoneNumber"
-            app:layout_constraintTop_toBottomOf="@+id/inputPhoneNumber"
-            app:layout_constraintWidth_max="300dp" />
+            app:layout_constraintTop_toBottomOf="@+id/ChoseRoleRadioGroup"
+            app:layout_constraintWidth_max="300dp"
+            android:onClick="register"/>
 
         <TextView
             android:id="@+id/alreadyHaveAccount"
@@ -207,5 +208,44 @@
             app:layout_constraintTop_toBottomOf="@+id/registerBtn"
             app:layout_constraintVertical_bias="0.0" />
 
+        <ImageView
+            android:id="@+id/closeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_close"
+            android:contentDescription="@string/close_img_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RadioGroup
+            android:id="@+id/ChoseRoleRadioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:layout_marginBottom="13dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/registerBtn"
+            app:layout_constraintEnd_toEndOf="@+id/inputPhoneNumber"
+            app:layout_constraintStart_toStartOf="@+id/inputPhoneNumber"
+            app:layout_constraintTop_toBottomOf="@+id/inputPhoneNumber">
+
+            <RadioButton
+                android:id="@+id/guestRadioBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="5sp"
+                android:paddingEnd="5sp"
+                android:text="@string/guest_radio_btn" />
+
+            <RadioButton
+                android:id="@+id/ownerRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="5sp"
+                android:paddingEnd="5sp"
+                android:text="@string/owner_radio_btn" />
+        </RadioGroup>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
