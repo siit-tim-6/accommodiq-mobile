@@ -50,4 +50,7 @@ public class AccountService {
         return loggedInAccount;
     }
 
+    public void signOut() {
+        loggedInAccount = null;
+    }
 }
