@@ -24,8 +24,8 @@ public class AuthorizedProfileFragment extends Fragment {
     }
 
     private View getAuthorizedUserView(@NonNull LayoutInflater inflater, ViewGroup container) {
-        MyProfileViewModel myProfileViewModel =
-                new ViewModelProvider(this).get(MyProfileViewModel.class);
+        AuthorizedProfileViewModel authorizedProfileViewModel =
+                new ViewModelProvider(this).get(AuthorizedProfileViewModel.class);
 
         binding = FragmentAuthorizedProfileBinding.inflate(inflater, container, false);
 
@@ -40,12 +40,12 @@ public class AuthorizedProfileFragment extends Fragment {
 
         View root = binding.getRoot();
 
-        myProfileViewModel.getEmailLiveData().observe(getViewLifecycleOwner(), binding.inputEmail::setText);
-        myProfileViewModel.getFirstNameLiveData().observe(getViewLifecycleOwner(), binding.inputFirstName::setText);
-        myProfileViewModel.getLastNameLiveData().observe(getViewLifecycleOwner(), binding.inputLastName::setText);
-        myProfileViewModel.getPasswordLiveData().observe(getViewLifecycleOwner(), binding.inputPassword::setText);
-        myProfileViewModel.getPhoneNumberLiveData().observe(getViewLifecycleOwner(), binding.inputPhoneNumber::setText);
-        myProfileViewModel.getAddressLiveData().observe(getViewLifecycleOwner(), binding.inputAddress::setText);
+        authorizedProfileViewModel.getEmailLiveData().observe(getViewLifecycleOwner(), binding.inputEmail::setText);
+        authorizedProfileViewModel.getFirstNameLiveData().observe(getViewLifecycleOwner(), binding.inputFirstName::setText);
+        authorizedProfileViewModel.getLastNameLiveData().observe(getViewLifecycleOwner(), binding.inputLastName::setText);
+        authorizedProfileViewModel.getPasswordLiveData().observe(getViewLifecycleOwner(), binding.inputPassword::setText);
+        authorizedProfileViewModel.getPhoneNumberLiveData().observe(getViewLifecycleOwner(), binding.inputPhoneNumber::setText);
+        authorizedProfileViewModel.getAddressLiveData().observe(getViewLifecycleOwner(), binding.inputAddress::setText);
         return root;
     }
     @Override

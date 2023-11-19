@@ -5,8 +5,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.accommodiq.models.Account;
+import com.example.accommodiq.services.AccountService;
 
-public class MyProfileViewModel extends ViewModel {
+public class AuthorizedProfileViewModel extends ViewModel {
     private final MutableLiveData<String> emailLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> passwordLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> firstNameLiveData = new MutableLiveData<>();
@@ -14,16 +15,8 @@ public class MyProfileViewModel extends ViewModel {
     private final MutableLiveData<String> addressLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> phoneNumberLiveData = new MutableLiveData<>();
 
-    public MyProfileViewModel() {
-        Account account = new Account(
-                "example@email.com",
-                "secretpassword",
-                "John",
-                "Doe",
-                "123 Main Street",
-                "555-1234",
-                Account.AccountType.GUEST
-        );
+    public AuthorizedProfileViewModel() {
+        Account account = AccountService.getInstance().getLoggedInAccount();
 
         // Initialize LiveData with initial values
         emailLiveData.setValue(account.getEmail());
