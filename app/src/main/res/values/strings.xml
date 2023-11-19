@@ -49,4 +49,6 @@
     <string name="confirm">Confirm</string>
     <string name="delete_account">Delete Account</string>
     <string name="title_new_accommodation">New Accommodation</string>
+    <string name="log_in_or_sign_up_btn_text">Log in or Sign up</string>
+    <string name="sign_out">Sign Out</string>
 </resources>
