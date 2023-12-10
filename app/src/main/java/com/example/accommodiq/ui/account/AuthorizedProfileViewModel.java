@@ -22,8 +22,8 @@ import java.util.Objects;
 
 public class AuthorizedProfileViewModel extends BaseObservable {
     private Account account = new Account();
-    private Boolean showChangePassword = false;
-    private Password password = new Password();
+    private final Password password = new Password();
+    private boolean checked = false;
     private final String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJob3N0M0BleGFtcGxlLmNvbSIsImV4cCI6MTcwMjIyOTYyMywiaWF0IjoxNzAyMjExNjIzfQ.iq0c9S_jpgpYJIAL0FN-btfnHFqYGed5KyyRBZS-oDGU-xi67G0WYEK_9yc9xLxFbNrFnjTgz5E_xF7Av3l5Cg";
 
     public AuthorizedProfileViewModel() {
@@ -111,15 +111,6 @@ public class AuthorizedProfileViewModel extends BaseObservable {
         notifyPropertyChanged(BR.phoneNumber);
     }
 
-    public Boolean getShowChangePassword() {
-        return showChangePassword;
-    }
-
-    public void setShowChangePassword(Boolean value) {
-        if (!Objects.equals(showChangePassword, value))
-            showChangePassword = value;
-    }
-
     @Bindable public String getOldPassword() {
         return password.getOldPassword();
     }
@@ -153,6 +144,17 @@ public class AuthorizedProfileViewModel extends BaseObservable {
         notifyPropertyChanged(BR.repeatPassword);
     }
 
+    @Bindable public boolean getChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean value) {
+        if (checked != value)
+            checked = value;
+
+        notifyPropertyChanged(BR.checked);
+    }
+
     public void updateAccountDetails(View view) {
         String email = getEmail();
         String firstName = getFirstName();
@@ -175,10 +177,16 @@ public class AuthorizedProfileViewModel extends BaseObservable {
                 Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
             }
         });
+
+        if (getChecked()) {
+            Log.d("ACCOUNT", "change password");
+            changePassword(view);
+        }
     }
 
     public void changePassword(View view) {
         Call<Void> call = ClientUtils.accountService.changePassword("Bearer " + token, new PasswordDto(getOldPassword(), getNewPassword()));
+        Log.d("PASSWORD DTO", new PasswordDto(getOldPassword(), getNewPassword()).toString());
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
