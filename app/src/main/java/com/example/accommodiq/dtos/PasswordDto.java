@@ -1,5 +1,7 @@
 package com.example.accommodiq.dtos;
 
+import androidx.annotation.NonNull;
+
 import com.example.accommodiq.models.Password;
 
 public class PasswordDto {
@@ -33,5 +35,14 @@ public class PasswordDto {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "PasswordDto{" +
+                "oldPassword='" + oldPassword + '\'' +
+                ", newPassword='" + newPassword + '\'' +
+                '}';
     }
 }
