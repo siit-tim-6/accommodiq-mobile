@@ -19,7 +19,7 @@ import com.example.accommodiq.BR;
 import java.util.Objects;
 
 public class AuthorizedProfileViewModel extends BaseObservable {
-    private Account account;
+    private Account account = new Account();
     private Boolean showChangePassword = false;
     private final String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJob3N0M0BleGFtcGxlLmNvbSIsImV4cCI6MTcwMjE5NTA2NiwiaWF0IjoxNzAyMTc3MDY2fQ.uyQn2nJmvuSwTNMJ3_BYUFFTgwS_fAyXaj82w45Ld7-wuKKFFDghUyEt0MJqY76eHby95jYYBl_wIran8dVWsQ";
 
@@ -28,13 +28,9 @@ public class AuthorizedProfileViewModel extends BaseObservable {
         call.enqueue(new Callback<Account>() {
             @Override
             public void onResponse(@NonNull Call<Account> call, @NonNull Response<Account> response) {
-                Account account = response.body();
+                account = response.body();
                 assert account != null;
-                setEmail(account.getEmail());
-                setAddress(account.getFirstName());
-                setLastName(account.getLastName());
-                setAddress(account.getAddress());
-                setPhoneNumber(account.getPhoneNumber());
+                notifyChange();
             }
 
             @Override
