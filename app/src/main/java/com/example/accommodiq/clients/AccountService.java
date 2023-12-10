@@ -32,7 +32,7 @@ public interface AccountService {
             "Content-Type:application/json"
     })
 
-    @PUT("users")
+    @PUT("users/password")
     Call<Void> changePassword(@Header("Authorization") String token, @Body PasswordDto passwordDto);
 
 }
