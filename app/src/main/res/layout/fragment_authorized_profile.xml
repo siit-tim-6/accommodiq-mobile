@@ -158,12 +158,14 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="@+id/inputPhoneNumber"
                 app:layout_constraintTop_toBottomOf="@+id/inputPhoneNumber">
+
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/toggleButtonChangePassword"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="@+id/inputPhoneNumber"
-                    app:layout_constraintTop_toBottomOf="@+id/inputPhoneNumber" />
+                    app:layout_constraintTop_toBottomOf="@+id/inputPhoneNumber"
+                    android:checked="@={viewModel.checked}"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -199,7 +201,8 @@
                     android:paddingBottom="10dp"
                     android:importantForAutofill="no"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="HardcodedText" />
+                    tools:ignore="HardcodedText"
+                    android:text="@={viewModel.oldPassword}"/>
 
                 <EditText
                     android:id="@+id/inputNewPassword"
@@ -221,7 +224,8 @@
                     app:layout_constraintStart_toStartOf="@+id/inputOldPassword"
                     app:layout_constraintTop_toBottomOf="@+id/inputOldPassword"
                     tools:ignore="HardcodedText"
-                    android:importantForAutofill="no" />
+                    android:importantForAutofill="no"
+                    android:text="@={viewModel.newPassword}"/>
 
                 <EditText
                     android:id="@+id/inputRepeatPassword"
@@ -243,7 +247,8 @@
                     app:layout_constraintStart_toStartOf="@+id/inputNewPassword"
                     app:layout_constraintTop_toBottomOf="@+id/inputNewPassword"
                     android:importantForAutofill="no"
-                    tools:ignore="HardcodedText" />
+                    tools:ignore="HardcodedText"
+                    android:text="@={viewModel.repeatPassword}" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
@@ -257,7 +262,7 @@
                 app:layout_constraintStart_toStartOf="@+id/changePasswordContainer"
                 app:layout_constraintTop_toBottomOf="@+id/changePasswordContainer"
                 app:layout_constraintWidth_max="300dp"
-                android:onClick="@{viewModel.updateAccountDetails}"/>
+                android:onClick="@{viewModel::updateAccountDetails}"/>
 
             <Button
                 android:id="@+id/deleteBtn"
