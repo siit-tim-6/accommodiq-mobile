@@ -10,8 +10,8 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.accommodiq.activities.LoginActivity;
 import com.example.accommodiq.databinding.FragmentAuthorizedProfileBinding;
@@ -19,7 +19,6 @@ import com.example.accommodiq.services.AccountService;
 
 public class AuthorizedProfileFragment extends Fragment {
     private FragmentAuthorizedProfileBinding binding;
-    private AuthorizedProfileViewModel authorizedProfileViewModel;
 
     public static void expand(final View v) {
         int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) v.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
@@ -82,10 +81,9 @@ public class AuthorizedProfileFragment extends Fragment {
     }
 
     private View getAuthorizedUserView(@NonNull LayoutInflater inflater, ViewGroup container) {
-        authorizedProfileViewModel =
-                new ViewModelProvider(this).get(AuthorizedProfileViewModel.class);
-
-        binding = FragmentAuthorizedProfileBinding.inflate(inflater, container, false);
+        binding = DataBindingUtil.inflate(inflater, com.example.accommodiq.R.layout.fragment_authorized_profile, container, false);
+        binding.setViewModel(new AuthorizedProfileViewModel());
+        View root = binding.getRoot();
 
         binding.signOutBtn.setOnClickListener(view -> {
             Activity mainActivity = getActivity();
@@ -96,25 +94,11 @@ public class AuthorizedProfileFragment extends Fragment {
             }
         });
 
-        View root = binding.getRoot();
         binding.toggleButtonChangePassword.setOnClickListener(this::onToggleClicked);
-        binding.confirmBtn.setOnClickListener((view)->{
-            updateViewModel();
-            authorizedProfileViewModel.updateAccountDetails(view);});
+
+
         collapse(binding.changePasswordContainer);
-
-        updateViewModel();
         return root;
-    }
-
-    private void updateViewModel() {
-        //        authorizedProfileViewModel.getEmailLiveData().observe(getViewLifecycleOwner(), binding.inputEmail::setText);
-        //        authorizedProfileViewModel.getFirstNameLiveData().observe(getViewLifecycleOwner(), binding.inputFirstName::setText);
-        //        authorizedProfileViewModel.getLastNameLiveData().observe(getViewLifecycleOwner(), binding.inputLastName::setText);
-        //        authorizedProfileViewModel.getPasswordLiveData().observe(getViewLifecycleOwner(), binding.inputNewPassword::setText);
-        //        authorizedProfileViewModel.getPhoneNumberLiveData().observe(getViewLifecycleOwner(), binding.inputPhoneNumber::setText);
-        //        authorizedProfileViewModel.getAddressLiveData().observe(getViewLifecycleOwner(), binding.inputAddress::setText);
-        //        authorizedProfileViewModel.getShowChangePasswordLiveData().observe(getViewLifecycleOwner(), binding.toggleButtonChangePassword::setChecked);
     }
 
     @Override
