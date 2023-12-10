@@ -4,9 +4,7 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import androidx.databinding.Bindable;
 
 import com.example.accommodiq.clients.ClientUtils;
 import com.example.accommodiq.models.Account;
@@ -16,14 +14,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import androidx.databinding.BaseObservable;
 
-public class AuthorizedProfileViewModel extends ViewModel {
-    private final MutableLiveData<String> emailLiveData = new MutableLiveData<>();
-    private final MutableLiveData<String> passwordLiveData = new MutableLiveData<>();
-    private final MutableLiveData<String> firstNameLiveData = new MutableLiveData<>();
-    private final MutableLiveData<String> lastNameLiveData = new MutableLiveData<>();
-    private final MutableLiveData<String> addressLiveData = new MutableLiveData<>();
-    private final MutableLiveData<String> phoneNumberLiveData = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> showChangePasswordLiveData = new MutableLiveData<>();
+import com.example.accommodiq.BR;
+
+import java.util.Objects;
+
+public class AuthorizedProfileViewModel extends BaseObservable {
+    private Account account;
+    private Boolean showChangePassword = false;
     private final String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJob3N0M0BleGFtcGxlLmNvbSIsImV4cCI6MTcwMjE5NTA2NiwiaWF0IjoxNzAyMTc3MDY2fQ.uyQn2nJmvuSwTNMJ3_BYUFFTgwS_fAyXaj82w45Ld7-wuKKFFDghUyEt0MJqY76eHby95jYYBl_wIran8dVWsQ";
 
     public AuthorizedProfileViewModel() {
@@ -33,11 +30,11 @@ public class AuthorizedProfileViewModel extends ViewModel {
             public void onResponse(@NonNull Call<Account> call, @NonNull Response<Account> response) {
                 Account account = response.body();
                 assert account != null;
-                emailLiveData.setValue(account.getEmail());
-                firstNameLiveData.setValue(account.getFirstName());
-                lastNameLiveData.setValue(account.getLastName());
-                addressLiveData.setValue(account.getAddress());
-                phoneNumberLiveData.setValue(account.getPhoneNumber());
+                setEmail(account.getEmail());
+                setAddress(account.getFirstName());
+                setLastName(account.getLastName());
+                setAddress(account.getAddress());
+                setPhoneNumber(account.getPhoneNumber());
             }
 
             @Override
@@ -47,41 +44,89 @@ public class AuthorizedProfileViewModel extends ViewModel {
         });
     }
 
-    // Getter methods for LiveData
-    public LiveData<String> getEmailLiveData() {
-        return emailLiveData;
+    // Getter methods for 
+    @Bindable
+    public String getEmail() {
+        return account.getEmail();
     }
 
-    public LiveData<String> getPasswordLiveData() {
-        return passwordLiveData;
+    public void setEmail(String value) {
+        if (!Objects.equals(account.getEmail(), value))
+            account.setEmail(value);
+
+        notifyPropertyChanged(BR.email);
     }
 
-    public LiveData<String> getFirstNameLiveData() {
-        return firstNameLiveData;
+    @Bindable public String getPassword() {
+        return account.getPassword();
     }
 
-    public LiveData<String> getLastNameLiveData() {
-        return lastNameLiveData;
+    public void setPassword(String value) {
+        if (!Objects.equals(account.getPassword(), value))
+            account.setPassword(value);
+
+        notifyPropertyChanged(BR.password);
     }
 
-    public LiveData<String> getAddressLiveData() {
-        return addressLiveData;
+    @Bindable public String getFirstName() {
+        return account.getFirstName();
     }
 
-    public LiveData<String> getPhoneNumberLiveData() {
-        return phoneNumberLiveData;
+    public void setFirstName(String value) {
+        if (!Objects.equals(account.getFirstName(), value))
+            account.setFirstName(value);
+
+        notifyPropertyChanged(BR.firstName);
     }
 
-    public LiveData<Boolean> getShowChangePasswordLiveData() {
-        return showChangePasswordLiveData;
+    @Bindable public String getLastName() {
+        return account.getLastName();
+    }
+
+    public void setLastName(String value) {
+        if (!Objects.equals(account.getLastName(), value))
+            account.setLastName(value);
+
+        notifyPropertyChanged(BR.lastName);
+    }
+
+    @Bindable public String getAddress() {
+        return account.getAddress();
+    }
+
+    public void setAddress(String value) {
+        if (!Objects.equals(account.getAddress(), value))
+            account.setAddress(value);
+
+        notifyPropertyChanged(BR.address);
+    }
+
+    @Bindable public String getPhoneNumber() {
+        return account.getPhoneNumber();
+    }
+
+    public void setPhoneNumber(String value) {
+        if (!Objects.equals(account.getPhoneNumber(), value))
+            account.setPhoneNumber(value);
+
+        notifyPropertyChanged(BR.phoneNumber);
+    }
+
+    public Boolean getShowChangePassword() {
+        return showChangePassword;
+    }
+
+    public void setShowChangePassword(Boolean value) {
+        if (!Objects.equals(showChangePassword, value))
+            showChangePassword = value;
     }
 
     public void updateAccountDetails(View view) {
-        String email = emailLiveData.getValue();
-        String firstName = firstNameLiveData.getValue();
-        String lastName = lastNameLiveData.getValue();
-        String address = addressLiveData.getValue();
-        String phoneNumber = phoneNumberLiveData.getValue();
+        String email = getEmail();
+        String firstName = getFirstName();
+        String lastName = getLastName();
+        String address = getAddress();
+        String phoneNumber = getPhoneNumber();
 
         assert email != null;
         Account account = new Account(email, null, firstName, lastName, address, phoneNumber, null);
