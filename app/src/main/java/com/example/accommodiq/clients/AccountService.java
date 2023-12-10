@@ -1,5 +1,6 @@
 package com.example.accommodiq.clients;
 
+import com.example.accommodiq.dtos.PasswordDto;
 import com.example.accommodiq.models.Account;
 
 import retrofit2.Call;
@@ -25,5 +26,13 @@ public interface AccountService {
 
     @PUT("users")
     Call<Void> updateAccount(@Header("Authorization") String token, @Body Account account);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+
+    @PUT("users")
+    Call<Void> changePassword(@Header("Authorization") String token, @Body PasswordDto passwordDto);
 
 }
