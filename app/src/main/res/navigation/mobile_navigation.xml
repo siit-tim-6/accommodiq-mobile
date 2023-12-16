@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/navigation_new_accommodation"
-        android:name="com.example.accommodiq.ui.newAccommodation.NewAccommodation"
+        android:name="com.example.accommodiq.ui.newAccommodation.NewAccommodationFragment"
         android:label="New Accommodation"
         tools:layout="@layout/fragment_new_accommodation" />
 </navigation>

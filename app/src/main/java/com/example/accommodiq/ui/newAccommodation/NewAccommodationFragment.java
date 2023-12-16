@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.accommodiq.R;
 import com.example.accommodiq.adapters.AvailabilityRangeListAdapter;
 import com.example.accommodiq.databinding.FragmentNewAccommodationBinding;
 import com.example.accommodiq.models.Availability;
@@ -28,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class NewAccommodation extends Fragment {
+public class NewAccommodationFragment extends Fragment {
 
     private NewAccommodationViewModel newAccommodationViewModel;
     private FragmentNewAccommodationBinding binding;
@@ -43,10 +42,11 @@ public class NewAccommodation extends Fragment {
 
         newAccommodationViewModel = new ViewModelProvider(this).get(NewAccommodationViewModel.class);
 
+        initSampleData();
+        adapter = new AvailabilityRangeListAdapter(availabilityList);
+
         binding = FragmentNewAccommodationBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-        adapter = new AvailabilityRangeListAdapter(availabilityList);
 
         return root;
     }
@@ -55,25 +55,8 @@ public class NewAccommodation extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Sample date initialization, will be changed later
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        Date startDate1, endDate1, startDate2, endDate2;
-        try {
-            startDate1 = dateFormat.parse("03/12/2023");
-            endDate1 = dateFormat.parse("05/12/2023");
-            startDate2 = dateFormat.parse("10/12/2023");
-            endDate2 = dateFormat.parse("15/12/2023");
-        } catch (ParseException e) {
-            e.printStackTrace();
-            // Handle the error according to your needs
-            return;
-        }
-
-        availabilityList.add(new Availability(1L, startDate1.getTime(), endDate1.getTime(), 100.00));
-        availabilityList.add(new Availability(2L, startDate2.getTime(), endDate2.getTime(), 150.00));
-
         AvailabilityRangeListAdapter adapter = new AvailabilityRangeListAdapter(availabilityList);
-        binding.recyclerViewAvailabilityRange.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerViewAvailabilityRange.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         binding.recyclerViewAvailabilityRange.setAdapter(adapter);
 
         binding.editTextSelectRange.setOnClickListener(v -> showMaterialDateRangePicker());
@@ -129,6 +112,27 @@ public class NewAccommodation extends Fragment {
     private String formatDate(Long dateInMillis) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         return dateFormat.format(new Date(dateInMillis));
+    }
+
+    private void initSampleData() {
+        // Sample date initialization
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        try {
+            Date startDate1 = dateFormat.parse("03/12/2023");
+            Date endDate1 = dateFormat.parse("05/12/2023");
+            availabilityList.add(new Availability(1L, startDate1.getTime(), endDate1.getTime(), 100.00));
+
+            Date startDate2 = dateFormat.parse("10/12/2023");
+            Date endDate2 = dateFormat.parse("15/12/2023");
+            availabilityList.add(new Availability(2L, startDate2.getTime(), endDate2.getTime(), 150.00));
+
+            Date startDate3 = dateFormat.parse("12/12/2023");
+            Date endDate3 = dateFormat.parse("20/12/2023");
+            availabilityList.add(new Availability(3L, startDate3.getTime(), endDate3.getTime(), 250.00));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            // Handle the error according to your needs
+        }
     }
 
 }

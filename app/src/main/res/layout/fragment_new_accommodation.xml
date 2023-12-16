@@ -1,36 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.newAccommodation.NewAccommodation">
+    android:fillViewport="true">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewAvailabilityRange"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        tools:layout_editor_absoluteX="0dp" />
+        android:layout_height="match_parent"
+        tools:context=".ui.newAccommodation.NewAccommodationFragment">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="New Accommodation"
-        android:textColor="@color/black"
-        android:textSize="36sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.050000012" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewAvailabilityRange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="42dp"
+            android:orientation="vertical"
+            android:paddingBottom="32dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="New Accommodation"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.050000012" />
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/editTextName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -55,9 +66,10 @@
         tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/editTextTextMultiLine"
+        android:id="@+id/editTextDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/multiline_input_bg"
         android:layout_marginStart="32dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="32dp"
@@ -75,12 +87,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText"
+        app:layout_constraintTop_toBottomOf="@+id/editTextName"
         app:layout_constraintWidth_max="400dp"
         tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/editTextText2"
+        android:id="@+id/editTextAddress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -99,49 +111,49 @@
         android:text="Address"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine"
+        app:layout_constraintTop_toBottomOf="@+id/editTextDescription"
         app:layout_constraintWidth_max="400dp"
         tools:ignore="HardcodedText" />
 
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/checkBoxAC"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Air Conditionig"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText2" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextAddress" />
 
     <CheckBox
-        android:id="@+id/checkBox2"
+        android:id="@+id/checkBoxBreakfast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="Complimentary Breakfast"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxAC" />
 
     <CheckBox
-        android:id="@+id/checkBox3"
+        android:id="@+id/checkBoxKitchen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="Fully Equipped Kitchen"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox2" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxBreakfast" />
 
     <CheckBox
-        android:id="@+id/checkBox4"
+        android:id="@+id/checkBoxBalcony"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="Private Balcony"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox3" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxKitchen" />
 
     <TextView
         android:id="@+id/textViewSelectedImages"
@@ -152,7 +164,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox4" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxBalcony" />
 
     <Button
         android:id="@+id/buttonUploadImages"
@@ -278,3 +290,4 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
