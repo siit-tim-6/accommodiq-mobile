@@ -1,9 +1,13 @@
 package com.example.accommodiq.ui.newAccommodation;
 
+import android.net.Uri;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.accommodiq.dtos.AccommodationCreateDto;
+import com.example.accommodiq.dtos.AvailabilityDto;
 import com.example.accommodiq.models.Availability;
 
 import java.text.ParseException;
@@ -50,5 +54,14 @@ public class NewAccommodationViewModel extends ViewModel {
     public void addAvailability(Availability availability) {
         availabilityList.add(availability);
         availabilityListLiveData.setValue(availabilityList);
+    }
+
+    public void uploadImages(List<Uri> imageUris) {
+        // Convert Uris to MultipartBody.Part
+        // Make Retrofit call to upload images
+    }
+
+    public void createNewAccommodation(AccommodationCreateDto dto) {
+        // Make Retrofit call to create new accommodation
     }
 }

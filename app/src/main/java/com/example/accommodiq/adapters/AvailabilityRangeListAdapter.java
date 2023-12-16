@@ -11,12 +11,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.accommodiq.R;
+import com.example.accommodiq.dtos.AvailabilityDto;
 import com.example.accommodiq.models.Availability;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class AvailabilityRangeListAdapter extends RecyclerView.Adapter<AvailabilityRangeListAdapter.ViewHolder> {
     private List<Availability> availabilityRangeList;
@@ -71,6 +73,11 @@ public class AvailabilityRangeListAdapter extends RecyclerView.Adapter<Availabil
 
     public List<Availability> getAvailabilityRangeList() { return availabilityRangeList; }
 
+    public List<AvailabilityDto> getAvailabilityDtoList() {
+        return availabilityRangeList.stream()
+                .map(AvailabilityDto::new)
+                .collect(Collectors.toList());
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewFromDate;

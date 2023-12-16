@@ -1,5 +1,7 @@
 package com.example.accommodiq.dtos;
 
+import com.example.accommodiq.models.Availability;
+
 public class AvailabilityDto {
     private Long fromDate;
     private Long toDate;
@@ -9,6 +11,12 @@ public class AvailabilityDto {
         this.fromDate = fromDate;
         this.toDate = toDate;
         this.price = price;
+    }
+
+    public AvailabilityDto(Availability availability) {
+        this.fromDate = availability.getFromDate();
+        this.toDate = availability.getToDate();
+        this.price = availability.getPrice();
     }
 
     public Long getFromDate() {
