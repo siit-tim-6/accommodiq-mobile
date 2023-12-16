@@ -1,8 +1,12 @@
 package com.example.accommodiq.ui.newAccommodation;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +40,8 @@ public class NewAccommodationFragment extends Fragment {
     private List<Availability> availabilityList = new ArrayList<>();
     private Long selectedFromDate;
     private Long selectedToDate;
+    private ActivityResultLauncher<Intent> galleryActivityResultLauncher;
+    private static final int REQUEST_GALLERY = 1;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -59,8 +66,22 @@ public class NewAccommodationFragment extends Fragment {
         binding.recyclerViewAvailabilityRange.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         binding.recyclerViewAvailabilityRange.setAdapter(adapter);
 
-        binding.editTextSelectRange.setOnClickListener(v -> showMaterialDateRangePicker());
+        galleryActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Intent data = result.getData();
+                        if (data.getClipData() != null) {
+                            int count = data.getClipData().getItemCount();
+                            binding.textViewSelectedImages.setText("Selected Images: " + count);
+                        } else if (data.getData() != null) {
+                            binding.textViewSelectedImages.setText("Selected Images: 1");
+                        }
+                    }
+                });
 
+        binding.editTextSelectRange.setOnClickListener(v -> showMaterialDateRangePicker());
+        binding.buttonUploadImages.setOnClickListener(v -> openGallery());
         binding.buttonAdd.setOnClickListener(v -> {
             if (selectedFromDate != null && selectedToDate != null) {
                 String priceString = binding.editTextPrice.getText().toString();
@@ -133,6 +154,13 @@ public class NewAccommodationFragment extends Fragment {
             e.printStackTrace();
             // Handle the error according to your needs
         }
+    }
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        galleryActivityResultLauncher.launch(Intent.createChooser(intent, "Select Images"));
     }
 
 }
