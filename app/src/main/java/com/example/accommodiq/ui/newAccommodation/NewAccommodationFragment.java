@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import com.example.accommodiq.adapters.AvailabilityRangeListAdapter;
 import com.example.accommodiq.databinding.FragmentNewAccommodationBinding;
+import com.example.accommodiq.dtos.AccommodationCreateDto;
+import com.example.accommodiq.models.Accommodation;
 import com.example.accommodiq.models.Availability;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
@@ -37,34 +39,30 @@ public class NewAccommodationFragment extends Fragment {
     private NewAccommodationViewModel newAccommodationViewModel;
     private FragmentNewAccommodationBinding binding;
     private AvailabilityRangeListAdapter adapter;
-    private List<Availability> availabilityList = new ArrayList<>();
     private Long selectedFromDate;
     private Long selectedToDate;
     private ActivityResultLauncher<Intent> galleryActivityResultLauncher;
-    private static final int REQUEST_GALLERY = 1;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
-        newAccommodationViewModel = new ViewModelProvider(this).get(NewAccommodationViewModel.class);
-
-        initSampleData();
-        adapter = new AvailabilityRangeListAdapter(availabilityList);
-
         binding = FragmentNewAccommodationBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
-        return root;
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        AvailabilityRangeListAdapter adapter = new AvailabilityRangeListAdapter(availabilityList);
-        binding.recyclerViewAvailabilityRange.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        newAccommodationViewModel = new ViewModelProvider(this).get(NewAccommodationViewModel.class);
+
+        adapter = new AvailabilityRangeListAdapter(new ArrayList<>());
+        binding.recyclerViewAvailabilityRange.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerViewAvailabilityRange.setAdapter(adapter);
+
+        newAccommodationViewModel.getAvailabilityListLiveData().observe(getViewLifecycleOwner(), availabilityList -> {
+            adapter.setAvailabilityRangeList(availabilityList);
+        });
 
         galleryActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -83,25 +81,7 @@ public class NewAccommodationFragment extends Fragment {
         binding.editTextSelectRange.setOnClickListener(v -> showMaterialDateRangePicker());
         binding.buttonUploadImages.setOnClickListener(v -> openGallery());
         binding.buttonAdd.setOnClickListener(v -> {
-            if (selectedFromDate != null && selectedToDate != null) {
-                String priceString = binding.editTextPrice.getText().toString();
-                double price;
-                try {
-                    price = Double.parseDouble(priceString);
-                } catch (NumberFormatException e) {
-                    Toast.makeText(getContext(), "Invalid price entered", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (price > 0) {
-                    Availability newAvailability = new Availability(-1L, selectedFromDate, selectedToDate, price);
-                    adapter.addItem(newAvailability);
-                } else {
-                    Toast.makeText(getContext(), "Price must be greater than 0", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(getContext(), "Please select a date range first.", Toast.LENGTH_SHORT).show();
-            }
+            addNewAvailability();
         });
     }
 
@@ -135,32 +115,52 @@ public class NewAccommodationFragment extends Fragment {
         return dateFormat.format(new Date(dateInMillis));
     }
 
-    private void initSampleData() {
-        // Sample date initialization
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        try {
-            Date startDate1 = dateFormat.parse("03/12/2023");
-            Date endDate1 = dateFormat.parse("05/12/2023");
-            availabilityList.add(new Availability(1L, startDate1.getTime(), endDate1.getTime(), 100.00));
-
-            Date startDate2 = dateFormat.parse("10/12/2023");
-            Date endDate2 = dateFormat.parse("15/12/2023");
-            availabilityList.add(new Availability(2L, startDate2.getTime(), endDate2.getTime(), 150.00));
-
-            Date startDate3 = dateFormat.parse("12/12/2023");
-            Date endDate3 = dateFormat.parse("20/12/2023");
-            availabilityList.add(new Availability(3L, startDate3.getTime(), endDate3.getTime(), 250.00));
-        } catch (ParseException e) {
-            e.printStackTrace();
-            // Handle the error according to your needs
-        }
-    }
-
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         galleryActivityResultLauncher.launch(Intent.createChooser(intent, "Select Images"));
+    }
+
+    private void addNewAvailability() {
+        if (selectedFromDate != null && selectedToDate != null) {
+            String priceString = binding.editTextPrice.getText().toString();
+            double price;
+            try {
+                price = Double.parseDouble(priceString);
+            } catch (NumberFormatException e) {
+                Toast.makeText(getContext(), "Invalid price entered", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (price > 0) {
+                Availability newAvailability = new Availability(-1L, selectedFromDate, selectedToDate, price);
+                newAccommodationViewModel.addAvailability(newAvailability);
+            } else {
+                Toast.makeText(getContext(), "Price must be greater than 0", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(getContext(), "Please select a date range first.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void createAccommodationFromInput() {
+        String title = binding.editTextName.getText().toString();
+        String description = binding.editTextDescription.getText().toString();
+        String location = binding.editTextAddress.getText().toString();
+        int minGuests = Integer.parseInt(binding.editTextMinGuests.getText().toString());
+        int maxGuests = Integer.parseInt(binding.editTextMaxGuests.getText().toString());
+        // Collect other inputs...
+
+        AccommodationCreateDto newAccommodationDto = new AccommodationCreateDto();
+        newAccommodationDto.setTitle(title);
+        newAccommodationDto.setDescription(description);
+        newAccommodationDto.setLocation(location);
+        newAccommodationDto.setMinGuests(minGuests);
+        newAccommodationDto.setMaxGuests(maxGuests);
+        // Set other fields...
+
+        // Pass newAccommodationDto to ViewModel or directly to the API call method
     }
 
 }

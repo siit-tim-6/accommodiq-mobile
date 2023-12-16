@@ -65,6 +65,13 @@ public class AvailabilityRangeListAdapter extends RecyclerView.Adapter<Availabil
         notifyItemRemoved(position);
     }
 
+    public void setAvailabilityRangeList(List<Availability> availabilityRangeList) {
+        this.availabilityRangeList=availabilityRangeList;
+    }
+
+    public List<Availability> getAvailabilityRangeList() { return availabilityRangeList; }
+
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewFromDate;
         TextView textViewToDate;
