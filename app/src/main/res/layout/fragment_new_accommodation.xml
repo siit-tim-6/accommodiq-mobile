@@ -7,7 +7,7 @@
     tools:context=".ui.newAccommodation.NewAccommodation">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewPriceRange"
+        android:id="@+id/recyclerViewAvailabilityRange"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -253,11 +253,12 @@
             android:background="@drawable/input_bg"
             android:gravity="center_vertical"
             android:hint="Select the Range"
+            android:focusable="false"
             android:inputType="number"
             android:padding="12dp" />
 
         <EditText
-            android:id="@+id/editTextNumber"
+            android:id="@+id/editTextPrice"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:background="@drawable/input_bg"

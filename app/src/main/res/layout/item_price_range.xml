@@ -7,7 +7,7 @@
     android:gravity="center_vertical">
 
     <TextView
-        android:id="@+id/textViewStartDate"
+        android:id="@+id/textViewFromDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -15,7 +15,7 @@
         android:text="03/12/2023" />
 
     <TextView
-        android:id="@+id/textViewEndDate"
+        android:id="@+id/textViewToDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
