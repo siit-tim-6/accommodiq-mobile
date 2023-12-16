@@ -34,4 +34,10 @@
         android:name="com.example.accommodiq.ui.account.MyProfileFragment"
         android:label="@string/title_my_profile"
         tools:layout="@layout/fragment_my_profile" />
+
+    <fragment
+        android:id="@+id/navigation_new_accommodation"
+        android:name="com.example.accommodiq.ui.newAccommodation.NewAccommodation"
+        android:label="New Accommodation"
+        tools:layout="@layout/fragment_new_accommodation" />
 </navigation>
