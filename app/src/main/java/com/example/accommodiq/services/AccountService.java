@@ -7,6 +7,9 @@ import com.example.accommodiq.services.interfaces.AccountApiService;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+
 public class AccountService {
     private static AccountService instance = null;
     AccountApiService accountApiService=RetrofitClientInstance.getRetrofitInstance().create(AccountApiService.class);
@@ -39,8 +42,8 @@ public class AccountService {
         return false;
     }
 
-    public boolean register(RegisterDto registerDto) {
-        Call<RegisterDto> call = apiService.registerUser(registerDto);
+    public void register(RegisterDto registerDto,  Callback<RegisterDto> callback) {
+        Call<RegisterDto> call = accountApiService.registerUser(registerDto);
         call.enqueue(callback);
     }
 
