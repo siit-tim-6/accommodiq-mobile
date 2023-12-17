@@ -10,18 +10,24 @@ import android.widget.TextView;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.Utility.TextUtilities;
+import com.example.accommodiq.config.RetrofitClientInstance;
 import com.example.accommodiq.databinding.ActivityRegisterBinding;
+import com.example.accommodiq.dtos.RegisterDto;
 import com.example.accommodiq.models.Account;
+import com.example.accommodiq.models.User;
 import com.example.accommodiq.services.AccountService;
+import com.example.accommodiq.services.interfaces.AccountApiService;
 
 public class RegisterActivity extends AppCompatActivity {
 
     ActivityRegisterBinding binding;
+    AccountApiService accountApiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
+        accountApiService = RetrofitClientInstance.getRetrofitInstance().create(AccountApiService.class);
         setContentView(binding.getRoot());
         setUpAlreadyHaveAccountBtn();
         setUpCloseBtn();
@@ -51,20 +57,23 @@ public class RegisterActivity extends AppCompatActivity {
         String confirmPassword = binding.inputRepeatPassword.getText().toString().trim();
         String phoneNumber = binding.inputPhoneNumber.getText().toString().trim();
         String address = binding.inputAddress.getText().toString().trim();
-        Account.AccountType role = binding.guestRadioBtn.isChecked() ? Account.AccountType.GUEST : Account.AccountType.OWNER;
+        String role = "";
+        role = binding.guestRadioBtn.isChecked() ? "GUEST";
+        role = binding.ownerRadioButton.isChecked() ? "OWNER";
 
-        Account newAccount;
-        try {
-            newAccount = new Account(email, password, firstName, lastName, address, phoneNumber, role);
-        } catch (IllegalArgumentException e) {
-            binding.inputEmail.setError("Email cant be empty");
-            return;
+        // Perform input validation
+        if (!validateInputs(firstName, lastName, email, password, confirmPassword, phoneNumber, address, role)) {
+            return; // Stop if validation fails
         }
-        if (AccountService.getInstance().register(newAccount)) {
-            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-            startActivity(intent);
-        } else {
-            binding.inputEmail.setError("Email already in use");
-        }
+
+        // Prepare DTO
+        User user = new User(firstName, lastName, phoneNumber, address);
+        RegisterDto registerDto = new RegisterDto(email, password, user, role);
+
+    }
+
+    private boolean validateInputs(String firstName, String lastName, String email, String password, String confirmPassword, String phoneNumber, String address,String role) {
+        // Check if fields are empty, passwords match, email is valid, etc.
+        // Return true if validation passes, false otherwise
     }
 }
