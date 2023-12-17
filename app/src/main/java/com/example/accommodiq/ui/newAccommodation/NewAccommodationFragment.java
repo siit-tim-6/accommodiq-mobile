@@ -114,6 +114,10 @@ public class NewAccommodationFragment extends Fragment {
         binding.buttonUploadImages.setOnClickListener(v -> openGallery());
         binding.buttonAdd.setOnClickListener(v -> {
             addNewAvailability();
+            selectedFromDate= null;
+            selectedToDate = null;
+            binding.editTextSelectRange.setText("");
+            binding.editTextPrice.setText("");
         });
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
@@ -252,6 +256,7 @@ public class NewAccommodationFragment extends Fragment {
                             if (response.isSuccessful()) {
                                 // Accommodation creation successful
                                 AccommodationDetailsDto accommodationDetails = response.body();
+                                Toast.makeText(getContext(), "Successfully created!", Toast.LENGTH_SHORT).show();
                                 // TODO: Handle the successful creation of accommodation
                             } else {
                                 // Handle the error
