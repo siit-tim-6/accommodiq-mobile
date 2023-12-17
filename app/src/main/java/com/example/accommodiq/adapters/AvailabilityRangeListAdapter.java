@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.dtos.AvailabilityDto;
+import com.example.accommodiq.listener.OnAvailabilityRemovedListener;
 import com.example.accommodiq.models.Availability;
 
 import java.text.SimpleDateFormat;
@@ -22,9 +23,11 @@ import java.util.stream.Collectors;
 
 public class AvailabilityRangeListAdapter extends RecyclerView.Adapter<AvailabilityRangeListAdapter.ViewHolder> {
     private List<Availability> availabilityRangeList;
+    private OnAvailabilityRemovedListener listener;
 
-    public AvailabilityRangeListAdapter(List<Availability> availabilityRangeList) {
+    public AvailabilityRangeListAdapter(List<Availability> availabilityRangeList, OnAvailabilityRemovedListener listener) {
         this.availabilityRangeList = availabilityRangeList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -54,21 +57,26 @@ public class AvailabilityRangeListAdapter extends RecyclerView.Adapter<Availabil
         return availabilityRangeList != null ? availabilityRangeList.size() : 0;
     }
 
+    public void removeItem(int position) {
+        if (position < 0 || position >= availabilityRangeList.size()) {
+            return; // Out of bounds
+        }
+        Availability removedItem = availabilityRangeList.get(position);
+        availabilityRangeList.remove(position);
+        notifyItemRemoved(position);
+        if (listener != null) {
+            listener.onAvailabilityRemoved(removedItem);
+        }
+    }
+
     public void addItem(Availability availability) {
         availabilityRangeList.add(availability);
         notifyItemInserted(availabilityRangeList.size() - 1);
     }
 
-    public void removeItem(int position) {
-        if (position < 0 || position >= availabilityRangeList.size()) {
-            return; // Out of bounds
-        }
-        availabilityRangeList.remove(position);
-        notifyItemRemoved(position);
-    }
-
     public void setAvailabilityRangeList(List<Availability> availabilityRangeList) {
         this.availabilityRangeList=availabilityRangeList;
+        notifyDataSetChanged();
     }
 
     public List<Availability> getAvailabilityRangeList() { return availabilityRangeList; }

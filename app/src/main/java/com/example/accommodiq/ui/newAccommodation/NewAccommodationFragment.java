@@ -29,6 +29,8 @@ import com.example.accommodiq.R;
 import com.example.accommodiq.adapters.AvailabilityRangeListAdapter;
 import com.example.accommodiq.databinding.FragmentNewAccommodationBinding;
 import com.example.accommodiq.dtos.AccommodationCreateDto;
+import com.example.accommodiq.dtos.AccommodationDetailsDto;
+import com.example.accommodiq.listener.OnAvailabilityRemovedListener;
 import com.example.accommodiq.models.Availability;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
@@ -71,12 +73,19 @@ public class NewAccommodationFragment extends Fragment {
 
         newAccommodationViewModel = new ViewModelProvider(this).get(NewAccommodationViewModel.class);
 
-        adapter = new AvailabilityRangeListAdapter(new ArrayList<>());
+        adapter = new AvailabilityRangeListAdapter(new ArrayList<>(), new OnAvailabilityRemovedListener() {
+            @Override
+            public void onAvailabilityRemoved(Availability availability) {
+                newAccommodationViewModel.removeAvailability(availability);
+            }
+        });
+
         binding.recyclerViewAvailabilityRange.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerViewAvailabilityRange.setAdapter(adapter);
 
         newAccommodationViewModel.getAvailabilityListLiveData().observe(getViewLifecycleOwner(), availabilityList -> {
             adapter.setAvailabilityRangeList(availabilityList);
+            adapter.notifyDataSetChanged();
         });
 
         galleryActivityResultLauncher = registerForActivityResult(
@@ -283,42 +292,5 @@ public class NewAccommodationFragment extends Fragment {
             return false;
         }
         return true;
-    }
-
-    private List<MultipartBody.Part> getMultipartBodyPartsFromUris(List<Uri> imageUris, Context context) {
-        List<MultipartBody.Part> parts = new ArrayList<>();
-
-        for (Uri imageUri : imageUris) {
-            String filePath = getPathFromUri(context, imageUri);
-            if (filePath != null) {
-                File file = new File(filePath);
-
-                RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
-
-                MultipartBody.Part body = MultipartBody.Part.createFormData("images", file.getName(), requestFile);
-
-                parts.add(body);
-            }
-        }
-
-        return parts;
-    }
-
-    private String getPathFromUri(Context context, Uri uri) {
-        String result = null;
-        Cursor cursor = null;
-        try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(uri, proj, null, null, null);
-            if (cursor != null && cursor.moveToFirst()) {
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                result = cursor.getString(column_index);
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return result;
     }
 }
