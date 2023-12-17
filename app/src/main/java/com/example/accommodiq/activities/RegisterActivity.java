@@ -21,13 +21,11 @@ import com.example.accommodiq.services.interfaces.AccountApiService;
 public class RegisterActivity extends AppCompatActivity {
 
     ActivityRegisterBinding binding;
-    AccountApiService accountApiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
-        accountApiService = RetrofitClientInstance.getRetrofitInstance().create(AccountApiService.class);
         setContentView(binding.getRoot());
         setUpAlreadyHaveAccountBtn();
         setUpCloseBtn();

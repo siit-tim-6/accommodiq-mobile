@@ -1,11 +1,15 @@
 package com.example.accommodiq.services;
 
+import com.example.accommodiq.config.RetrofitClientInstance;
+import com.example.accommodiq.dtos.RegisterDto;
 import com.example.accommodiq.models.Account;
+import com.example.accommodiq.services.interfaces.AccountApiService;
 
 import java.util.ArrayList;
 
 public class AccountService {
     private static AccountService instance = null;
+    AccountApiService accountApiService=RetrofitClientInstance.getRetrofitInstance().create(AccountApiService.class);
 
     public static AccountService getInstance() {
         if (instance == null) instance = new AccountService();
@@ -35,15 +39,9 @@ public class AccountService {
         return false;
     }
 
-    public boolean register(Account account) {
-        boolean emailExists = accounts.stream()
-                .anyMatch(existingAccount -> existingAccount.getEmail().equals(account.getEmail()));
-
-        if (emailExists) return false;
-
-        accounts.add(account);
-        loggedInAccount = account;
-        return true;
+    public boolean register(RegisterDto registerDto) {
+        Call<RegisterDto> call = apiService.registerUser(registerDto);
+        call.enqueue(callback);
     }
 
     public Account getLoggedInAccount() {
