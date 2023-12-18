@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.dtos.AvailabilityDto;
+import com.example.accommodiq.listener.AvailabilityActionsListener;
 import com.example.accommodiq.listener.OnAvailabilityRemovedListener;
 import com.example.accommodiq.models.Availability;
 
@@ -24,8 +25,14 @@ import java.util.stream.Collectors;
 public class AvailabilityRangeListAdapter extends RecyclerView.Adapter<AvailabilityRangeListAdapter.ViewHolder> {
     private List<Availability> availabilityRangeList;
     private OnAvailabilityRemovedListener listener;
+    private AvailabilityActionsListener listener;
 
     public AvailabilityRangeListAdapter(List<Availability> availabilityRangeList, OnAvailabilityRemovedListener listener) {
+        this.availabilityRangeList = availabilityRangeList;
+        this.listener = listener;
+    }
+
+    public AvailabilityRangeListAdapter(List<Availability> availabilityRangeList, AvailabilityActionsListener listener) {
         this.availabilityRangeList = availabilityRangeList;
         this.listener = listener;
     }
@@ -85,6 +92,19 @@ public class AvailabilityRangeListAdapter extends RecyclerView.Adapter<Availabil
         return availabilityRangeList.stream()
                 .map(AvailabilityDto::new)
                 .collect(Collectors.toList());
+    }
+
+    public void removeItemByAvailabilityId(long availabilityId) {
+        int position = -1;
+        for (int i = 0; i < availabilityRangeList.size(); i++) {
+            if (availabilityRangeList.get(i).getId() == availabilityId) {
+                position = i;
+                break;
+            }
+        }
+        if (position != -1) {
+            removeItem(position);
+        }
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
