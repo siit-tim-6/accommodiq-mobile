@@ -64,4 +64,12 @@ public class UpdateAccommodationAvailabilityViewModel extends ViewModel {
         Call<MessageDto> call = apiService.removeAccommodationAvailability(accommodationId,availabilityId);
         call.enqueue(callback);
     }
+
+    public void removeAvailabilityFromList(Long availabilityId) {
+        List<Availability> currentList = availabilityListLiveData.getValue();
+        if (currentList != null) {
+            currentList.removeIf(availability -> availability.getId().equals(availabilityId));
+            availabilityListLiveData.setValue(currentList);
+        }
+    }
 }

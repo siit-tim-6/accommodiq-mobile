@@ -30,7 +30,7 @@ import com.example.accommodiq.adapters.AvailabilityRangeListAdapter;
 import com.example.accommodiq.databinding.FragmentNewAccommodationBinding;
 import com.example.accommodiq.dtos.AccommodationCreateDto;
 import com.example.accommodiq.dtos.AccommodationDetailsDto;
-import com.example.accommodiq.listener.OnAvailabilityRemovedListener;
+import com.example.accommodiq.listener.AvailabilityActionsListener;
 import com.example.accommodiq.models.Availability;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
@@ -49,7 +49,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class NewAccommodationFragment extends Fragment {
+public class NewAccommodationFragment extends Fragment implements AvailabilityActionsListener {
 
     private NewAccommodationViewModel newAccommodationViewModel;
     private FragmentNewAccommodationBinding binding;
@@ -73,12 +73,7 @@ public class NewAccommodationFragment extends Fragment {
 
         newAccommodationViewModel = new ViewModelProvider(this).get(NewAccommodationViewModel.class);
 
-        adapter = new AvailabilityRangeListAdapter(new ArrayList<>(), new OnAvailabilityRemovedListener() {
-            @Override
-            public void onAvailabilityRemoved(Availability availability) {
-                newAccommodationViewModel.removeAvailability(availability);
-            }
-        });
+        adapter = new AvailabilityRangeListAdapter(new ArrayList<>(), this);
 
         binding.recyclerViewAvailabilityRange.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerViewAvailabilityRange.setAdapter(adapter);
@@ -297,5 +292,10 @@ public class NewAccommodationFragment extends Fragment {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onRemoveAvailability(Availability availability) {
+        newAccommodationViewModel.removeAvailability(availability);
     }
 }

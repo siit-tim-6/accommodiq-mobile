@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.accommodiq.R;
 import com.example.accommodiq.dtos.AvailabilityDto;
 import com.example.accommodiq.listener.AvailabilityActionsListener;
-import com.example.accommodiq.listener.OnAvailabilityRemovedListener;
 import com.example.accommodiq.models.Availability;
 
 import java.text.SimpleDateFormat;
@@ -24,13 +23,7 @@ import java.util.stream.Collectors;
 
 public class AvailabilityRangeListAdapter extends RecyclerView.Adapter<AvailabilityRangeListAdapter.ViewHolder> {
     private List<Availability> availabilityRangeList;
-    private OnAvailabilityRemovedListener listener;
     private AvailabilityActionsListener listener;
-
-    public AvailabilityRangeListAdapter(List<Availability> availabilityRangeList, OnAvailabilityRemovedListener listener) {
-        this.availabilityRangeList = availabilityRangeList;
-        this.listener = listener;
-    }
 
     public AvailabilityRangeListAdapter(List<Availability> availabilityRangeList, AvailabilityActionsListener listener) {
         this.availabilityRangeList = availabilityRangeList;
@@ -52,9 +45,8 @@ public class AvailabilityRangeListAdapter extends RecyclerView.Adapter<Availabil
         holder.textViewToDate.setText(dateFormat.format(new Date(availability.getToDate())));
         holder.textViewPrice.setText(String.valueOf(availability.getPrice()));
         holder.buttonDelete.setOnClickListener(view -> {
-            int positionToRemove = holder.getAdapterPosition();
-            if (positionToRemove != RecyclerView.NO_POSITION) {
-                removeItem(positionToRemove);
+            if (listener != null) {
+                listener.onRemoveAvailability(availability);
             }
         });
     }
@@ -72,7 +64,7 @@ public class AvailabilityRangeListAdapter extends RecyclerView.Adapter<Availabil
         availabilityRangeList.remove(position);
         notifyItemRemoved(position);
         if (listener != null) {
-            listener.onAvailabilityRemoved(removedItem);
+            listener.onRemoveAvailability(removedItem);
         }
     }
 
