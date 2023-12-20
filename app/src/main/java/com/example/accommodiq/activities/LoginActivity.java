@@ -11,7 +11,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.accommodiq.R;
 import com.example.accommodiq.Utility.TextUtilities;
 import com.example.accommodiq.databinding.ActivityLoginBinding;
+import com.example.accommodiq.dtos.LoginResponseDto;
 import com.example.accommodiq.services.AccountService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -29,12 +34,27 @@ public class LoginActivity extends AppCompatActivity {
     public void logIn(View view) {
         String email = binding.inputEmail.getText().toString();
         String password = binding.inputPassword.getText().toString();
-        if (AccountService.getInstance().logIn(email, password)) {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-        } else {
-            binding.inputPassword.setError("Invalid credentials");
-        }
+
+        AccountService.getInstance().logIn(email, password, new Callback<LoginResponseDto>() {
+            @Override
+            public void onResponse(Call<LoginResponseDto> call, Response<LoginResponseDto> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    // Store JWT and user role
+                    String jwt = response.body().getJwt();
+                    // Save JWT in SharedPreferences or another secure place
+                    // Navigate to MainActivity
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    binding.inputPassword.setError("Invalid credentials");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponseDto> call, Throwable t) {
+                // Handle network error
+            }
+        });
     }
 
     private void setUpCreateAccountTextView() {

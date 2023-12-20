@@ -1,6 +1,8 @@
 package com.example.accommodiq.services;
 
 import com.example.accommodiq.config.RetrofitClientInstance;
+import com.example.accommodiq.dtos.CredentialsDto;
+import com.example.accommodiq.dtos.LoginResponseDto;
 import com.example.accommodiq.dtos.RegisterDto;
 import com.example.accommodiq.models.Account;
 import com.example.accommodiq.services.interfaces.AccountApiService;
@@ -32,14 +34,10 @@ public class AccountService {
         accounts.add(adminAccount);
     }
 
-    public boolean logIn(String email, String password) {
-        for (Account account : accounts) {
-            if (account.getEmail().equals(email) && account.getPassword().equals(password)) {
-                loggedInAccount = account;
-                return true;
-            }
-        }
-        return false;
+    public void logIn(String email, String password, Callback<LoginResponseDto> callback) {
+        CredentialsDto credentials = new CredentialsDto(email, password);
+        Call<LoginResponseDto> call = accountApiService.login(credentials);
+        call.enqueue(callback);
     }
 
     public void register(RegisterDto registerDto,  Callback<RegisterDto> callback) {
