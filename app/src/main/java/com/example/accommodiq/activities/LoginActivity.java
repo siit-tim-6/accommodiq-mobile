@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.Utility.TextUtilities;
+import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.databinding.ActivityLoginBinding;
 import com.example.accommodiq.dtos.CredentialsDto;
@@ -46,9 +47,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<LoginResponseDto> call, Response<LoginResponseDto> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // Store JWT and user role
+                    // Store JWT in SharedPreferences
                     String jwt = response.body().getJwt();
-                    // Save JWT in SharedPreferences or another secure place
+                    String role = response.body().getRole();
+
+                    JwtUtils.saveJwt(getApplicationContext(), jwt);
+                    JwtUtils.saveRole(getApplicationContext(), role);
+
                     // Navigate to MainActivity
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);

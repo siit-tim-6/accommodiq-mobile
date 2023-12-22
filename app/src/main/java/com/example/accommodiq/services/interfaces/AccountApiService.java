@@ -9,9 +9,9 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 public interface AccountApiService {
-    @POST("users")
+    @POST("/users")
     Call<RegisterDto> registerUser(@Body RegisterDto registerDto);
 
-    @POST("login")
+    @POST("/sessions")
     Call<LoginResponseDto> login(@Body CredentialsDto credentials);
 }
