@@ -1,6 +1,6 @@
 package com.example.accommodiq.services;
 
-import com.example.accommodiq.config.RetrofitClientInstance;
+import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.dtos.CredentialsDto;
 import com.example.accommodiq.dtos.LoginResponseDto;
 import com.example.accommodiq.dtos.RegisterDto;
@@ -14,7 +14,6 @@ import retrofit2.Callback;
 
 public class AccountService {
     private static AccountService instance = null;
-    AccountApiService accountApiService=RetrofitClientInstance.getRetrofitInstance().create(AccountApiService.class);
 
     public static AccountService getInstance() {
         if (instance == null) instance = new AccountService();
@@ -32,17 +31,6 @@ public class AccountService {
         accounts.add(guestAccount);
         accounts.add(ownerAccount);
         accounts.add(adminAccount);
-    }
-
-    public void logIn(String email, String password, Callback<LoginResponseDto> callback) {
-        CredentialsDto credentials = new CredentialsDto(email, password);
-        Call<LoginResponseDto> call = accountApiService.login(credentials);
-        call.enqueue(callback);
-    }
-
-    public void register(RegisterDto registerDto,  Callback<RegisterDto> callback) {
-        Call<RegisterDto> call = accountApiService.registerUser(registerDto);
-        call.enqueue(callback);
     }
 
     public Account getLoggedInAccount() {

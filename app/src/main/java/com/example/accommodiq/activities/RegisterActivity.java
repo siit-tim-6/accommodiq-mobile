@@ -11,10 +11,12 @@ import android.widget.Toast;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.Utility.TextUtilities;
+import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.databinding.ActivityRegisterBinding;
 import com.example.accommodiq.dtos.RegisterDto;
 import com.example.accommodiq.models.User;
 import com.example.accommodiq.services.AccountService;
+import com.example.accommodiq.services.interfaces.AccountApiService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,6 +25,7 @@ import retrofit2.Response;
 public class RegisterActivity extends AppCompatActivity {
 
     ActivityRegisterBinding binding;
+    AccountApiService accountApiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setUpAlreadyHaveAccountBtn();
         setUpCloseBtn();
+        accountApiService = RetrofitClientInstance.getRetrofitInstance(this).create(AccountApiService.class);
     }
 
     private void setUpAlreadyHaveAccountBtn() {
@@ -72,7 +76,8 @@ public class RegisterActivity extends AppCompatActivity {
         Toast.makeText(RegisterActivity.this, "Registering...", Toast.LENGTH_SHORT).show();
         System.out.println(registerDto.toString());
 
-        AccountService.getInstance().register(registerDto, new Callback<RegisterDto>() {
+        Call<RegisterDto> call = accountApiService.registerUser(registerDto);
+        call.enqueue(new Callback<RegisterDto>() {
             @Override
             public void onResponse(Call<RegisterDto> call, Response<RegisterDto> response) {
                 if (response.isSuccessful()) {

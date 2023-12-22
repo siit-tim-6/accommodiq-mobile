@@ -1,4 +1,4 @@
-package com.example.accommodiq.Utility;
+package com.example.accommodiq.apiConfig;
 
 import android.content.Context;
 import android.content.SharedPreferences;

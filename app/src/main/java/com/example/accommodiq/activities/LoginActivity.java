@@ -10,9 +10,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.Utility.TextUtilities;
+import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.databinding.ActivityLoginBinding;
+import com.example.accommodiq.dtos.CredentialsDto;
 import com.example.accommodiq.dtos.LoginResponseDto;
 import com.example.accommodiq.services.AccountService;
+import com.example.accommodiq.services.interfaces.AccountApiService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,6 +24,7 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
 
     ActivityLoginBinding binding;
+    AccountApiService accountApiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +33,16 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setUpCreateAccountTextView();
         setUpCloseBtn();
+        accountApiService = RetrofitClientInstance.getRetrofitInstance(this).create(AccountApiService.class);
     }
 
     public void logIn(View view) {
         String email = binding.inputEmail.getText().toString();
         String password = binding.inputPassword.getText().toString();
 
-        AccountService.getInstance().logIn(email, password, new Callback<LoginResponseDto>() {
+        CredentialsDto credentials = new CredentialsDto(email, password);
+        Call<LoginResponseDto> call = accountApiService.login(credentials);
+        call.enqueue(new Callback<LoginResponseDto>() {
             @Override
             public void onResponse(Call<LoginResponseDto> call, Response<LoginResponseDto> response) {
                 if (response.isSuccessful() && response.body() != null) {
