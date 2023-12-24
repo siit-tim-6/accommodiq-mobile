@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.Utility.TextUtilities;
+import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.databinding.ActivityRegisterBinding;
 import com.example.accommodiq.dtos.RegisterDto;
@@ -46,8 +47,12 @@ public class RegisterActivity extends AppCompatActivity {
     private void setUpCloseBtn() {
         ImageView closeBtn = findViewById(R.id.closeButton);
         closeBtn.setOnClickListener(view -> {
+            // Clear JWT and role
+            JwtUtils.clearJwtAndRole(getApplicationContext());
+
+            // Navigate back to MainActivity
             startActivity(new Intent(RegisterActivity.this, MainActivity.class));
-            AccountService.getInstance().signOut();
+            finish();
         });
     }
 

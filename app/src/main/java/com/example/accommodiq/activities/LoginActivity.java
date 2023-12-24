@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -57,14 +58,20 @@ public class LoginActivity extends AppCompatActivity {
                     // Navigate to MainActivity
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
+
+                    // Display success message
+                    Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                 } else {
+                    // Display error message
+                    Toast.makeText(LoginActivity.this, "Invalid credentials", Toast.LENGTH_SHORT).show();
                     binding.inputPassword.setError("Invalid credentials");
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponseDto> call, Throwable t) {
-                // Handle network error
+                // Display network error message
+                Toast.makeText(LoginActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -78,6 +85,10 @@ public class LoginActivity extends AppCompatActivity {
     private void setUpCloseBtn() {
         ImageView closeBtn = findViewById(R.id.closeButton);
         closeBtn.setOnClickListener(view -> {
+            // Clear JWT and role
+            JwtUtils.clearJwtAndRole(getApplicationContext());
+
+            // Navigate back to MainActivity
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         });

@@ -31,4 +31,18 @@ public class JwtUtils {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(KEY_ROLE, null);
     }
+
+    public static void clearJwtAndRole(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(KEY_JWT);
+        editor.remove(KEY_ROLE);
+        editor.apply();
+    }
+
+    public static boolean isUserLoggedIn(Context context) {
+        String jwt = getJwt(context);
+        String role = getRole(context);
+        return jwt != null && !jwt.isEmpty() && role != null && !role.isEmpty();
+    }
 }
