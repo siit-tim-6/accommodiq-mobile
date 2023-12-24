@@ -19,11 +19,9 @@ public class Account {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.accountType = accountType;
+    }
 
-        // check if fields are empty
-        if (email.isEmpty() || password.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || address.isEmpty() || phoneNumber.isEmpty()) {
-            throw new IllegalArgumentException("Fields cannot be empty");
-        }
+    public Account() {
     }
 
     public AccountType getAccountType() {

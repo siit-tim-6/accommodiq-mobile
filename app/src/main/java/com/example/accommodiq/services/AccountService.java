@@ -1,8 +1,16 @@
 package com.example.accommodiq.services;
 
+import com.example.accommodiq.apiConfig.RetrofitClientInstance;
+import com.example.accommodiq.dtos.CredentialsDto;
+import com.example.accommodiq.dtos.LoginResponseDto;
+import com.example.accommodiq.dtos.RegisterDto;
 import com.example.accommodiq.models.Account;
+import com.example.accommodiq.services.interfaces.AccountApiService;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class AccountService {
     private static AccountService instance = null;
@@ -23,27 +31,6 @@ public class AccountService {
         accounts.add(guestAccount);
         accounts.add(ownerAccount);
         accounts.add(adminAccount);
-    }
-
-    public boolean logIn(String email, String password) {
-        for (Account account : accounts) {
-            if (account.getEmail().equals(email) && account.getPassword().equals(password)) {
-                loggedInAccount = account;
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean register(Account account) {
-        boolean emailExists = accounts.stream()
-                .anyMatch(existingAccount -> existingAccount.getEmail().equals(account.getEmail()));
-
-        if (emailExists) return false;
-
-        accounts.add(account);
-        loggedInAccount = account;
-        return true;
     }
 
     public Account getLoggedInAccount() {
