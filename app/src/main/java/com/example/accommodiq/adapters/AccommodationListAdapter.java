@@ -81,6 +81,8 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
             if (!accommodation.getImage().isEmpty()) {
                 String imageUrl = RetrofitClientInstance.getServerIp(getContext()) + "/images/" + accommodation.getImage();
                 Picasso.with(getContext()).load(imageUrl).into(imageView);
+            } else {
+                imageView.setImageResource(R.drawable.accommodation_image);
             }
             titleTextView.setText(accommodation.getTitle());
             ratingBar.setRating(accommodation.getRating().floatValue());

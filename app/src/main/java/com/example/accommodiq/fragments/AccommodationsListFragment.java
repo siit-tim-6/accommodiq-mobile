@@ -70,24 +70,25 @@ public class AccommodationsListFragment extends ListFragment {
         TextView dateRangeSearch = view.findViewById(R.id.date_range_search);
         Button moreFiltersBtn = view.findViewById(R.id.more_filters);
         Button searchBtn = view.findViewById(R.id.accommodations_search);
+        Button clearBtn = view.findViewById(R.id.clear_search);
+        CalendarConstraints dateValidator = (new CalendarConstraints.Builder()).setValidator(DateValidatorPointForward.now()).build();
+
+        MaterialDatePicker<Pair<Long, Long>> dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
+                .setCalendarConstraints(dateValidator)
+                .setTheme(R.style.ThemeMaterialCalendar)
+                .setTitleText("Select check-in and check-out date").setSelection(new Pair<>(null, null)).build();
 
         dateRangeSearch.setOnClickListener(v -> {
-            CalendarConstraints dateValidator = (new CalendarConstraints.Builder()).setValidator(DateValidatorPointForward.now()).build();
-
-            MaterialDatePicker<Pair<Long, Long>> dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
-                    .setCalendarConstraints(dateValidator)
-                    .setTheme(R.style.ThemeMaterialCalendar)
-                    .setTitleText("Select check-in and check-out date").setSelection(new Pair<>(null, null)).build();
-
-            dateRangePicker.show(this.getParentFragmentManager(), "AccommodIQ");
+            if (!dateRangePicker.isAdded())
+                dateRangePicker.show(this.getParentFragmentManager(), "AccommodIQ");
 
             dateRangePicker.addOnNegativeButtonClickListener(v1 -> {
                 dateRangePicker.dismiss();
             });
 
             dateRangePicker.addOnPositiveButtonClickListener(selection -> {
-                dateFrom = selection.first;
-                dateTo = selection.second;
+                dateFrom = selection.first / 1000;
+                dateTo = selection.second / 1000;
                 dateRangeSearch.setText(String.format("%s - %s", DateUtils.convertTimeToDate(selection.first), DateUtils.convertTimeToDate(selection.second)));
             });
         });
@@ -98,6 +99,17 @@ public class AccommodationsListFragment extends ListFragment {
             String locationSearchText = !locationSearch.getText().toString().isEmpty() ? locationSearch.getText().toString() : null;
 
             searchAccommodations(titleSearchText, locationSearchText, dateFrom, dateTo, null, null, guestsSearchNumber, null, null);
+        });
+
+        clearBtn.setOnClickListener(v -> {
+            titleSearch.setText("");
+            guestsSearch.setText("");
+            locationSearch.setText("");
+            dateFrom = null;
+            dateTo = null;
+            dateRangeSearch.setText(R.string.date_range_hint);
+
+            searchAccommodations(null, null, null, null, null, null, null, null, null);
         });
     }
 
