@@ -10,13 +10,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.accommodiq.R;
-import com.example.accommodiq.Utility.TextUtilities;
+import com.example.accommodiq.utils.TextUtils;
 import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.databinding.ActivityRegisterBinding;
 import com.example.accommodiq.dtos.RegisterDto;
 import com.example.accommodiq.models.User;
-import com.example.accommodiq.services.AccountService;
 import com.example.accommodiq.services.interfaces.AccountApiService;
 
 import retrofit2.Call;
@@ -41,7 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void setUpAlreadyHaveAccountBtn() {
         TextView alreadyHaveAccountBtn = findViewById(R.id.alreadyHaveAccount);
         alreadyHaveAccountBtn.setOnClickListener(view -> startActivity(new Intent(RegisterActivity.this, LoginActivity.class)));
-        TextUtilities.makeTextUnderlined(alreadyHaveAccountBtn);
+        TextUtils.makeTextUnderlined(alreadyHaveAccountBtn);
     }
 
     private void setUpCloseBtn() {

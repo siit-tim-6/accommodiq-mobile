@@ -10,13 +10,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.accommodiq.R;
-import com.example.accommodiq.Utility.TextUtilities;
+import com.example.accommodiq.utils.TextUtils;
 import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.databinding.ActivityLoginBinding;
 import com.example.accommodiq.dtos.CredentialsDto;
 import com.example.accommodiq.dtos.LoginResponseDto;
-import com.example.accommodiq.services.AccountService;
 import com.example.accommodiq.services.interfaces.AccountApiService;
 
 import retrofit2.Call;
@@ -79,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
     private void setUpCreateAccountTextView() {
         TextView createAccountTextView = findViewById(R.id.createAccountTextView);
         createAccountTextView.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
-        TextUtilities.makeTextUnderlined(createAccountTextView);
+        TextUtils.makeTextUnderlined(createAccountTextView);
     }
 
     private void setUpCloseBtn() {
