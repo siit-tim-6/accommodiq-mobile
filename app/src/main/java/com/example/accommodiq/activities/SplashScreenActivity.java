@@ -15,6 +15,7 @@ import android.provider.Settings;
 import android.widget.Toast;
 
 import com.example.accommodiq.R;
+import com.example.accommodiq.apiConfig.JwtUtils;
 
 public class SplashScreenActivity extends AppCompatActivity {
     int SPLASH_TIME_OUT=2000;
@@ -40,7 +41,15 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     private void navigateToWelcomeScreenAfterDelay(int delayMilliseconds) {
-        new Handler(Looper.getMainLooper()).postDelayed(this::navigateToLogin,delayMilliseconds);
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (JwtUtils.isUserLoggedIn(getApplicationContext())) {
+                Intent mainIntent = new Intent(SplashScreenActivity.this, MainActivity.class);
+                startActivity(mainIntent);
+                finish();
+            } else {
+                navigateToLogin();
+            }
+        }, delayMilliseconds);
     }
 
     private void openWifiSettings() {
