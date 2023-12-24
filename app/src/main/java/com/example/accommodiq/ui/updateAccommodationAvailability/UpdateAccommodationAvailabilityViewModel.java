@@ -1,9 +1,12 @@
 package com.example.accommodiq.ui.updateAccommodationAvailability;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.dtos.AccommodationBookingDetailFormDto;
 import com.example.accommodiq.dtos.AccommodationBookingDetailsDto;
 import com.example.accommodiq.dtos.AccommodationDetailsDto;
@@ -11,6 +14,7 @@ import com.example.accommodiq.dtos.AvailabilityDto;
 import com.example.accommodiq.dtos.MessageDto;
 import com.example.accommodiq.models.Availability;
 import com.example.accommodiq.services.interfaces.AccommodationApiService;
+import com.example.accommodiq.services.interfaces.AccountApiService;
 
 import java.util.List;
 
@@ -23,18 +27,10 @@ public class UpdateAccommodationAvailabilityViewModel extends ViewModel {
     private MutableLiveData<List<Availability>> availabilityListLiveData;
     private AccommodationApiService apiService;
 
-    public UpdateAccommodationAvailabilityViewModel() {
+    public UpdateAccommodationAvailabilityViewModel(Context context) {
         availabilityListLiveData = new MutableLiveData<>();
-        initApiService();
+        apiService = RetrofitClientInstance.getRetrofitInstance(context).create(AccommodationApiService.class);
         // Optionally load initial data here if needed
-    }
-
-    private void initApiService() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:8000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        apiService = retrofit.create(AccommodationApiService.class);
     }
 
     public LiveData<List<Availability>> getAvailabilityListLiveData() {

@@ -39,5 +39,13 @@
         android:id="@+id/navigation_new_accommodation"
         android:name="com.example.accommodiq.ui.newAccommodation.NewAccommodationFragment"
         android:label="New Accommodation"
-        tools:layout="@layout/fragment_new_accommodation" />
+        tools:layout="@layout/fragment_new_accommodation">
+        <action
+        android:id="@+id/action_newAccommodationFragment_to_updateAccommodationAvailabilityFragment"
+        app:destination="@id/navigation_update_accommodation_availability" /></fragment>
+
+    <fragment
+        android:id="@+id/navigation_update_accommodation_availability"
+        android:name="com.example.accommodiq.ui.updateAccommodationAvailability.UpdateAccommodationAvailabilityFragment"
+        android:label="Update Accommodation Availability" />
 </navigation>

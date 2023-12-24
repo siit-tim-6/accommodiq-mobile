@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".ui.updateAccommodationAvailability.UpdateAccommodationAvailability">
+        tools:context=".ui.updateAccommodationAvailability.UpdateAccommodationAvailabilityFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewAvailabilityRange"
@@ -128,6 +128,21 @@
                 android:text="Add"
                 android:textColor="@color/white" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/closePageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            android:text="X"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toTopOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

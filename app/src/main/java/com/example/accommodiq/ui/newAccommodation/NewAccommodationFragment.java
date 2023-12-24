@@ -15,6 +15,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.provider.MediaStore;
@@ -83,6 +84,9 @@ public class NewAccommodationFragment extends Fragment implements AvailabilityAc
             adapter.notifyDataSetChanged();
         });
 
+        binding.updateAvailabilityTestButton.setOnClickListener(v -> NavHostFragment.findNavController(NewAccommodationFragment.this)
+                .navigate(R.id.action_newAccommodationFragment_to_updateAccommodationAvailabilityFragment));
+
         galleryActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -109,7 +113,7 @@ public class NewAccommodationFragment extends Fragment implements AvailabilityAc
         binding.buttonUploadImages.setOnClickListener(v -> openGallery());
         binding.buttonAdd.setOnClickListener(v -> {
             addNewAvailability();
-            selectedFromDate= null;
+            selectedFromDate = null;
             selectedToDate = null;
             binding.editTextSelectRange.setText("");
             binding.editTextPrice.setText("");

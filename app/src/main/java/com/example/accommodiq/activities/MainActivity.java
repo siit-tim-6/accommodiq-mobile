@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             switch (role) {
-                case "OWNER":
+                case "HOST":
                     binding.navView.getMenu().clear();
                     binding.navView.inflateMenu(R.menu.bottom_nav_menu_owner);
                     break;

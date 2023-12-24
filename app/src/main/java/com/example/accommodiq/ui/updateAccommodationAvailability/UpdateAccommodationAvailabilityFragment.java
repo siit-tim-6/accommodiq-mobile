@@ -1,6 +1,7 @@
 package com.example.accommodiq.ui.updateAccommodationAvailability;
 
 import androidx.core.util.Pair;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -8,15 +9,14 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.accommodiq.R;
 import com.example.accommodiq.adapters.AvailabilityRangeListAdapter;
 import com.example.accommodiq.databinding.FragmentUpdateAccommodationAvailabilityBinding;
 import com.example.accommodiq.dtos.AccommodationBookingDetailFormDto;
@@ -37,10 +37,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UpdateAccommodationAvailability extends Fragment implements AvailabilityActionsListener {
+public class UpdateAccommodationAvailabilityFragment extends Fragment implements AvailabilityActionsListener {
 
     // Assuming accommodationId is obtained somehow (e.g., passed via Bundle or ViewModel)
-    Long accommodationId = 1L; // Replace with actual accommodation ID
+    Long accommodationId = 4L; // Replace with actual accommodation ID
     private UpdateAccommodationAvailabilityViewModel mViewModel;
     private AvailabilityRangeListAdapter adapter;
     private FragmentUpdateAccommodationAvailabilityBinding binding; // Binding object
@@ -56,7 +56,13 @@ public class UpdateAccommodationAvailability extends Fragment implements Availab
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        mViewModel = new ViewModelProvider(this).get(UpdateAccommodationAvailabilityViewModel.class);
+        mViewModel = mViewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new UpdateAccommodationAvailabilityViewModel(getContext());
+            }
+        }).get(UpdateAccommodationAvailabilityViewModel.class);
 
         List<Availability> availabilityList = mViewModel.getAvailabilityListLiveData().getValue();
 
@@ -71,6 +77,7 @@ public class UpdateAccommodationAvailability extends Fragment implements Availab
             binding.editTextPrice.setText("");
         });
         binding.editTextSelectRange.setOnClickListener(v -> showMaterialDateRangePicker());
+        binding.closePageButton.setOnClickListener(v -> NavHostFragment.findNavController(this).popBackStack());
 
         mViewModel.getAccommodationBookingDetails(accommodationId, new Callback<AccommodationBookingDetailFormDto>() {
             @Override
