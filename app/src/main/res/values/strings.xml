@@ -55,5 +55,6 @@
     <string name="title_hint">Title</string>
     <string name="location_hint">Location</string>
     <string name="more_filters">More Filters</string>
+    <string name="clear">Clear</string>
     <string name="date_range_hint">Start date - End date</string>
 </resources>
