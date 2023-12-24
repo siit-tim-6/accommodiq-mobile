@@ -40,7 +40,7 @@ import retrofit2.Response;
 public class UpdateAccommodationAvailabilityFragment extends Fragment implements AvailabilityActionsListener {
 
     // Assuming accommodationId is obtained somehow (e.g., passed via Bundle or ViewModel)
-    Long accommodationId = 4L; // Replace with actual accommodation ID
+    Long accommodationId=4L; // Replace with actual accommodation ID
     private UpdateAccommodationAvailabilityViewModel mViewModel;
     private AvailabilityRangeListAdapter adapter;
     private FragmentUpdateAccommodationAvailabilityBinding binding; // Binding object
@@ -63,6 +63,11 @@ public class UpdateAccommodationAvailabilityFragment extends Fragment implements
                 return (T) new UpdateAccommodationAvailabilityViewModel(getContext());
             }
         }).get(UpdateAccommodationAvailabilityViewModel.class);
+
+        Bundle args = getArguments();
+        if (args != null) {
+            accommodationId = args.getLong("accommodationId", -1L);
+        }
 
         List<Availability> availabilityList = mViewModel.getAvailabilityListLiveData().getValue();
 
