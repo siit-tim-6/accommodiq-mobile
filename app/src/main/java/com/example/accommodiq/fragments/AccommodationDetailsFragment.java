@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import com.example.accommodiq.R;
 import com.example.accommodiq.adapters.ReviewsListAdapter;
 import com.example.accommodiq.models.Review;
+import com.example.accommodiq.utils.DateUtils;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
 import java.text.SimpleDateFormat;
@@ -70,7 +71,7 @@ public class AccommodationDetailsFragment extends Fragment {
             });
 
             dateRangePicker.addOnPositiveButtonClickListener(selection -> {
-                dateRangeTextView.setText(String.format("%s - %s", convertTimeToDate(selection.first), convertTimeToDate(selection.second)));
+                dateRangeTextView.setText(String.format("%s - %s", DateUtils.convertTimeToDate(selection.first), DateUtils.convertTimeToDate(selection.second)));
             });
         });
 
@@ -78,13 +79,6 @@ public class AccommodationDetailsFragment extends Fragment {
         reviewsListView.setAdapter(new ReviewsListAdapter(getActivity(), reviews));
 
         return view;
-    }
-
-    private String convertTimeToDate(Long time) {
-        Calendar utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        utc.setTimeInMillis(time);
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        return format.format(utc.getTime());
     }
 
     private void prepareReviewList() {
