@@ -18,10 +18,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.accommodiq.R;
+import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.dtos.AccommodationListDto;
 import com.example.accommodiq.fragments.AccommodationDetailsFragment;
 import com.example.accommodiq.fragments.FragmentTransition;
 import com.example.accommodiq.models.Accommodation;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -76,7 +78,10 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
             String pricePerNight = "From " + accommodation.getMinPrice() + "€" + (accommodation.getPricingType().equals("PER_GUEST") ? " / guest" : "") + " / night";
             String totalPrice = accommodation.getTotalPrice() + "€ total";
 
-//            imageView.setImageResource(accommodation.getImage());
+            if (!accommodation.getImage().isEmpty()) {
+                String imageUrl = RetrofitClientInstance.getServerIp(getContext()) + "/images/" + accommodation.getImage();
+                Picasso.with(getContext()).load(imageUrl).into(imageView);
+            }
             titleTextView.setText(accommodation.getTitle());
             ratingBar.setRating(accommodation.getRating().floatValue());
             ratingTextView.setText(String.valueOf(accommodation.getRating()));
