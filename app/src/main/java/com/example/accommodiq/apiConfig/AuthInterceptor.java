@@ -40,6 +40,7 @@ public class AuthInterceptor implements Interceptor {
     }
 
     private void redirectToLogin() {
+        JwtUtils.clearJwtAndRole(context);
         Intent intent = new Intent(context, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
