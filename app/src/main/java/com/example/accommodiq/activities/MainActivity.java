@@ -9,8 +9,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.databinding.ActivityMainBinding;
-import com.example.accommodiq.models.Account;
-import com.example.accommodiq.services.AccountService;
 import com.example.accommodiq.apiConfig.JwtUtils;
 
 public class MainActivity extends AppCompatActivity {
