@@ -73,7 +73,7 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
         if (accommodation != null) {
             String reviewCount = "(" + accommodation.getReviewCount() + ")";
             String guests = accommodation.getMinGuests() + "-" + accommodation.getMaxGuests() + " guests";
-            String pricePerNight = "From" + accommodation.getMinPrice() + "€" + (accommodation.getPricingType().equals("PER_GUEST") ? " / guest" : "") + " / night";
+            String pricePerNight = "From " + accommodation.getMinPrice() + "€" + (accommodation.getPricingType().equals("PER_GUEST") ? " / guest" : "") + " / night";
             String totalPrice = accommodation.getTotalPrice() + "€ total";
 
 //            imageView.setImageResource(accommodation.getImage());
