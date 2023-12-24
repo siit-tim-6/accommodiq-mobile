@@ -18,17 +18,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.accommodiq.R;
+import com.example.accommodiq.dtos.AccommodationListDto;
 import com.example.accommodiq.fragments.AccommodationDetailsFragment;
 import com.example.accommodiq.fragments.FragmentTransition;
 import com.example.accommodiq.models.Accommodation;
 
 import java.util.ArrayList;
 
-public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
-    private ArrayList<Accommodation> accommodations;
+public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto> {
+    private ArrayList<AccommodationListDto> accommodations;
     private Context context;
 
-    public AccommodationListAdapter(Context context, ArrayList<Accommodation> accommodations) {
+    public AccommodationListAdapter(Context context, ArrayList<AccommodationListDto> accommodations) {
         super(context, R.layout.accommodation_card, accommodations);
         this.accommodations = accommodations;
         this.context = context;
@@ -41,19 +42,19 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
 
     @Nullable
     @Override
-    public Accommodation getItem(int position) {
+    public AccommodationListDto getItem(int position) {
         return accommodations.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return accommodations.get(position).getId();
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Accommodation accommodation = getItem(position);
+        AccommodationListDto accommodation = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.accommodation_card, parent, false);
         }
@@ -72,12 +73,12 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
         if (accommodation != null) {
             String reviewCount = "(" + accommodation.getReviewCount() + ")";
             String guests = accommodation.getMinGuests() + "-" + accommodation.getMaxGuests() + " guests";
-            String pricePerNight = accommodation.getPrice() + "€ / night";
-            String totalPrice = accommodation.getPrice() + "€ total";
+            String pricePerNight = "From" + accommodation.getMinPrice() + "€" + (accommodation.getPricingType().equals("PER_GUEST") ? " / guest" : "") + " / night";
+            String totalPrice = accommodation.getTotalPrice() + "€ total";
 
-            imageView.setImageResource(accommodation.getImage());
+//            imageView.setImageResource(accommodation.getImage());
             titleTextView.setText(accommodation.getTitle());
-            ratingBar.setRating(((float) accommodation.getRating()));
+            ratingBar.setRating(accommodation.getRating().floatValue());
             ratingTextView.setText(String.valueOf(accommodation.getRating()));
             reviewCountTextView.setText(reviewCount);
             locationTextView.setText(accommodation.getLocation());
