@@ -5,11 +5,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.util.Pair;
 import androidx.fragment.app.ListFragment;
 
 import com.example.accommodiq.R;
@@ -18,6 +22,10 @@ import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.clients.AccommodationClient;
 import com.example.accommodiq.dtos.AccommodationListDto;
 import com.example.accommodiq.models.Accommodation;
+import com.example.accommodiq.utils.DateUtils;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointForward;
+import com.google.android.material.datepicker.MaterialDatePicker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +33,14 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Query;
 
 public class AccommodationsListFragment extends ListFragment {
     private AccommodationListAdapter adapter;
     private AccommodationClient accommodationClient;
     private List<AccommodationListDto> accommodations;
+    private Long dateFrom = null;
+    private Long dateTo = null;
 
     public static AccommodationsListFragment newInstance(Context context) {
         AccommodationsListFragment fragment = new AccommodationsListFragment();
@@ -46,9 +57,54 @@ public class AccommodationsListFragment extends ListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        searchAccommodations(null, null, null, null, null, null, null, null, null);
+    }
 
-        Call<List<AccommodationListDto>> accommodationsCall = accommodationClient.getAccommodations(null, null, null, null, null,
-                null, null, null, null);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        EditText titleSearch = view.findViewById(R.id.title_search);
+        EditText guestsSearch = view.findViewById(R.id.guests_search);
+        EditText locationSearch = view.findViewById(R.id.location_search);
+        TextView dateRangeSearch = view.findViewById(R.id.date_range_search);
+        Button moreFiltersBtn = view.findViewById(R.id.more_filters);
+        Button searchBtn = view.findViewById(R.id.accommodations_search);
+
+        dateRangeSearch.setOnClickListener(v -> {
+            CalendarConstraints dateValidator = (new CalendarConstraints.Builder()).setValidator(DateValidatorPointForward.now()).build();
+
+            MaterialDatePicker<Pair<Long, Long>> dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
+                    .setCalendarConstraints(dateValidator)
+                    .setTheme(R.style.ThemeMaterialCalendar)
+                    .setTitleText("Select check-in and check-out date").setSelection(new Pair<>(null, null)).build();
+
+            dateRangePicker.show(this.getParentFragmentManager(), "AccommodIQ");
+
+            dateRangePicker.addOnNegativeButtonClickListener(v1 -> {
+                dateRangePicker.dismiss();
+            });
+
+            dateRangePicker.addOnPositiveButtonClickListener(selection -> {
+                dateFrom = selection.first;
+                dateTo = selection.second;
+                dateRangeSearch.setText(String.format("%s - %s", DateUtils.convertTimeToDate(selection.first), DateUtils.convertTimeToDate(selection.second)));
+            });
+        });
+
+        searchBtn.setOnClickListener(v -> {
+            String titleSearchText = !titleSearch.getText().toString().isEmpty() ? titleSearch.getText().toString() : null;
+            Integer guestsSearchNumber = !guestsSearch.getText().toString().isEmpty() ? Integer.valueOf(guestsSearch.getText().toString()) : null;
+            String locationSearchText = !locationSearch.getText().toString().isEmpty() ? locationSearch.getText().toString() : null;
+
+            searchAccommodations(titleSearchText, locationSearchText, dateFrom, dateTo, null, null, guestsSearchNumber, null, null);
+        });
+    }
+
+    private void searchAccommodations(String title, String location, Long availableFrom, Long availableTo,
+                                      Integer priceFrom, Integer priceTo, Integer guests, String type, String benefits) {
+        Call<List<AccommodationListDto>> accommodationsCall = accommodationClient.getAccommodations(title, location, availableFrom, availableTo, priceFrom,
+                priceTo, guests, type, benefits);
         accommodationsCall.enqueue(new Callback<List<AccommodationListDto>>() {
             @Override
             public void onResponse(Call<List<AccommodationListDto>> call, Response<List<AccommodationListDto>> response) {

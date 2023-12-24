@@ -52,4 +52,8 @@
     <string name="log_in_or_sign_up_btn_text">Log in or Sign up</string>
     <string name="sign_out">Sign Out</string>
     <string name="prompt_change_password">Change Password</string>
+    <string name="title_hint">Title</string>
+    <string name="location_hint">Location</string>
+    <string name="more_filters">More Filters</string>
+    <string name="date_range_hint">Start date - End date</string>
 </resources>
