@@ -48,4 +48,10 @@
         android:id="@+id/navigation_update_accommodation_availability"
         android:name="com.example.accommodiq.ui.updateAccommodationAvailability.UpdateAccommodationAvailabilityFragment"
         android:label="Update Accommodation Availability" />
+
+    <fragment
+        android:id="@+id/navigation_accommodation_review"
+        android:name="com.example.accommodiq.ui.accommodationReview.AccommodationReviewFragment"
+        android:label="@string/title_accommodation_review"
+        tools:layout="@layout/fragment_accommodation_review" />
 </navigation>

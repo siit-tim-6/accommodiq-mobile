@@ -58,4 +58,5 @@
         <item>Hotel room</item>
     </string-array>
     <string name="prompt_change_password">Change Password</string>
+    <string name="title_accommodation_review">Review</string>
 </resources>
