@@ -85,6 +85,8 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
         ImageButton favoriteButton = convertView.findViewById(R.id.favorite_button_card);
         ImageButton acceptButton = convertView.findViewById(R.id.accommodation_accept_button);
         ImageButton denyButton = convertView.findViewById(R.id.accommodation_deny_button);
+        ImageButton editButton = convertView.findViewById(R.id.accommodation_edit_button);
+        ImageButton editAvailabilityButton = convertView.findViewById(R.id.accommodation_availability_edit_button);
 
         if (accommodation != null) {
             String reviewCount = "(" + accommodation.getReviewCount() + ")";
@@ -119,6 +121,12 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
                 changeStatus(accommodation, denyAccommodationCall);
             });
 
+            editButton.setOnClickListener(v -> {
+            });
+
+            editAvailabilityButton.setOnClickListener(v -> {
+            });
+
             if (showAcceptDenyButtons) {
                 favoriteButton.setVisibility(View.GONE);
             } else {
@@ -128,8 +136,12 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
             if (showStatus) {
                 statusTextView.setVisibility(View.VISIBLE);
                 statusTextView.setText("STATUS: " + accommodation.getStatus());
+                editButton.setVisibility(View.VISIBLE);
+                editAvailabilityButton.setVisibility(View.VISIBLE);
             } else {
                 statusTextView.setVisibility(View.GONE);
+                editButton.setVisibility(View.GONE);
+                editAvailabilityButton.setVisibility(View.GONE);
             }
         }
 

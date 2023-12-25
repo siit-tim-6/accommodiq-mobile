@@ -54,6 +54,28 @@
             android:contentDescription="@string/favorite_button"
             app:srcCompat="@drawable/icon_accommodation_deny" />
 
+        <ImageButton
+            android:id="@+id/accommodation_edit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/favorite_button"
+            app:srcCompat="@drawable/icon_accommodation_edit" />
+
+        <ImageButton
+            android:id="@+id/accommodation_availability_edit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/favorite_button"
+            app:srcCompat="@drawable/icon_accommodation_availability_edit" />
+
 
     </FrameLayout>
 
