@@ -54,4 +54,11 @@
         android:name="com.example.accommodiq.ui.accommodationReview.AccommodationReviewFragment"
         android:label="@string/title_accommodation_review"
         tools:layout="@layout/fragment_accommodation_review" />
+
+    <fragment
+        android:id="@+id/navigation_host_accommodations"
+        android:name="com.example.accommodiq.ui.hostAccommodations.HostAccommodationsFragment"
+        android:label="@string/title_host_accommodations"
+        tools:layout="@layout/fragment_host_accommodations" />
+
 </navigation>

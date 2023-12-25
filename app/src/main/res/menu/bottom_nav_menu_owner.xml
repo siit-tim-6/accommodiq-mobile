@@ -7,9 +7,9 @@
         android:title="@string/title_search" />
 
     <item
-        android:id="@+id/navigation_reservations"
+        android:id="@+id/navigation_host_accommodations"
         android:icon="@drawable/icon_listing"
-        android:title="@string/title_reservations" />
+        android:title="@string/host_accommodations" />
 
 
     <item

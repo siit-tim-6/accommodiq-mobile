@@ -1,4 +1,4 @@
-package com.example.accommodiq.ui.accommodationReview;
+package com.example.accommodiq.ui.hostAccommodations;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,26 +6,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.accommodiq.R;
-import com.example.accommodiq.activities.RegisterActivity;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
-import com.example.accommodiq.databinding.FragmentAccommodationReviewBinding;
 import com.example.accommodiq.databinding.FragmentSearchBinding;
-import com.example.accommodiq.dtos.AccommodationDetailsDto;
 import com.example.accommodiq.dtos.AccommodationReviewDto;
-import com.example.accommodiq.dtos.RegisterDto;
 import com.example.accommodiq.fragments.AccommodationsListFragment;
 import com.example.accommodiq.fragments.FragmentTransition;
 import com.example.accommodiq.models.Accommodation;
 import com.example.accommodiq.services.interfaces.AccommodationApiService;
-import com.example.accommodiq.ui.search.SearchViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AccommodationReviewFragment extends Fragment {
+public class HostAccommodationsFragment extends Fragment {
     private ArrayList<Accommodation> accommodations = new ArrayList<>();
     private FragmentSearchBinding binding;
 
@@ -50,7 +43,7 @@ public class AccommodationReviewFragment extends Fragment {
         prepareAccommodationList();
         Activity mainActivity = getActivity();
         if (mainActivity != null) {
-            FragmentTransition.to(AccommodationsListFragment.newInstance(accommodations, true, false), getActivity(), false, R.id.accommodations_fragment);
+            FragmentTransition.to(AccommodationsListFragment.newInstance(accommodations, false, true), getActivity(), false, R.id.accommodations_fragment);
         }
     }
 
@@ -62,7 +55,7 @@ public class AccommodationReviewFragment extends Fragment {
 
     private void prepareAccommodationList() {
         AccommodationApiService accommodationApiService = RetrofitClientInstance.getRetrofitInstance(getContext()).create(AccommodationApiService.class);
-        Call<List<AccommodationReviewDto>> call = accommodationApiService.getPendingAccommodations();
+        Call<List<AccommodationReviewDto>> call = accommodationApiService.getHostAccommodations();
         call.enqueue(new Callback<List<AccommodationReviewDto>>() {
             @Override
             public void onResponse(@NonNull Call<List<AccommodationReviewDto>> call, @NonNull Response<List<AccommodationReviewDto>> response) {
@@ -71,7 +64,7 @@ public class AccommodationReviewFragment extends Fragment {
                     fillAccommodationList(response.body());
 
                     if (getActivity() != null) {
-                        FragmentTransition.to(AccommodationsListFragment.newInstance(accommodations, true, false), getActivity(), false, R.id.accommodations_fragment);
+                        FragmentTransition.to(AccommodationsListFragment.newInstance(accommodations, false, true), getActivity(), false, R.id.accommodations_fragment);
                     }
                 } else {
                     Toast.makeText(getContext(), "Server error", Toast.LENGTH_SHORT).show();

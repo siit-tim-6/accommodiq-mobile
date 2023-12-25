@@ -12,6 +12,7 @@ public class AccommodationReviewDto {
     // for demonstration purposes only, will be an URL later
     private String image;
     private double price;
+    private String status;
 
     public AccommodationReviewDto() {
     }
@@ -110,5 +111,13 @@ public class AccommodationReviewDto {
                 ", image='" + image + '\'' +
                 ", price=" + price +
                 '}';
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

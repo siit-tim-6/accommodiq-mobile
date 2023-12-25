@@ -20,6 +20,7 @@ public class Accommodation implements Parcelable {
     // for demonstration purposes only, will be an URL later
     private int image;
     private double price;
+    private String status;
 
     public Accommodation(long id, String title, String description, double rating, int reviewCount, String location, int minGuests, int maxGuests, int image, double price) {
         this.id = id;
@@ -62,6 +63,7 @@ public class Accommodation implements Parcelable {
         this.maxGuests = accommodationReviewDto.getMaxGuests();
         this.image = R.drawable.accommodation_image;
         this.price = accommodationReviewDto.getPrice();
+        this.status = accommodationReviewDto.getStatus();
     }
 
     public long getId() {
@@ -174,4 +176,12 @@ public class Accommodation implements Parcelable {
             return new Accommodation[i];
         }
     };
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

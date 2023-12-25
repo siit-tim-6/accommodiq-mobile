@@ -46,4 +46,7 @@ public interface AccommodationApiService {
 
     @PUT("/accommodations/{accommodationId}/status")
     Call<AccommodationReviewDto> updateAccommodationStatus(@Path("accommodationId") Long accommodationId, @Body AccommodationStatusDto status);
+
+    @GET("/hosts/accommodations")
+    Call<List<AccommodationReviewDto>> getHostAccommodations();
 }

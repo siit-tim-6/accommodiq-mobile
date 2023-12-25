@@ -37,12 +37,14 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
     private final ArrayList<Accommodation> accommodations;
     private final Context context;
     private final boolean showAcceptDenyButtons;
+    private final boolean showStatus;
 
-    public AccommodationListAdapter(Context context, ArrayList<Accommodation> accommodations, boolean showAcceptDenyButtons) {
+    public AccommodationListAdapter(Context context, ArrayList<Accommodation> accommodations, boolean showAcceptDenyButtons, boolean showStatus) {
         super(context, R.layout.accommodation_card, accommodations);
         this.accommodations = accommodations;
         this.context = context;
         this.showAcceptDenyButtons = showAcceptDenyButtons;
+        this.showStatus = showStatus;
     }
 
     @Override
@@ -79,6 +81,7 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
         TextView guestsTextView = convertView.findViewById(R.id.accommodation_guests);
         TextView pricePerNightTextView = convertView.findViewById(R.id.accommodation_price_per_night);
         TextView totalPriceTextView = convertView.findViewById(R.id.accommodation_total_price);
+        TextView statusTextView = convertView.findViewById(R.id.accommodation_status);
         ImageButton favoriteButton = convertView.findViewById(R.id.favorite_button_card);
         ImageButton acceptButton = convertView.findViewById(R.id.accommodation_accept_button);
         ImageButton denyButton = convertView.findViewById(R.id.accommodation_deny_button);
@@ -122,6 +125,12 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
                 acceptButton.setVisibility(View.GONE);
                 denyButton.setVisibility(View.GONE);
             }
+            if (showStatus) {
+                statusTextView.setVisibility(View.VISIBLE);
+                statusTextView.setText("STATUS: " + accommodation.getStatus());
+            } else {
+                statusTextView.setVisibility(View.GONE);
+            }
         }
 
         return convertView;
@@ -130,9 +139,7 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
     @Override
     public void remove(@Nullable Accommodation object) {
         super.remove(object);
-//        accommodations.remove(object);
         notifyDataSetChanged();
-        Log.i("HALO", "obrisao");
     }
 
     private void changeStatus(Accommodation accommodation, Call<AccommodationReviewDto> acceptAccommodationCall) {
@@ -143,7 +150,6 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
                     Toast.makeText(context, accommodation.getId() + ": changed", Toast.LENGTH_SHORT).show();
                     Optional<Accommodation> result = accommodations.stream().filter(a -> a.getId() == accommodation.getId()).findFirst();
                     result.ifPresent(value -> remove(value));
-                    Log.i("POVRATNA", response.body().toString());
                 } else {
                     Toast.makeText(context, accommodation.getId() + ": change failed", Toast.LENGTH_SHORT).show();
                 }
