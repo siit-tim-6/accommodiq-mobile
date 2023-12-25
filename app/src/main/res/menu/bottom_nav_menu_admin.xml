@@ -12,9 +12,9 @@
         android:title="@string/title_reservations" />
 
     <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/icon_notifications"
-        android:title="@string/title_notifications" />
+        android:id="@+id/navigation_accommodation_review"
+        android:icon="@drawable/icon_accommodation_review"
+        android:title="@string/title_accommodation_review" />
 
 
     <item

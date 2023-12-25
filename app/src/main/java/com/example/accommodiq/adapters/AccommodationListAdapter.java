@@ -18,20 +18,37 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.accommodiq.R;
+import com.example.accommodiq.apiConfig.RetrofitClientInstance;
+import com.example.accommodiq.dtos.AccommodationDetailsDto;
+import com.example.accommodiq.dtos.AccommodationReviewDto;
+import com.example.accommodiq.dtos.AccommodationStatusDto;
+import com.example.accommodiq.dtos.ModifyAccommodationDto;
 import com.example.accommodiq.fragments.AccommodationDetailsFragment;
 import com.example.accommodiq.fragments.FragmentTransition;
 import com.example.accommodiq.models.Accommodation;
+import com.example.accommodiq.services.interfaces.AccommodationApiService;
+import com.example.accommodiq.ui.newAccommodation.NewAccommodationFragment;
+import com.example.accommodiq.ui.updateAccommodationAvailability.UpdateAccommodationAvailabilityFragment;
 
 import java.util.ArrayList;
+import java.util.Optional;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
-    private ArrayList<Accommodation> accommodations;
-    private Context context;
+    private final ArrayList<Accommodation> accommodations;
+    private final Context context;
+    private final boolean showAcceptDenyButtons;
+    private final boolean showStatus;
 
-    public AccommodationListAdapter(Context context, ArrayList<Accommodation> accommodations) {
+    public AccommodationListAdapter(Context context, ArrayList<Accommodation> accommodations, boolean showAcceptDenyButtons, boolean showStatus) {
         super(context, R.layout.accommodation_card, accommodations);
         this.accommodations = accommodations;
         this.context = context;
+        this.showAcceptDenyButtons = showAcceptDenyButtons;
+        this.showStatus = showStatus;
     }
 
     @Override
@@ -53,6 +70,7 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        AccommodationApiService apiService = RetrofitClientInstance.getRetrofitInstance(context).create(AccommodationApiService.class);
         Accommodation accommodation = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.accommodation_card, parent, false);
@@ -67,7 +85,12 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
         TextView guestsTextView = convertView.findViewById(R.id.accommodation_guests);
         TextView pricePerNightTextView = convertView.findViewById(R.id.accommodation_price_per_night);
         TextView totalPriceTextView = convertView.findViewById(R.id.accommodation_total_price);
+        TextView statusTextView = convertView.findViewById(R.id.accommodation_status);
         ImageButton favoriteButton = convertView.findViewById(R.id.favorite_button_card);
+        ImageButton acceptButton = convertView.findViewById(R.id.accommodation_accept_button);
+        ImageButton denyButton = convertView.findViewById(R.id.accommodation_deny_button);
+        ImageButton editButton = convertView.findViewById(R.id.accommodation_edit_button);
+        ImageButton editAvailabilityButton = convertView.findViewById(R.id.accommodation_availability_edit_button);
 
         if (accommodation != null) {
             String reviewCount = "(" + accommodation.getReviewCount() + ")";
@@ -91,8 +114,87 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
                 FragmentTransition.to(AccommodationDetailsFragment.newInstance(), (FragmentActivity) context, true, R.id.accommodations_fragment);
                 Log.i("AccommodIQ", "Clicked accommodation card with id: " + accommodation.getId());
             });
+
+            acceptButton.setOnClickListener(v -> {
+                Call<AccommodationReviewDto> acceptAccommodationCall = apiService.updateAccommodationStatus(accommodation.getId(), new AccommodationStatusDto("ACCEPTED"));
+                changeStatus(accommodation, acceptAccommodationCall);
+            });
+
+            denyButton.setOnClickListener(v -> {
+                Call<AccommodationReviewDto> denyAccommodationCall = apiService.updateAccommodationStatus(accommodation.getId(), new AccommodationStatusDto("DENIED"));
+                changeStatus(accommodation, denyAccommodationCall);
+            });
+
+            editButton.setOnClickListener(v -> {
+                apiService.getAccommodationDetails(accommodation.getId()).enqueue(new Callback<ModifyAccommodationDto>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ModifyAccommodationDto> call, @NonNull Response<ModifyAccommodationDto> response) {
+                        if (response.isSuccessful()) {
+                            ModifyAccommodationDto accommodationDetailsDto = response.body();
+
+                            FragmentTransition.to(NewAccommodationFragment.newInstance(accommodationDetailsDto), (FragmentActivity) context, true, R.id.accommodations_fragment);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<ModifyAccommodationDto> call, @NonNull Throwable t) {
+                    }
+                });
+            });
+
+            editAvailabilityButton.setOnClickListener(v -> {
+                FragmentTransition.to(UpdateAccommodationAvailabilityFragment.newInstance(accommodation.getId()), (FragmentActivity) context, true, R.id.accommodations_fragment);
+            });
+
+            if (showAcceptDenyButtons) {
+                favoriteButton.setVisibility(View.GONE);
+                editButton.setVisibility(View.GONE);
+                editAvailabilityButton.setVisibility(View.GONE);
+            } else {
+                acceptButton.setVisibility(View.GONE);
+                denyButton.setVisibility(View.GONE);
+            }
+            if (showStatus) {
+                statusTextView.setVisibility(View.VISIBLE);
+                statusTextView.setText("STATUS: " + accommodation.getStatus());
+                editButton.setVisibility(View.VISIBLE);
+                editAvailabilityButton.setVisibility(View.VISIBLE);
+
+                favoriteButton.setVisibility(View.GONE);
+                acceptButton.setVisibility(View.GONE);
+                denyButton.setVisibility(View.GONE);
+            } else {
+                statusTextView.setVisibility(View.GONE);
+                editButton.setVisibility(View.GONE);
+                editAvailabilityButton.setVisibility(View.GONE);
+            }
         }
 
         return convertView;
+    }
+
+    @Override
+    public void remove(@Nullable Accommodation object) {
+        super.remove(object);
+        notifyDataSetChanged();
+    }
+
+    private void changeStatus(Accommodation accommodation, Call<AccommodationReviewDto> acceptAccommodationCall) {
+        acceptAccommodationCall.enqueue(new Callback<AccommodationReviewDto>() {
+            @Override
+            public void onResponse(@NonNull Call<AccommodationReviewDto> call, @NonNull Response<AccommodationReviewDto> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, accommodation.getId() + ": changed", Toast.LENGTH_SHORT).show();
+                    Optional<Accommodation> result = accommodations.stream().filter(a -> a.getId() == accommodation.getId()).findFirst();
+                    result.ifPresent(value -> remove(value));
+                } else {
+                    Toast.makeText(context, accommodation.getId() + ": change failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<AccommodationReviewDto> call, @NonNull Throwable t) {
+            }
+        });
     }
 }
