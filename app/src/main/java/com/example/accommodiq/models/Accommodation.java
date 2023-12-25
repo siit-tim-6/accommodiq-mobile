@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.example.accommodiq.R;
+import com.example.accommodiq.dtos.AccommodationReviewDto;
+
 public class Accommodation implements Parcelable {
     private long id;
     private String title;
@@ -17,6 +20,7 @@ public class Accommodation implements Parcelable {
     // for demonstration purposes only, will be an URL later
     private int image;
     private double price;
+    private String status;
 
     public Accommodation(long id, String title, String description, double rating, int reviewCount, String location, int minGuests, int maxGuests, int image, double price) {
         this.id = id;
@@ -46,6 +50,20 @@ public class Accommodation implements Parcelable {
         maxGuests = in.readInt();
         image = in.readInt();
         price = in.readDouble();
+    }
+
+    public Accommodation(AccommodationReviewDto accommodationReviewDto) {
+        this.id = accommodationReviewDto.getId();
+        this.title = accommodationReviewDto.getTitle();
+        this.description = accommodationReviewDto.getDescription();
+        this.rating = accommodationReviewDto.getRating();
+        this.reviewCount = accommodationReviewDto.getReviewCount();
+        this.location = accommodationReviewDto.getLocation();
+        this.minGuests = accommodationReviewDto.getMinGuests();
+        this.maxGuests = accommodationReviewDto.getMaxGuests();
+        this.image = R.drawable.accommodation_image;
+        this.price = accommodationReviewDto.getPrice();
+        this.status = accommodationReviewDto.getStatus();
     }
 
     public long getId() {
@@ -158,4 +176,12 @@ public class Accommodation implements Parcelable {
             return new Accommodation[i];
         }
     };
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

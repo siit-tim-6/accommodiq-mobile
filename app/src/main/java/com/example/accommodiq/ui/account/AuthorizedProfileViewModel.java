@@ -1,33 +1,37 @@
 package com.example.accommodiq.ui.account;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
-import com.example.accommodiq.clients.ClientUtils;
+import com.example.accommodiq.BR;
+import com.example.accommodiq.activities.LoginActivity;
+import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.dtos.PasswordDto;
 import com.example.accommodiq.models.Account;
+import com.example.accommodiq.models.Password;
+import com.example.accommodiq.services.interfaces.AccountApiService;
+
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import androidx.databinding.BaseObservable;
-
-import com.example.accommodiq.BR;
-import com.example.accommodiq.models.Password;
-
-import java.util.Objects;
 
 public class AuthorizedProfileViewModel extends BaseObservable {
     private Account account = new Account();
     private final Password password = new Password();
     private boolean checked = false;
-    private final String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJob3N0M0BleGFtcGxlLmNvbSIsImV4cCI6MTcwMjIyOTYyMywiaWF0IjoxNzAyMjExNjIzfQ.iq0c9S_jpgpYJIAL0FN-btfnHFqYGed5KyyRBZS-oDGU-xi67G0WYEK_9yc9xLxFbNrFnjTgz5E_xF7Av3l5Cg";
+    private final AccountApiService accountApiService;
 
-    public AuthorizedProfileViewModel() {
-        Call<Account> call = ClientUtils.accountService.getAccountDetails("Bearer " + token);
+    public AuthorizedProfileViewModel(AccountApiService accountApiService) {
+        this.accountApiService = accountApiService;
+
+        Call<Account> call = accountApiService.getAccountDetails();
         call.enqueue(new Callback<Account>() {
             @Override
             public void onResponse(@NonNull Call<Account> call, @NonNull Response<Account> response) {
@@ -165,7 +169,7 @@ public class AuthorizedProfileViewModel extends BaseObservable {
         assert email != null;
         Account account = new Account(email, null, firstName, lastName, address, phoneNumber, null);
         Log.d("ACCOUNT", account.toString());
-        Call<Void> call = ClientUtils.accountService.updateAccount("Bearer " + token, account);
+        Call<Void> call = accountApiService.updateAccount(account);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
@@ -185,8 +189,7 @@ public class AuthorizedProfileViewModel extends BaseObservable {
     }
 
     public void changePassword(View view) {
-        Call<Void> call = ClientUtils.accountService.changePassword("Bearer " + token, new PasswordDto(getOldPassword(), getNewPassword()));
-        Log.d("PASSWORD DTO", new PasswordDto(getOldPassword(), getNewPassword()).toString());
+        Call<Void> call = accountApiService.changePassword(new PasswordDto(getOldPassword(), getNewPassword()));
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
@@ -203,6 +206,21 @@ public class AuthorizedProfileViewModel extends BaseObservable {
                 setNewPassword("");
                 setRepeatPassword("");
             }
+        });
+    }
+
+    public void deleteAccount(View view) {
+        Call<Void> call = accountApiService.deleteAccount();
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                JwtUtils.clearJwtAndRole(view.getContext());
+                Intent intent = new Intent(view.getContext(), LoginActivity.class);
+                view.getContext().startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {}
         });
     }
 }
