@@ -31,6 +31,8 @@ import com.example.accommodiq.adapters.AvailabilityRangeListAdapter;
 import com.example.accommodiq.databinding.FragmentNewAccommodationBinding;
 import com.example.accommodiq.dtos.AccommodationCreateDto;
 import com.example.accommodiq.dtos.AccommodationDetailsDto;
+import com.example.accommodiq.fragments.AccommodationDetailsFragment;
+import com.example.accommodiq.fragments.AccommodationsListFragment;
 import com.example.accommodiq.listener.AvailabilityActionsListener;
 import com.example.accommodiq.models.Availability;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -61,6 +63,10 @@ public class NewAccommodationFragment extends Fragment implements AvailabilityAc
     private ActivityResultLauncher<Intent> galleryActivityResultLauncher;
     private List<Uri> uploadedImageUris = new ArrayList<>();
 
+    public static NewAccommodationFragment newInstance() {
+        return new NewAccommodationFragment();
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -83,9 +89,6 @@ public class NewAccommodationFragment extends Fragment implements AvailabilityAc
             adapter.setAvailabilityRangeList(availabilityList);
             adapter.notifyDataSetChanged();
         });
-
-        binding.updateAvailabilityTestButton.setOnClickListener(v -> NavHostFragment.findNavController(NewAccommodationFragment.this)
-                .navigate(R.id.action_newAccommodationFragment_to_updateAccommodationAvailabilityFragment));
 
         galleryActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),

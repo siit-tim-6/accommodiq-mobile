@@ -23,7 +23,7 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/new_accommodation_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Update Accommodation Availability"
@@ -45,7 +45,7 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView">
+            app:layout_constraintTop_toBottomOf="@id/new_accommodation_text_view">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -140,7 +140,7 @@
             android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="normal"
-            app:layout_constraintBottom_toTopOf="@+id/textView"
+            app:layout_constraintBottom_toTopOf="@+id/new_accommodation_text_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

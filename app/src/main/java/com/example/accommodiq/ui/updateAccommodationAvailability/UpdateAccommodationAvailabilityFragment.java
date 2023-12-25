@@ -54,6 +54,12 @@ public class UpdateAccommodationAvailabilityFragment extends Fragment implements
         return binding.getRoot();
     }
 
+    public static UpdateAccommodationAvailabilityFragment newInstance(Long accommodationId) {
+        UpdateAccommodationAvailabilityFragment fragment = new UpdateAccommodationAvailabilityFragment();
+        fragment.accommodationId = accommodationId;
+        return fragment;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mViewModel = mViewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {

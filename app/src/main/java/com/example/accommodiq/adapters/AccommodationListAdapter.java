@@ -25,6 +25,8 @@ import com.example.accommodiq.fragments.AccommodationDetailsFragment;
 import com.example.accommodiq.fragments.FragmentTransition;
 import com.example.accommodiq.models.Accommodation;
 import com.example.accommodiq.services.interfaces.AccommodationApiService;
+import com.example.accommodiq.ui.newAccommodation.NewAccommodationFragment;
+import com.example.accommodiq.ui.updateAccommodationAvailability.UpdateAccommodationAvailabilityFragment;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -122,13 +124,17 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
             });
 
             editButton.setOnClickListener(v -> {
+                FragmentTransition.to(NewAccommodationFragment.newInstance(), (FragmentActivity) context, true, R.id.accommodations_fragment);
             });
 
             editAvailabilityButton.setOnClickListener(v -> {
+                FragmentTransition.to(UpdateAccommodationAvailabilityFragment.newInstance(accommodation.getId()), (FragmentActivity) context, true, R.id.accommodations_fragment);
             });
 
             if (showAcceptDenyButtons) {
                 favoriteButton.setVisibility(View.GONE);
+                editButton.setVisibility(View.GONE);
+                editAvailabilityButton.setVisibility(View.GONE);
             } else {
                 acceptButton.setVisibility(View.GONE);
                 denyButton.setVisibility(View.GONE);
@@ -138,6 +144,10 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
                 statusTextView.setText("STATUS: " + accommodation.getStatus());
                 editButton.setVisibility(View.VISIBLE);
                 editAvailabilityButton.setVisibility(View.VISIBLE);
+
+                favoriteButton.setVisibility(View.GONE);
+                acceptButton.setVisibility(View.GONE);
+                denyButton.setVisibility(View.GONE);
             } else {
                 statusTextView.setVisibility(View.GONE);
                 editButton.setVisibility(View.GONE);

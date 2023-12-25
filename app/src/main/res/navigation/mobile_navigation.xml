@@ -40,9 +40,7 @@
         android:name="com.example.accommodiq.ui.newAccommodation.NewAccommodationFragment"
         android:label="New Accommodation"
         tools:layout="@layout/fragment_new_accommodation">
-        <action
-        android:id="@+id/action_newAccommodationFragment_to_updateAccommodationAvailabilityFragment"
-        app:destination="@id/navigation_update_accommodation_availability" /></fragment>
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_update_accommodation_availability"
