@@ -50,7 +50,7 @@ public class AccommodationReviewFragment extends Fragment {
         prepareAccommodationList();
         Activity mainActivity = getActivity();
         if (mainActivity != null) {
-            FragmentTransition.to(AccommodationsListFragment.newInstance(accommodations), getActivity(), false, R.id.accommodations_fragment);
+            FragmentTransition.to(AccommodationsListFragment.newInstance(accommodations, true), getActivity(), false, R.id.accommodations_fragment);
         }
     }
 
@@ -72,7 +72,7 @@ public class AccommodationReviewFragment extends Fragment {
                     fillAccommodationList(response.body());
 
                     if (getActivity() != null) {
-                        FragmentTransition.to(AccommodationsListFragment.newInstance(accommodations), getActivity(), false, R.id.accommodations_fragment);
+                        FragmentTransition.to(AccommodationsListFragment.newInstance(accommodations, true), getActivity(), false, R.id.accommodations_fragment);
                     }
                 } else {
                     Toast.makeText(getContext(), "Registration failed. Please try again.", Toast.LENGTH_LONG).show();

@@ -21,10 +21,11 @@ public class AccommodationsListFragment extends ListFragment {
     private static final String ARG_PARAM = "accommodation_list";
     private ArrayList<Accommodation> accommodations;
 
-    public static AccommodationsListFragment newInstance(ArrayList<Accommodation> accommodations) {
+    public static AccommodationsListFragment newInstance(ArrayList<Accommodation> accommodations, boolean showAcceptDenyButtons) {
         AccommodationsListFragment fragment = new AccommodationsListFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(ARG_PARAM, accommodations);
+        args.putBoolean("showAcceptDenyButtons", showAcceptDenyButtons);
         fragment.setArguments(args);
         return fragment;
     }
@@ -40,7 +41,9 @@ public class AccommodationsListFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             accommodations = getArguments().getParcelableArrayList(ARG_PARAM);
-            adapter = new AccommodationListAdapter(getActivity(), accommodations);
+            boolean showAcceptDenyButtons = getArguments().getBoolean("showAcceptDenyButtons");
+
+            adapter = new AccommodationListAdapter(getActivity(), accommodations, showAcceptDenyButtons);
             setListAdapter(adapter);
         }
     }

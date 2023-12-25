@@ -40,7 +40,7 @@ public class SearchFragment extends Fragment {
         prepareAccommodationList(accommodations);
         Activity mainActivity = getActivity();
         if (mainActivity != null) {
-            FragmentTransition.to(AccommodationsListFragment.newInstance(accommodations), getActivity(), false, R.id.accommodations_fragment);
+            FragmentTransition.to(AccommodationsListFragment.newInstance(accommodations, false), getActivity(), false, R.id.accommodations_fragment);
         }
     }
 

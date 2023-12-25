@@ -27,11 +27,13 @@ import java.util.ArrayList;
 public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
     private ArrayList<Accommodation> accommodations;
     private Context context;
+    private boolean showAcceptDenyButtons;
 
-    public AccommodationListAdapter(Context context, ArrayList<Accommodation> accommodations) {
+    public AccommodationListAdapter(Context context, ArrayList<Accommodation> accommodations, boolean showAcceptDenyButtons) {
         super(context, R.layout.accommodation_card, accommodations);
         this.accommodations = accommodations;
         this.context = context;
+        this.showAcceptDenyButtons = showAcceptDenyButtons;
     }
 
     @Override
@@ -68,6 +70,8 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
         TextView pricePerNightTextView = convertView.findViewById(R.id.accommodation_price_per_night);
         TextView totalPriceTextView = convertView.findViewById(R.id.accommodation_total_price);
         ImageButton favoriteButton = convertView.findViewById(R.id.favorite_button_card);
+        ImageButton approveButton = convertView.findViewById(R.id.accommodation_approve_button);
+        ImageButton denyButton = convertView.findViewById(R.id.accommodation_deny_button);
 
         if (accommodation != null) {
             String reviewCount = "(" + accommodation.getReviewCount() + ")";
@@ -91,6 +95,21 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
                 FragmentTransition.to(AccommodationDetailsFragment.newInstance(), (FragmentActivity) context, true, R.id.accommodations_fragment);
                 Log.i("AccommodIQ", "Clicked accommodation card with id: " + accommodation.getId());
             });
+
+            approveButton.setOnClickListener(v -> {
+                Toast.makeText(context, "Approved accommodation with id: " + accommodation.getId(), Toast.LENGTH_SHORT).show();
+            });
+
+            denyButton.setOnClickListener(v -> {
+                Toast.makeText(context, "Denied accommodation with id: " + accommodation.getId(), Toast.LENGTH_SHORT).show();
+            });
+
+            if (showAcceptDenyButtons) {
+               favoriteButton.setVisibility(View.GONE);
+            } else {
+                approveButton.setVisibility(View.GONE);
+                denyButton.setVisibility(View.GONE);
+            }
         }
 
         return convertView;
