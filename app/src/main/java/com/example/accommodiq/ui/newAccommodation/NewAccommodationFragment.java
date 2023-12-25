@@ -201,6 +201,7 @@ public class NewAccommodationFragment extends Fragment {
                                 AccommodationDetailsDto accommodationDetails = response.body();
                                 Toast.makeText(getContext(), "Successfully created!", Toast.LENGTH_SHORT).show();
                                 // TODO: Handle the successful creation of accommodation
+                                resetFields();
                             } else {
                                 // Handle the error
                                 Toast.makeText(getContext(), "Failed to create accommodation", Toast.LENGTH_SHORT).show();
@@ -240,4 +241,27 @@ public class NewAccommodationFragment extends Fragment {
         }
         return true;
     }
+
+    private void resetFields() {
+        binding.editTextName.setText("");
+        binding.editTextDescription.setText("");
+        binding.editTextAddress.setText("");
+        binding.editTextMinGuests.setText("");
+        binding.editTextMaxGuests.setText("");
+        binding.automaticallyAcceptCB.setChecked(false);
+
+        // Reset the spinner to the default value
+        binding.spinnerAccommodationType.setSelection(0);
+
+        // Clear the checkboxes
+        binding.checkBoxAC.setChecked(false);
+        binding.checkBoxBreakfast.setChecked(false);
+        binding.checkBoxKitchen.setChecked(false);
+        binding.checkBoxBalcony.setChecked(false);
+
+        // Clear the image URIs and update the display
+        uploadedImageUris.clear();
+        binding.textViewSelectedImages.setText("Selected Images: 0");
+    }
+
 }
