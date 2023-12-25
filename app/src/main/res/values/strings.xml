@@ -11,7 +11,6 @@
     <string name="host">Hosted by John Doe</string>
     <string name="wifi">Wi-Fi</string>
     <string name="ac">AC</string>
-    <string name="free_parking">Free parking</string>
     <string name="description">Welcome to our stylish urban haven in the heart of the city center.
         This contemporary accommodation seamlessly combines modern comfort with city energy. Step into tastefully designed rooms with sleek furnishings,
         offering both convenience and style. Enjoy city views, stay connected with high-speed Wi-Fi, and relax in the rooftop terrace with a panoramic cityscape.
@@ -57,4 +56,28 @@
     <string name="more_filters">More</string>
     <string name="clear">Clear</string>
     <string name="date_range_hint">Start date - End date</string>
+    <string name="type">Accommodation Type</string>
+    <string name="price">Price</string>
+    <string name="min_price">Min Price</string>
+    <string name="max_price">Max Price</string>
+
+    <string name="air_conditioning">Air Conditioning</string>
+    <string name="free_wifi">Free Wi-Fi</string>
+    <string name="fitness_center">Fitness Center</string>
+    <string name="free_parking">Free Parking</string>
+    <string name="swimming_pool">Swimming Pool</string>
+    <string name="private_balcony">Private Balcony</string>
+
+    <string name="benefits">Benefits</string>
+
+    <string-array name="accommodation_types">
+        <item>Apartment</item>
+        <item>House</item>
+        <item>Loft</item>
+        <item>Cabin</item>
+        <item>Luxurious Hotel Suite</item>
+        <item>Beachfront Villa</item>
+    </string-array>
+
+    <string name="apply">Apply</string>
 </resources>

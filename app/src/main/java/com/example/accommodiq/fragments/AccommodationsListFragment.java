@@ -20,9 +20,12 @@ import com.example.accommodiq.R;
 import com.example.accommodiq.adapters.AccommodationListAdapter;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.clients.AccommodationClient;
+import com.example.accommodiq.dialogs.MoreFiltersDialog;
 import com.example.accommodiq.dtos.AccommodationListDto;
+import com.example.accommodiq.dtos.MoreFiltersDto;
 import com.example.accommodiq.models.Accommodation;
 import com.example.accommodiq.utils.DateUtils;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -41,6 +44,11 @@ public class AccommodationsListFragment extends ListFragment {
     private List<AccommodationListDto> accommodations;
     private Long dateFrom = null;
     private Long dateTo = null;
+    private Double priceFrom = null;
+    private Double priceTo = null;
+    private String selectedType = null;
+    private List<String> selectedBenefits = new ArrayList<>();
+    private MoreFiltersDto moreFiltersDto = new MoreFiltersDto();
 
     public static AccommodationsListFragment newInstance(Context context) {
         AccommodationsListFragment fragment = new AccommodationsListFragment();
@@ -98,7 +106,7 @@ public class AccommodationsListFragment extends ListFragment {
             Integer guestsSearchNumber = !guestsSearch.getText().toString().isEmpty() ? Integer.valueOf(guestsSearch.getText().toString()) : null;
             String locationSearchText = !locationSearch.getText().toString().isEmpty() ? locationSearch.getText().toString() : null;
 
-            searchAccommodations(titleSearchText, locationSearchText, dateFrom, dateTo, null, null, guestsSearchNumber, null, null);
+            searchAccommodations(titleSearchText, locationSearchText, dateFrom, dateTo, moreFiltersDto.getMinPrice(), moreFiltersDto.getMaxPrice(), guestsSearchNumber, moreFiltersDto.getSelectedType(), moreFiltersDto.getBenefits());
         });
 
         clearBtn.setOnClickListener(v -> {
@@ -110,6 +118,12 @@ public class AccommodationsListFragment extends ListFragment {
             dateRangeSearch.setText(R.string.date_range_hint);
 
             searchAccommodations(null, null, null, null, null, null, null, null, null);
+        });
+
+        moreFiltersBtn.setOnClickListener(v -> {
+            View dialogView = getLayoutInflater().inflate(R.layout.more_filters_dialog, null);
+            MoreFiltersDialog moreFiltersDialog = new MoreFiltersDialog(getActivity(), dialogView, moreFiltersDto);
+            moreFiltersDialog.show();
         });
     }
 
