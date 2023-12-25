@@ -62,9 +62,12 @@ public class NewAccommodationFragment extends Fragment implements AvailabilityAc
     private String selectedApartmentType;
     private ActivityResultLauncher<Intent> galleryActivityResultLauncher;
     private List<Uri> uploadedImageUris = new ArrayList<>();
+    private AccommodationDetailsDto accommodationDetailsDto;
 
-    public static NewAccommodationFragment newInstance() {
-        return new NewAccommodationFragment();
+    public static NewAccommodationFragment newInstance(AccommodationDetailsDto accommodationDetailsDto) {
+        NewAccommodationFragment fragment = new NewAccommodationFragment();
+        fragment.accommodationDetailsDto = accommodationDetailsDto;
+        return fragment;
     }
 
     @Override

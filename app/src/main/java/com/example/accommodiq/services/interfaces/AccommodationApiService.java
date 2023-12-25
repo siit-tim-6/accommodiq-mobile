@@ -49,4 +49,7 @@ public interface AccommodationApiService {
 
     @GET("/hosts/accommodations")
     Call<List<AccommodationReviewDto>> getHostAccommodations();
+
+    @GET("/accommodations/{accommodationId}/advanced")
+    Call<AccommodationDetailsDto> getAccommodationDetails(@Path("accommodationId") Long accommodationId);
 }

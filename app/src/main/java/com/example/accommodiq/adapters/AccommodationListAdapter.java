@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
+import com.example.accommodiq.dtos.AccommodationDetailsDto;
 import com.example.accommodiq.dtos.AccommodationReviewDto;
 import com.example.accommodiq.dtos.AccommodationStatusDto;
 import com.example.accommodiq.fragments.AccommodationDetailsFragment;
@@ -124,7 +125,20 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
             });
 
             editButton.setOnClickListener(v -> {
-                FragmentTransition.to(NewAccommodationFragment.newInstance(), (FragmentActivity) context, true, R.id.accommodations_fragment);
+                apiService.getAccommodationDetails(accommodation.getId()).enqueue(new Callback<AccommodationDetailsDto>() {
+                    @Override
+                    public void onResponse(@NonNull Call<AccommodationDetailsDto> call, @NonNull Response<AccommodationDetailsDto> response) {
+                        if (response.isSuccessful()) {
+                            AccommodationDetailsDto accommodationDetailsDto = response.body();
+
+                            FragmentTransition.to(NewAccommodationFragment.newInstance(accommodationDetailsDto), (FragmentActivity) context, true, R.id.accommodations_fragment);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<com.example.accommodiq.dtos.AccommodationDetailsDto> call, @NonNull Throwable t) {
+                    }
+                });
             });
 
             editAvailabilityButton.setOnClickListener(v -> {
