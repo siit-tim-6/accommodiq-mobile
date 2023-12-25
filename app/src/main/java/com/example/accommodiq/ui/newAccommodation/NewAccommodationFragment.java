@@ -54,13 +54,10 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class NewAccommodationFragment extends Fragment implements AvailabilityActionsListener {
+public class NewAccommodationFragment extends Fragment {
 
     private NewAccommodationViewModel newAccommodationViewModel;
     private FragmentNewAccommodationBinding binding;
-    private AvailabilityRangeListAdapter adapter;
-    private Long selectedFromDate;
-    private Long selectedToDate;
     private String selectedApartmentType;
     private ActivityResultLauncher<Intent> galleryActivityResultLauncher;
     private List<Uri> uploadedImageUris = new ArrayList<>();
@@ -91,16 +88,6 @@ public class NewAccommodationFragment extends Fragment implements AvailabilityAc
             }
         }).get(NewAccommodationViewModel.class);
 
-        adapter = new AvailabilityRangeListAdapter(new ArrayList<>(), this);
-
-        binding.recyclerViewAvailabilityRange.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerViewAvailabilityRange.setAdapter(adapter);
-
-        newAccommodationViewModel.getAvailabilityListLiveData().observe(getViewLifecycleOwner(), availabilityList -> {
-            adapter.setAvailabilityRangeList(availabilityList);
-            adapter.notifyDataSetChanged();
-        });
-
         galleryActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -123,15 +110,7 @@ public class NewAccommodationFragment extends Fragment implements AvailabilityAc
                 }
         );
 
-        binding.editTextSelectRange.setOnClickListener(v -> showMaterialDateRangePicker());
         binding.buttonUploadImages.setOnClickListener(v -> openGallery());
-        binding.buttonAdd.setOnClickListener(v -> {
-            addNewAvailability();
-            selectedFromDate = null;
-            selectedToDate = null;
-            binding.editTextSelectRange.setText("");
-            binding.editTextPrice.setText("");
-        });
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.apartment_types, android.R.layout.simple_spinner_item);
@@ -163,57 +142,11 @@ public class NewAccommodationFragment extends Fragment implements AvailabilityAc
         binding = null;
     }
 
-    private void showMaterialDateRangePicker() {
-        MaterialDatePicker.Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
-        builder.setTitleText("Select Date Range");
-        final MaterialDatePicker<Pair<Long, Long>> picker = builder.build();
-
-        picker.addOnPositiveButtonClickListener(selection -> {
-            Pair<Long, Long> dateRange = selection;
-            if (dateRange.first != null && dateRange.second != null) {
-                selectedFromDate = dateRange.first;
-                selectedToDate = dateRange.second;
-                String fromDate = formatDate(dateRange.first);
-                String toDate = formatDate(dateRange.second);
-                binding.editTextSelectRange.setText(String.format("%s - %s", fromDate, toDate));
-            }
-        });
-
-        picker.show(getChildFragmentManager(), picker.toString());
-    }
-
-    private String formatDate(Long dateInMillis) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        return dateFormat.format(new Date(dateInMillis));
-    }
-
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         galleryActivityResultLauncher.launch(Intent.createChooser(intent, "Select Images"));
-    }
-
-    private void addNewAvailability() {
-        if (selectedFromDate != null && selectedToDate != null) {
-            String priceString = binding.editTextPrice.getText().toString();
-            double price;
-            try {
-                price = Double.parseDouble(priceString);
-            } catch (NumberFormatException e) {
-                Toast.makeText(getContext(), "Invalid price entered", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (price > 0) {
-                Availability newAvailability = new Availability(-1L, selectedFromDate, selectedToDate, price);
-                newAccommodationViewModel.addAvailability(newAvailability);
-            } else {
-                Toast.makeText(getContext(), "Price must be greater than 0", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(getContext(), "Please select a date range first.", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private AccommodationCreateDto createAccommodationFromInput() {
@@ -223,7 +156,6 @@ public class NewAccommodationFragment extends Fragment implements AvailabilityAc
         int minGuests = Integer.parseInt(binding.editTextMinGuests.getText().toString());
         int maxGuests = Integer.parseInt(binding.editTextMaxGuests.getText().toString());
         boolean automaticAcceptance = binding.automaticallyAcceptCB.isChecked();
-        String pricingType = binding.pricePerGuestCB.isChecked() ? "PER_GUEST" : "PER_NIGHT";
 
         List<String> benefits = new ArrayList<>();
         if (binding.checkBoxAC.isChecked()) {
@@ -246,10 +178,8 @@ public class NewAccommodationFragment extends Fragment implements AvailabilityAc
         newAccommodationDto.setMinGuests(minGuests);
         newAccommodationDto.setMaxGuests(maxGuests);
         newAccommodationDto.setAutomaticAcceptance(automaticAcceptance);
-        newAccommodationDto.setPricingType(pricingType);
         newAccommodationDto.setBenefits(benefits);
         newAccommodationDto.setType(selectedApartmentType);
-        newAccommodationDto.setAvailable(adapter.getAvailabilityDtoList());
 
         return newAccommodationDto;
     }
@@ -304,16 +234,10 @@ public class NewAccommodationFragment extends Fragment implements AvailabilityAc
                 binding.editTextAddress.getText().toString().isEmpty() ||
                 binding.editTextMinGuests.getText().toString().isEmpty() ||
                 binding.editTextMaxGuests.getText().toString().isEmpty() ||
-                selectedApartmentType == null ||
-                newAccommodationViewModel.getAvailabilityListLiveData().getValue().isEmpty()) {
+                selectedApartmentType == null) {
             Toast.makeText(getContext(), "Please fill all required fields", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
-    }
-
-    @Override
-    public void onRemoveAvailability(Availability availability) {
-        newAccommodationViewModel.removeAvailability(availability);
     }
 }

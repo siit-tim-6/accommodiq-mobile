@@ -11,17 +11,6 @@
         android:layout_height="wrap_content"
         tools:context=".ui.newAccommodation.NewAccommodationFragment">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewAvailabilityRange"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
-
         <TextView
             android:id="@+id/new_accommodation_text_view"
             android:layout_width="match_parent"
@@ -224,23 +213,13 @@
     </LinearLayout>
 
     <CheckBox
-        android:id="@+id/pricePerGuestCB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Price per guest"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guestsInputLayout" />
-
-    <CheckBox
         android:id="@+id/automaticallyAcceptCB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Automatically accept incoming reservations"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pricePerGuestCB" />
+        app:layout_constraintTop_toBottomOf="@+id/guestsInputLayout" />
 
         <Spinner
             android:id="@+id/spinnerAccommodationType"
@@ -250,49 +229,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/checkBoxBalcony" />
-
-
-        <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/automaticallyAcceptCB">
-
-        <EditText
-            android:id="@+id/editTextSelectRange"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/input_bg"
-            android:gravity="center_vertical"
-            android:hint="Select the Range"
-            android:focusable="false"
-            android:inputType="number"
-            android:padding="12dp" />
-
-        <EditText
-            android:id="@+id/editTextPrice"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/input_bg"
-            android:gravity="center"
-            android:hint="price"
-            android:inputType="number"
-            android:padding="12dp" />
-
-        <Button
-            android:id="@+id/buttonAdd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="Add"
-            android:textColor="@color/white" />
-    </LinearLayout>
 
         <Button
             android:id="@+id/buttonCreate"
@@ -305,6 +241,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerViewAvailabilityRange" />
+            app:layout_constraintTop_toBottomOf="@+id/automaticallyAcceptCB" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

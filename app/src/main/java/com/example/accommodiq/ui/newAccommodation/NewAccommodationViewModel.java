@@ -29,26 +29,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.Response;
 
 public class NewAccommodationViewModel extends ViewModel {
-    private final MutableLiveData<List<Availability>> availabilityListLiveData = new MutableLiveData<>();
     private List<Availability> availabilityList = new ArrayList<>();
     private final AccommodationApiService apiService;
     public NewAccommodationViewModel(Context context) {
         apiService = RetrofitClientInstance.getRetrofitInstance(context).create(AccommodationApiService.class);
-        availabilityListLiveData.setValue(availabilityList);
-    }
-
-    public LiveData<List<Availability>> getAvailabilityListLiveData() {
-        return availabilityListLiveData;
-    }
-
-    public void removeAvailability(Availability availability) {
-        availabilityList.remove(availability);
-        availabilityListLiveData.setValue(new ArrayList<>(availabilityList));
-    }
-
-    public void addAvailability(Availability availability) {
-        availabilityList.add(availability);
-        availabilityListLiveData.setValue(new ArrayList<>(availabilityList));
     }
 
     public void uploadImages(List<Uri> imageUris, Context context, Callback<List<String>> callback) {
