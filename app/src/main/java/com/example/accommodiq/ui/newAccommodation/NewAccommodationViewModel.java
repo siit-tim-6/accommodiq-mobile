@@ -36,15 +36,15 @@ public class NewAccommodationViewModel extends ViewModel {
     }
 
     public void uploadImages(List<Uri> imageUris, Context context, Callback<List<String>> callback) {
-        // Create an empty list of strings
-        List<String> emptyList = new ArrayList<>();
-        // Manually trigger the onResponse of the callback with the empty list
-        callback.onResponse(null, Response.success(emptyList));
+//        // Create an empty list of strings
+//        List<String> emptyList = new ArrayList<>();
+//        // Manually trigger the onResponse of the callback with the empty list
+//        callback.onResponse(null, Response.success(emptyList));
 
 
-//        List<MultipartBody.Part> imageParts = getMultipartBodyPartsFromUris(imageUris, context);
-//        Call<List<String>> uploadCall = apiService.uploadImages(imageParts);
-//        uploadCall.enqueue(callback);
+        List<MultipartBody.Part> imageParts = getMultipartBodyPartsFromUris(imageUris, context);
+        Call<List<String>> uploadCall = apiService.uploadImages(imageParts);
+        uploadCall.enqueue(callback);
     }
 
     public void createNewAccommodation(AccommodationCreateDto dto, Callback<AccommodationDetailsDto> callback) {
