@@ -95,4 +95,20 @@ public class AccommodationReviewDto {
     public void setPrice(double price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "AccommodationReviewDto{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", rating=" + rating +
+                ", reviewCount=" + reviewCount +
+                ", location='" + location + '\'' +
+                ", minGuests=" + minGuests +
+                ", maxGuests=" + maxGuests +
+                ", image='" + image + '\'' +
+                ", price=" + price +
+                '}';
+    }
 }

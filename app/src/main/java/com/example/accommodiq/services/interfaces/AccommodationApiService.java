@@ -5,6 +5,7 @@ import com.example.accommodiq.dtos.AccommodationBookingDetailsDto;
 import com.example.accommodiq.dtos.AccommodationCreateDto;
 import com.example.accommodiq.dtos.AccommodationDetailsDto;
 import com.example.accommodiq.dtos.AccommodationReviewDto;
+import com.example.accommodiq.dtos.AccommodationStatusDto;
 import com.example.accommodiq.dtos.AvailabilityDto;
 import com.example.accommodiq.dtos.MessageDto;
 import com.example.accommodiq.models.Accommodation;
@@ -42,4 +43,7 @@ public interface AccommodationApiService {
 
     @GET("/accommodations/pending")
     Call<List<AccommodationReviewDto>> getPendingAccommodations();
+
+    @PUT("/accommodations/{accommodationId}/status")
+    Call<AccommodationReviewDto> updateAccommodationStatus(@Path("accommodationId") Long accommodationId, @Body AccommodationStatusDto status);
 }

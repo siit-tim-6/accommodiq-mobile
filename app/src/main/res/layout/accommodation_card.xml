@@ -34,10 +34,10 @@
             android:contentDescription="@string/favorite_button" />
 
         <ImageButton
-            android:id="@+id/accommodation_approve_button"
+            android:id="@+id/accommodation_accept_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/icon_accommodation_approve"
+            app:srcCompat="@drawable/icon_accommodation_accept"
             android:layout_gravity="start"
             android:background="@android:color/transparent"
             android:layout_marginTop="15dp"

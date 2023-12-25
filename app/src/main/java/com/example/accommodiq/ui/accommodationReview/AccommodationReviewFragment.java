@@ -67,7 +67,6 @@ public class AccommodationReviewFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<List<AccommodationReviewDto>> call, @NonNull Response<List<AccommodationReviewDto>> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(getContext(), "Success", Toast.LENGTH_LONG).show();
                     assert response.body() != null;
                     fillAccommodationList(response.body());
 
@@ -75,13 +74,13 @@ public class AccommodationReviewFragment extends Fragment {
                         FragmentTransition.to(AccommodationsListFragment.newInstance(accommodations, true), getActivity(), false, R.id.accommodations_fragment);
                     }
                 } else {
-                    Toast.makeText(getContext(), "Registration failed. Please try again.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Server error", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<AccommodationReviewDto>> call, @NonNull Throwable t) {
-                Toast.makeText(getContext(), "Network error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

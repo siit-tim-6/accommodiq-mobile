@@ -18,16 +18,25 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.accommodiq.R;
+import com.example.accommodiq.apiConfig.RetrofitClientInstance;
+import com.example.accommodiq.dtos.AccommodationReviewDto;
+import com.example.accommodiq.dtos.AccommodationStatusDto;
 import com.example.accommodiq.fragments.AccommodationDetailsFragment;
 import com.example.accommodiq.fragments.FragmentTransition;
 import com.example.accommodiq.models.Accommodation;
+import com.example.accommodiq.services.interfaces.AccommodationApiService;
 
 import java.util.ArrayList;
+import java.util.Optional;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
-    private ArrayList<Accommodation> accommodations;
-    private Context context;
-    private boolean showAcceptDenyButtons;
+    private final ArrayList<Accommodation> accommodations;
+    private final Context context;
+    private final boolean showAcceptDenyButtons;
 
     public AccommodationListAdapter(Context context, ArrayList<Accommodation> accommodations, boolean showAcceptDenyButtons) {
         super(context, R.layout.accommodation_card, accommodations);
@@ -55,6 +64,7 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        AccommodationApiService apiService = RetrofitClientInstance.getRetrofitInstance(context).create(AccommodationApiService.class);
         Accommodation accommodation = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.accommodation_card, parent, false);
@@ -70,7 +80,7 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
         TextView pricePerNightTextView = convertView.findViewById(R.id.accommodation_price_per_night);
         TextView totalPriceTextView = convertView.findViewById(R.id.accommodation_total_price);
         ImageButton favoriteButton = convertView.findViewById(R.id.favorite_button_card);
-        ImageButton approveButton = convertView.findViewById(R.id.accommodation_approve_button);
+        ImageButton acceptButton = convertView.findViewById(R.id.accommodation_accept_button);
         ImageButton denyButton = convertView.findViewById(R.id.accommodation_deny_button);
 
         if (accommodation != null) {
@@ -96,22 +106,52 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
                 Log.i("AccommodIQ", "Clicked accommodation card with id: " + accommodation.getId());
             });
 
-            approveButton.setOnClickListener(v -> {
-                Toast.makeText(context, "Approved accommodation with id: " + accommodation.getId(), Toast.LENGTH_SHORT).show();
+            acceptButton.setOnClickListener(v -> {
+                Call<AccommodationReviewDto> acceptAccommodationCall = apiService.updateAccommodationStatus(accommodation.getId(), new AccommodationStatusDto("ACCEPTED"));
+                changeStatus(accommodation, acceptAccommodationCall);
             });
 
             denyButton.setOnClickListener(v -> {
-                Toast.makeText(context, "Denied accommodation with id: " + accommodation.getId(), Toast.LENGTH_SHORT).show();
+                Call<AccommodationReviewDto> denyAccommodationCall = apiService.updateAccommodationStatus(accommodation.getId(), new AccommodationStatusDto("DENIED"));
+                changeStatus(accommodation, denyAccommodationCall);
             });
 
             if (showAcceptDenyButtons) {
-               favoriteButton.setVisibility(View.GONE);
+                favoriteButton.setVisibility(View.GONE);
             } else {
-                approveButton.setVisibility(View.GONE);
+                acceptButton.setVisibility(View.GONE);
                 denyButton.setVisibility(View.GONE);
             }
         }
 
         return convertView;
+    }
+
+    @Override
+    public void remove(@Nullable Accommodation object) {
+        super.remove(object);
+//        accommodations.remove(object);
+        notifyDataSetChanged();
+        Log.i("HALO", "obrisao");
+    }
+
+    private void changeStatus(Accommodation accommodation, Call<AccommodationReviewDto> acceptAccommodationCall) {
+        acceptAccommodationCall.enqueue(new Callback<AccommodationReviewDto>() {
+            @Override
+            public void onResponse(@NonNull Call<AccommodationReviewDto> call, @NonNull Response<AccommodationReviewDto> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, accommodation.getId() + ": changed", Toast.LENGTH_SHORT).show();
+                    Optional<Accommodation> result = accommodations.stream().filter(a -> a.getId() == accommodation.getId()).findFirst();
+                    result.ifPresent(value -> remove(value));
+                    Log.i("POVRATNA", response.body().toString());
+                } else {
+                    Toast.makeText(context, accommodation.getId() + ": change failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<AccommodationReviewDto> call, @NonNull Throwable t) {
+            }
+        });
     }
 }
