@@ -13,6 +13,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+app/src/main/assets/config.properties
+app/src/main/res/xml/network_security_config.xml
+
 
 # Compiled class file
 *.class

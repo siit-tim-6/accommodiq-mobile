@@ -16,7 +16,6 @@ import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.databinding.ActivityRegisterBinding;
 import com.example.accommodiq.dtos.RegisterDto;
 import com.example.accommodiq.models.User;
-import com.example.accommodiq.services.AccountService;
 import com.example.accommodiq.services.interfaces.AccountApiService;
 
 import retrofit2.Call;

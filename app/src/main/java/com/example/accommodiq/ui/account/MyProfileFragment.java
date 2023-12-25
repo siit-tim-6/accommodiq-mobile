@@ -10,8 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.accommodiq.R;
+import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.fragments.FragmentTransition;
-import com.example.accommodiq.services.AccountService;
 
 public class MyProfileFragment extends Fragment {
 
@@ -19,7 +19,7 @@ public class MyProfileFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         Activity mainActivity = getActivity();
         if (mainActivity != null){
-            if (AccountService.getInstance().getLoggedInAccount() == null) {
+            if (!JwtUtils.isUserLoggedIn(getContext())) {
                 FragmentTransition.to(new UnauthorizedProfileFragment(), getActivity(), true, R.id.my_profile_fragment);
             }
             else {

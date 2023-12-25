@@ -274,7 +274,8 @@
                 app:layout_constraintEnd_toEndOf="@+id/signOutBtn"
                 app:layout_constraintStart_toStartOf="@+id/signOutBtn"
                 app:layout_constraintTop_toBottomOf="@+id/signOutBtn"
-                app:layout_constraintWidth_max="300dp" />
+                app:layout_constraintWidth_max="300dp"
+                android:onClick="@{viewModel::deleteAccount}" />
 
             <Button
                 android:id="@+id/signOutBtn"

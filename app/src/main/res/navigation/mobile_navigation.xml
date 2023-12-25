@@ -34,4 +34,29 @@
         android:name="com.example.accommodiq.ui.account.MyProfileFragment"
         android:label="@string/title_my_profile"
         tools:layout="@layout/fragment_my_profile" />
+
+    <fragment
+        android:id="@+id/navigation_new_accommodation"
+        android:name="com.example.accommodiq.ui.newAccommodation.NewAccommodationFragment"
+        android:label="New Accommodation"
+        tools:layout="@layout/fragment_new_accommodation">
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_update_accommodation_availability"
+        android:name="com.example.accommodiq.ui.updateAccommodationAvailability.UpdateAccommodationAvailabilityFragment"
+        android:label="Update Accommodation Availability" />
+
+    <fragment
+        android:id="@+id/navigation_accommodation_review"
+        android:name="com.example.accommodiq.ui.accommodationReview.AccommodationReviewFragment"
+        android:label="@string/title_accommodation_review"
+        tools:layout="@layout/fragment_accommodation_review" />
+
+    <fragment
+        android:id="@+id/navigation_host_accommodations"
+        android:name="com.example.accommodiq.ui.hostAccommodations.HostAccommodationsFragment"
+        android:label="@string/title_host_accommodations"
+        tools:layout="@layout/fragment_host_accommodations" />
+
 </navigation>
