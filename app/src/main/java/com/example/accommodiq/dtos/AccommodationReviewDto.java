@@ -1,5 +1,7 @@
 package com.example.accommodiq.dtos;
 
+import com.google.gson.annotations.SerializedName;
+
 public class AccommodationReviewDto {
     private long id;
     private String title;
@@ -11,6 +13,7 @@ public class AccommodationReviewDto {
     private int maxGuests;
     // for demonstration purposes only, will be an URL later
     private String image;
+    @SerializedName("minPrice")
     private double price;
     private String status;
 
