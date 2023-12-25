@@ -2,24 +2,18 @@ package com.example.accommodiq.ui.newAccommodation;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,30 +22,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.example.accommodiq.R;
-import com.example.accommodiq.adapters.AvailabilityRangeListAdapter;
 import com.example.accommodiq.databinding.FragmentNewAccommodationBinding;
-import com.example.accommodiq.dtos.AccommodationCreateDto;
+import com.example.accommodiq.dtos.ModifyAccommodationDto;
 import com.example.accommodiq.dtos.AccommodationDetailsDto;
-import com.example.accommodiq.fragments.AccommodationDetailsFragment;
-import com.example.accommodiq.fragments.AccommodationsListFragment;
-import com.example.accommodiq.listener.AvailabilityActionsListener;
-import com.example.accommodiq.models.Availability;
-import com.example.accommodiq.ui.updateAccommodationAvailability.UpdateAccommodationAvailabilityViewModel;
-import com.google.android.material.datepicker.MaterialDatePicker;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Callback;
 import retrofit2.Call;
 import retrofit2.Response;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 
 public class NewAccommodationFragment extends Fragment {
@@ -60,10 +40,10 @@ public class NewAccommodationFragment extends Fragment {
     private FragmentNewAccommodationBinding binding;
     private String selectedApartmentType;
     private ActivityResultLauncher<Intent> galleryActivityResultLauncher;
-    private List<Uri> uploadedImageUris = new ArrayList<>();
-    private AccommodationDetailsDto accommodationDetailsDto;
+    private final List<Uri> uploadedImageUris = new ArrayList<>();
+    private ModifyAccommodationDto accommodationDetailsDto;
 
-    public static NewAccommodationFragment newInstance(AccommodationDetailsDto accommodationDetailsDto) {
+    public static NewAccommodationFragment newInstance(ModifyAccommodationDto accommodationDetailsDto) {
         NewAccommodationFragment fragment = new NewAccommodationFragment();
         fragment.accommodationDetailsDto = accommodationDetailsDto;
         return fragment;
@@ -84,7 +64,7 @@ public class NewAccommodationFragment extends Fragment {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new NewAccommodationViewModel(getContext());
+                return (T) new NewAccommodationViewModel(getContext(), accommodationDetailsDto);
             }
         }).get(NewAccommodationViewModel.class);
 
@@ -110,7 +90,15 @@ public class NewAccommodationFragment extends Fragment {
                 }
         );
 
-        binding.buttonUploadImages.setOnClickListener(v -> openGallery());
+        if (accommodationDetailsDto != null) {
+            binding.modifyAccommodationTextView.setText("Update Accommodation");
+            binding.buttonModify.setText("Update");
+            setBenefits();
+            populateFields();
+        }
+
+        binding.buttonUploadImages.setOnClickListener(v ->
+                openGallery());
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.apartment_types, android.R.layout.simple_spinner_item);
@@ -129,11 +117,28 @@ public class NewAccommodationFragment extends Fragment {
             }
         });
 
-        binding.buttonCreate.setOnClickListener(v -> {
+        binding.buttonModify.setOnClickListener(v -> {
             if (validateInput()) {
                 createAndSendAccommodationData();
             }
         });
+    }
+
+    private void populateFields() {
+        binding.editTextName.setText(accommodationDetailsDto.getTitle());
+        binding.editTextDescription.setText(accommodationDetailsDto.getDescription());
+        binding.editTextAddress.setText(accommodationDetailsDto.getLocation());
+        binding.editTextMinGuests.setText(String.valueOf(accommodationDetailsDto.getMinGuests()));
+        binding.editTextMaxGuests.setText(String.valueOf(accommodationDetailsDto.getMaxGuests()));
+        binding.automaticallyAcceptCB.setChecked(accommodationDetailsDto.getAutomaticAcceptance());
+    }
+
+    private void setBenefits() {
+        if (accommodationDetailsDto == null) return;
+        binding.checkBoxAC.setChecked(accommodationDetailsDto.getBenefits().contains("Air Conditioning"));
+        binding.checkBoxBreakfast.setChecked(accommodationDetailsDto.getBenefits().contains("Complimentary Breakfast"));
+        binding.checkBoxKitchen.setChecked(accommodationDetailsDto.getBenefits().contains("Fully Equipped Kitchen"));
+        binding.checkBoxBalcony.setChecked(accommodationDetailsDto.getBenefits().contains("Private Balcony"));
     }
 
     @Override
@@ -149,7 +154,7 @@ public class NewAccommodationFragment extends Fragment {
         galleryActivityResultLauncher.launch(Intent.createChooser(intent, "Select Images"));
     }
 
-    private AccommodationCreateDto createAccommodationFromInput() {
+    private ModifyAccommodationDto createAccommodationFromInput() {
         String title = binding.editTextName.getText().toString();
         String description = binding.editTextDescription.getText().toString();
         String location = binding.editTextAddress.getText().toString();
@@ -171,7 +176,7 @@ public class NewAccommodationFragment extends Fragment {
             benefits.add("Private Balcony");
         }
 
-        AccommodationCreateDto newAccommodationDto = new AccommodationCreateDto();
+        ModifyAccommodationDto newAccommodationDto = new ModifyAccommodationDto();
         newAccommodationDto.setTitle(title);
         newAccommodationDto.setDescription(description);
         newAccommodationDto.setLocation(location);
@@ -190,21 +195,17 @@ public class NewAccommodationFragment extends Fragment {
             public void onResponse(Call<List<String>> call, Response<List<String>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<String> uploadedImageUrls = response.body();
-                    AccommodationCreateDto dto = createAccommodationFromInput();
+                    ModifyAccommodationDto dto = createAccommodationFromInput();
                     dto.setImages(uploadedImageUrls);
 
                     newAccommodationViewModel.createNewAccommodation(dto, new Callback<AccommodationDetailsDto>() {
                         @Override
                         public void onResponse(Call<AccommodationDetailsDto> call, Response<AccommodationDetailsDto> response) {
                             if (response.isSuccessful()) {
-                                // Accommodation creation successful
-                                AccommodationDetailsDto accommodationDetails = response.body();
-                                Toast.makeText(getContext(), "Successfully created!", Toast.LENGTH_SHORT).show();
-                                // TODO: Handle the successful creation of accommodation
-                                resetFields();
+                                Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
+                                if (accommodationDetailsDto == null) resetFields();
                             } else {
-                                // Handle the error
-                                Toast.makeText(getContext(), "Failed to create accommodation", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
                             }
                         }
 

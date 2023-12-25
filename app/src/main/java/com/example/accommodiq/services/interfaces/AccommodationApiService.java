@@ -2,13 +2,12 @@ package com.example.accommodiq.services.interfaces;
 
 import com.example.accommodiq.dtos.AccommodationBookingDetailFormDto;
 import com.example.accommodiq.dtos.AccommodationBookingDetailsDto;
-import com.example.accommodiq.dtos.AccommodationCreateDto;
+import com.example.accommodiq.dtos.ModifyAccommodationDto;
 import com.example.accommodiq.dtos.AccommodationDetailsDto;
 import com.example.accommodiq.dtos.AccommodationReviewDto;
 import com.example.accommodiq.dtos.AccommodationStatusDto;
 import com.example.accommodiq.dtos.AvailabilityDto;
 import com.example.accommodiq.dtos.MessageDto;
-import com.example.accommodiq.models.Accommodation;
 import com.example.accommodiq.models.Availability;
 
 import java.util.List;
@@ -30,7 +29,7 @@ public interface AccommodationApiService {
     Call<List<String>> uploadImages(@Part List<MultipartBody.Part> images);
 
     @POST("hosts/accommodations")
-    Call<AccommodationDetailsDto> createNewAccommodation(@Body AccommodationCreateDto accommodation);
+    Call<AccommodationDetailsDto> createNewAccommodation(@Body ModifyAccommodationDto accommodation);
 
     @PUT("/accommodations/{accommodationId}/booking-details")
     Call<AccommodationDetailsDto> updateAccommodationBookingDetails(@Path("accommodationId") Long accommodationId, @Body AccommodationBookingDetailsDto updateDto);
@@ -54,5 +53,8 @@ public interface AccommodationApiService {
     Call<List<AccommodationReviewDto>> getHostAccommodations();
 
     @GET("/accommodations/{accommodationId}/advanced")
-    Call<AccommodationDetailsDto> getAccommodationDetails(@Path("accommodationId") Long accommodationId);
+    Call<ModifyAccommodationDto> getAccommodationDetails(@Path("accommodationId") Long accommodationId);
+
+    @PUT("/accommodations/{accommodationId}")
+    Call<AccommodationDetailsDto> updateAccommodation(ModifyAccommodationDto dto);
 }

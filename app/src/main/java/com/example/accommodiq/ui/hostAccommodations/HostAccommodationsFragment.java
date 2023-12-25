@@ -43,7 +43,7 @@ public class HostAccommodationsFragment extends Fragment {
         prepareAccommodationList();
         Activity mainActivity = getActivity();
         if (mainActivity != null) {
-            FragmentTransition.to(AccommodationsListFragment.newInstance(accommodations, false, true), getActivity(), false, R.id.accommodations_fragment);
+            FragmentTransition.to(AccommodationsListFragment.newInstance(accommodations, false, true), getActivity(), true, R.id.accommodations_fragment);
         }
     }
 
@@ -64,7 +64,7 @@ public class HostAccommodationsFragment extends Fragment {
                     fillAccommodationList(response.body());
 
                     if (getActivity() != null) {
-                        FragmentTransition.to(AccommodationsListFragment.newInstance(accommodations, false, true), getActivity(), false, R.id.accommodations_fragment);
+                        FragmentTransition.to(AccommodationsListFragment.newInstance(accommodations, false, true), getActivity(), true, R.id.accommodations_fragment);
                     }
                 } else {
                     Toast.makeText(getContext(), "Server error", Toast.LENGTH_SHORT).show();

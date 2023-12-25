@@ -12,7 +12,7 @@
         tools:context=".ui.newAccommodation.NewAccommodationFragment">
 
         <TextView
-            android:id="@+id/new_accommodation_text_view"
+            android:id="@+id/modify_accommodation_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="New Accommodation"
@@ -46,7 +46,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_accommodation_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/modify_accommodation_text_view"
         app:layout_constraintWidth_max="400dp"
         tools:ignore="HardcodedText" />
 
@@ -231,7 +231,7 @@
             app:layout_constraintTop_toBottomOf="@+id/checkBoxBalcony" />
 
         <Button
-            android:id="@+id/buttonCreate"
+            android:id="@+id/button_modify"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"

@@ -22,6 +22,7 @@ import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.dtos.AccommodationDetailsDto;
 import com.example.accommodiq.dtos.AccommodationReviewDto;
 import com.example.accommodiq.dtos.AccommodationStatusDto;
+import com.example.accommodiq.dtos.ModifyAccommodationDto;
 import com.example.accommodiq.fragments.AccommodationDetailsFragment;
 import com.example.accommodiq.fragments.FragmentTransition;
 import com.example.accommodiq.models.Accommodation;
@@ -125,18 +126,18 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
             });
 
             editButton.setOnClickListener(v -> {
-                apiService.getAccommodationDetails(accommodation.getId()).enqueue(new Callback<AccommodationDetailsDto>() {
+                apiService.getAccommodationDetails(accommodation.getId()).enqueue(new Callback<ModifyAccommodationDto>() {
                     @Override
-                    public void onResponse(@NonNull Call<AccommodationDetailsDto> call, @NonNull Response<AccommodationDetailsDto> response) {
+                    public void onResponse(@NonNull Call<ModifyAccommodationDto> call, @NonNull Response<ModifyAccommodationDto> response) {
                         if (response.isSuccessful()) {
-                            AccommodationDetailsDto accommodationDetailsDto = response.body();
+                            ModifyAccommodationDto accommodationDetailsDto = response.body();
 
                             FragmentTransition.to(NewAccommodationFragment.newInstance(accommodationDetailsDto), (FragmentActivity) context, true, R.id.accommodations_fragment);
                         }
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<com.example.accommodiq.dtos.AccommodationDetailsDto> call, @NonNull Throwable t) {
+                    public void onFailure(@NonNull Call<ModifyAccommodationDto> call, @NonNull Throwable t) {
                     }
                 });
             });
