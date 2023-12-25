@@ -1,5 +1,6 @@
 package com.example.accommodiq.ui.account;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
@@ -8,6 +9,8 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
 import com.example.accommodiq.BR;
+import com.example.accommodiq.activities.LoginActivity;
+import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.dtos.PasswordDto;
 import com.example.accommodiq.models.Account;
 import com.example.accommodiq.models.Password;
@@ -203,6 +206,21 @@ public class AuthorizedProfileViewModel extends BaseObservable {
                 setNewPassword("");
                 setRepeatPassword("");
             }
+        });
+    }
+
+    public void deleteAccount(View view) {
+        Call<Void> call = accountApiService.deleteAccount();
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                JwtUtils.clearJwtAndRole(view.getContext());
+                Intent intent = new Intent(view.getContext(), LoginActivity.class);
+                view.getContext().startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {}
         });
     }
 }

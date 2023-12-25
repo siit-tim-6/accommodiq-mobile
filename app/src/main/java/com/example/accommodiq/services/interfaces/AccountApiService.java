@@ -8,6 +8,7 @@ import com.example.accommodiq.models.Account;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -44,4 +45,7 @@ public interface AccountApiService {
 
     @PUT("users/password")
     Call<Void> changePassword(@Body PasswordDto passwordDto);
+
+    @DELETE("users")
+    Call<Void> deleteAccount();
 }
