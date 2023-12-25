@@ -4,8 +4,10 @@ import com.example.accommodiq.dtos.AccommodationBookingDetailFormDto;
 import com.example.accommodiq.dtos.AccommodationBookingDetailsDto;
 import com.example.accommodiq.dtos.AccommodationCreateDto;
 import com.example.accommodiq.dtos.AccommodationDetailsDto;
+import com.example.accommodiq.dtos.AccommodationReviewDto;
 import com.example.accommodiq.dtos.AvailabilityDto;
 import com.example.accommodiq.dtos.MessageDto;
+import com.example.accommodiq.models.Accommodation;
 import com.example.accommodiq.models.Availability;
 
 import java.util.List;
@@ -37,4 +39,7 @@ public interface AccommodationApiService {
 
     @DELETE("/accommodations/{accommodationId}/availabilities/{availabilityId}")
     Call<MessageDto> removeAccommodationAvailability(@Path("accommodationId") Long accommodationId, @Path("availabilityId") Long availabilityId);
+
+    @GET("/accommodations/pending")
+    Call<List<AccommodationReviewDto>> getPendingAccommodations();
 }
