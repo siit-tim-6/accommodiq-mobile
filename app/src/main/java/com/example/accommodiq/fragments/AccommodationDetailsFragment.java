@@ -2,11 +2,14 @@ package com.example.accommodiq.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -27,8 +30,11 @@ import com.example.accommodiq.clients.AccommodationClient;
 import com.example.accommodiq.dtos.AccommodationDetailsDto;
 import com.example.accommodiq.dtos.AccommodationDetailsReviewDto;
 import com.example.accommodiq.dtos.AccommodationListDto;
+import com.example.accommodiq.dtos.AccommodationPriceDto;
 import com.example.accommodiq.models.Review;
 import com.example.accommodiq.utils.DateUtils;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.squareup.picasso.Picasso;
 
@@ -42,6 +48,8 @@ public class AccommodationDetailsFragment extends Fragment {
     private AccommodationDetailsDto accommodation;
     private long accommodationId;
     private AccommodationClient accommodationClient;
+    private Long dateFrom = null;
+    private Long dateTo = null;
 
     public AccommodationDetailsFragment() { }
 
@@ -51,8 +59,7 @@ public class AccommodationDetailsFragment extends Fragment {
     }
 
     public static AccommodationDetailsFragment newInstance(long accommodationId) {
-        AccommodationDetailsFragment fragment = new AccommodationDetailsFragment(accommodationId);
-        return fragment;
+        return new AccommodationDetailsFragment(accommodationId);
     }
 
     @Override
@@ -88,16 +95,21 @@ public class AccommodationDetailsFragment extends Fragment {
         TextView locationTextView = view.findViewById(R.id.accommodation_details_location);
         TextView minPriceTextView = view.findViewById(R.id.accommodation_details_min_price);
         ImageView imageView = view.findViewById(R.id.accommodation_details_image);
+        TextView totalPriceTextView = view.findViewById(R.id.accommodation_details_total_price);
+        EditText guestsField = view.findViewById(R.id.accommodation_details_guests_field);
 
         favoriteImageButton.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Added to favorites!", Toast.LENGTH_SHORT).show();
         });
 
         dateRangePickerButton.setOnClickListener(v -> {
+            CalendarConstraints dateValidator = (new CalendarConstraints.Builder()).setValidator(DateValidatorPointForward.now()).build();
             MaterialDatePicker<Pair<Long, Long>> dateRangePicker = MaterialDatePicker.Builder.dateRangePicker().setTheme(R.style.ThemeMaterialCalendar)
+                    .setCalendarConstraints(dateValidator)
                     .setTitleText("Select reservation check-in and check-out date").setSelection(new Pair<>(null, null)).build();
 
-            dateRangePicker.show(this.getParentFragmentManager(), "AccommodIQ");
+            if (!dateRangePicker.isAdded())
+                dateRangePicker.show(this.getParentFragmentManager(), "AccommodIQ");
 
             dateRangePicker.addOnNegativeButtonClickListener(v1 -> {
                 dateRangePicker.dismiss();
@@ -105,6 +117,46 @@ public class AccommodationDetailsFragment extends Fragment {
 
             dateRangePicker.addOnPositiveButtonClickListener(selection -> {
                 dateRangeTextView.setText(String.format("%s - %s", DateUtils.convertTimeToDate(selection.first), DateUtils.convertTimeToDate(selection.second)));
+                dateFrom = selection.first / 1000;
+                dateTo = selection.second / 1000;
+
+                if (accommodation != null && dateFrom != null && dateTo != null) {
+                    int guestsInput;
+
+                    if (accommodation.getPricingType().equals("PER_NIGHT")) {
+                        guestsInput = 0;
+                    } else {
+                        try {
+                            guestsInput = Integer.parseInt(guestsField.getText().toString());
+
+                            if (guestsInput < accommodation.getMinGuests() || guestsInput > accommodation.getMaxGuests()) {
+                                totalPriceTextView.setText(R.string.total_price);
+                                return;
+                            }
+                        } catch (Exception ignored) {
+                            totalPriceTextView.setText(R.string.total_price);
+                            return;
+                        }
+                    }
+
+                    Call<AccommodationPriceDto> accommodationPriceCall = accommodationClient.getTotalPrice(accommodationId, dateFrom, dateTo, guestsInput);
+                    accommodationPriceCall.enqueue(new Callback<AccommodationPriceDto>() {
+                        @Override
+                        public void onResponse(Call<AccommodationPriceDto> call, Response<AccommodationPriceDto> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                String totalPrice = ((AccommodationPriceDto) response.body()).getTotalPrice() + "€ total";
+                                totalPriceTextView.setText(totalPrice);
+                            } else {
+                                totalPriceTextView.setText(R.string.total_price);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<AccommodationPriceDto> call, Throwable t) {
+                            totalPriceTextView.setText(R.string.total_price);
+                        }
+                    });
+                }
             });
         });
 
@@ -147,6 +199,53 @@ public class AccommodationDetailsFragment extends Fragment {
             @Override
             public void onFailure(Call<AccommodationDetailsDto> call, Throwable t) {
                 Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        guestsField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                int guestsInput;
+                try {
+                    guestsInput = Integer.parseInt(guestsField.getText().toString());
+                } catch (Exception ignored) {
+                    totalPriceTextView.setText(R.string.total_price);
+                    return;
+                }
+
+                if (accommodation != null && accommodation.getPricingType().equals("PER_GUEST")
+                        && dateFrom != null && dateTo != null) {
+
+                    if (guestsInput < accommodation.getMinGuests() || guestsInput > accommodation.getMaxGuests()) {
+                        totalPriceTextView.setText(R.string.total_price);
+                        return;
+                    }
+
+                    Call<AccommodationPriceDto> accommodationPriceCall = accommodationClient.getTotalPrice(accommodationId, dateFrom, dateTo, guestsInput);
+
+                    accommodationPriceCall.enqueue(new Callback<AccommodationPriceDto>() {
+                        @Override
+                        public void onResponse(Call<AccommodationPriceDto> call, Response<AccommodationPriceDto> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                String totalPrice = ((AccommodationPriceDto) response.body()).getTotalPrice() + "€ total";
+                                totalPriceTextView.setText(totalPrice);
+                            } else {
+                                totalPriceTextView.setText(R.string.total_price);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<AccommodationPriceDto> call, Throwable t) {
+                            totalPriceTextView.setText(R.string.total_price);
+                        }
+                    });
+                }
             }
         });
     }

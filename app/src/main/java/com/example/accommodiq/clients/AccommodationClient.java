@@ -2,6 +2,7 @@ package com.example.accommodiq.clients;
 
 import com.example.accommodiq.dtos.AccommodationDetailsDto;
 import com.example.accommodiq.dtos.AccommodationListDto;
+import com.example.accommodiq.dtos.AccommodationPriceDto;
 import com.example.accommodiq.models.Accommodation;
 
 import java.util.List;
@@ -28,4 +29,11 @@ public interface AccommodationClient {
     })
     @GET("accommodations/{accommodationId}")
     Call<AccommodationDetailsDto> getAccommodationDetails(@Path("accommodationId") long accommodationId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json"
+    })
+    @GET("accommodations/{accommodationId}/total-price")
+    Call<AccommodationPriceDto> getTotalPrice(@Path("accommodationId") long accommodationId, @Query("dateFrom") long dateFrom, @Query("dateTo") long dateTo, @Query("guests") int guests);
 }
