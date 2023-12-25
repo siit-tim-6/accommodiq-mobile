@@ -9,18 +9,15 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.dtos.AccommodationCreateDto;
 import com.example.accommodiq.dtos.AccommodationDetailsDto;
 import com.example.accommodiq.models.Availability;
 import com.example.accommodiq.services.interfaces.AccommodationApiService;
 
 import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -29,17 +26,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.Response;
 
 public class NewAccommodationViewModel extends ViewModel {
     private final MutableLiveData<List<Availability>> availabilityListLiveData = new MutableLiveData<>();
     private List<Availability> availabilityList = new ArrayList<>();
     private final AccommodationApiService apiService;
-    public NewAccommodationViewModel() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:8000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        apiService = retrofit.create(AccommodationApiService.class);
+    public NewAccommodationViewModel(Context context) {
+        apiService = RetrofitClientInstance.getRetrofitInstance(context).create(AccommodationApiService.class);
         availabilityListLiveData.setValue(availabilityList);
     }
 
@@ -58,9 +52,15 @@ public class NewAccommodationViewModel extends ViewModel {
     }
 
     public void uploadImages(List<Uri> imageUris, Context context, Callback<List<String>> callback) {
-        List<MultipartBody.Part> imageParts = getMultipartBodyPartsFromUris(imageUris, context);
-        Call<List<String>> uploadCall = apiService.uploadImages(imageParts);
-        uploadCall.enqueue(callback);
+        // Create an empty list of strings
+        List<String> emptyList = new ArrayList<>();
+        // Manually trigger the onResponse of the callback with the empty list
+        callback.onResponse(null, Response.success(emptyList));
+
+
+//        List<MultipartBody.Part> imageParts = getMultipartBodyPartsFromUris(imageUris, context);
+//        Call<List<String>> uploadCall = apiService.uploadImages(imageParts);
+//        uploadCall.enqueue(callback);
     }
 
     public void createNewAccommodation(AccommodationCreateDto dto, Callback<AccommodationDetailsDto> callback) {

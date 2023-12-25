@@ -3,6 +3,7 @@ package com.example.accommodiq.ui.newAccommodation;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.util.Pair;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
@@ -35,6 +36,7 @@ import com.example.accommodiq.fragments.AccommodationDetailsFragment;
 import com.example.accommodiq.fragments.AccommodationsListFragment;
 import com.example.accommodiq.listener.AvailabilityActionsListener;
 import com.example.accommodiq.models.Availability;
+import com.example.accommodiq.ui.updateAccommodationAvailability.UpdateAccommodationAvailabilityViewModel;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
 import okhttp3.MediaType;
@@ -81,7 +83,13 @@ public class NewAccommodationFragment extends Fragment implements AvailabilityAc
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        newAccommodationViewModel = new ViewModelProvider(this).get(NewAccommodationViewModel.class);
+        newAccommodationViewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new NewAccommodationViewModel(getContext());
+            }
+        }).get(NewAccommodationViewModel.class);
 
         adapter = new AvailabilityRangeListAdapter(new ArrayList<>(), this);
 
