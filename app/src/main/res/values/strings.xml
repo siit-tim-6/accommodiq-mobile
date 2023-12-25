@@ -6,7 +6,7 @@
     <string name="review_count">(390)</string>
     <string name="guests">2–4 guests</string>
     <string name="price_per_night">From 45€ / night</string>
-    <string name="total_price">450€ total</string>
+    <string name="total_price">*€ total</string>
     <string name="favorite_button">Favorite button</string>
     <string name="host">Hosted by John Doe</string>
     <string name="wifi">Wi-Fi</string>
@@ -54,7 +54,7 @@
     <string name="prompt_change_password">Change Password</string>
     <string name="title_hint">Title</string>
     <string name="location_hint">Location</string>
-    <string name="more_filters">More Filters</string>
+    <string name="more_filters">More</string>
     <string name="clear">Clear</string>
     <string name="date_range_hint">Start date - End date</string>
 </resources>

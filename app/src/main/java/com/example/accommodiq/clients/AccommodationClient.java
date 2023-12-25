@@ -1,5 +1,6 @@
 package com.example.accommodiq.clients;
 
+import com.example.accommodiq.dtos.AccommodationDetailsDto;
 import com.example.accommodiq.dtos.AccommodationListDto;
 import com.example.accommodiq.models.Accommodation;
 
@@ -26,5 +27,5 @@ public interface AccommodationClient {
             "Content-Type: application/json"
     })
     @GET("accommodations/{accommodationId}")
-    Call<AccommodationListDto> getAccommodationDetails(@Path("accommodationId") long accommodationId);
+    Call<AccommodationDetailsDto> getAccommodationDetails(@Path("accommodationId") long accommodationId);
 }

@@ -1,6 +1,8 @@
 package com.example.accommodiq.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,37 +10,48 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 
 import com.example.accommodiq.R;
+import com.example.accommodiq.adapters.AccommodationListAdapter;
 import com.example.accommodiq.adapters.ReviewsListAdapter;
+import com.example.accommodiq.apiConfig.RetrofitClientInstance;
+import com.example.accommodiq.clients.AccommodationClient;
+import com.example.accommodiq.dtos.AccommodationDetailsDto;
+import com.example.accommodiq.dtos.AccommodationDetailsReviewDto;
+import com.example.accommodiq.dtos.AccommodationListDto;
 import com.example.accommodiq.models.Review;
 import com.example.accommodiq.utils.DateUtils;
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.squareup.picasso.Picasso;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.TimeZone;
-import java.util.concurrent.locks.ReentrantLock;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AccommodationDetailsFragment extends Fragment {
-    private ArrayList<Review> reviews = new ArrayList<>();
+    private AccommodationDetailsDto accommodation;
+    private long accommodationId;
+    private AccommodationClient accommodationClient;
 
-    public AccommodationDetailsFragment() {
+    public AccommodationDetailsFragment() { }
 
+    public AccommodationDetailsFragment(long accommodationId) {
+        this.accommodationId = accommodationId;
+        this.accommodationClient = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(AccommodationClient.class);
     }
 
-    public static AccommodationDetailsFragment newInstance() {
-        AccommodationDetailsFragment fragment = new AccommodationDetailsFragment();
+    public static AccommodationDetailsFragment newInstance(long accommodationId) {
+        AccommodationDetailsFragment fragment = new AccommodationDetailsFragment(accommodationId);
         return fragment;
     }
 
@@ -50,11 +63,31 @@ public class AccommodationDetailsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceBundle) {
-        View view = inflater.inflate(R.layout.fragment_accommodation_details, container, false);
+        return inflater.inflate(R.layout.fragment_accommodation_details, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         ImageButton favoriteImageButton = view.findViewById(R.id.favorite_button);
         TextView dateRangeTextView = view.findViewById(R.id.date_range_text);
         Button dateRangePickerButton = view.findViewById(R.id.date_range_picker_button);
         ListView reviewsListView = view.findViewById(R.id.reviews_list);
+        TextView titleTextView = view.findViewById(R.id.accommodation_details_title);
+        TextView hostNameTextView = view.findViewById(R.id.accommodation_details_host);
+        RatingBar hostRatingStars = view.findViewById(R.id.accommodation_details_host_stars);
+        TextView hostRatingTextView = view.findViewById(R.id.accommodation_details_host_rating);
+        TextView hostReviewCountTextView = view.findViewById(R.id.accommodation_details_host_review_count);
+        RatingBar ratingStars = view.findViewById(R.id.accommodation_details_rating_stars);
+        TextView ratingTextView = view.findViewById(R.id.accommodation_details_rating);
+        TextView reviewCountTextView = view.findViewById(R.id.accommodation_details_review_count);
+        TextView guestsTextView = view.findViewById(R.id.accommodation_details_guests);
+        TextView benefitsTextView = view.findViewById(R.id.accommodation_details_benefits);
+        TextView descriptionTextView = view.findViewById(R.id.accommodation_details_description);
+        TextView locationTextView = view.findViewById(R.id.accommodation_details_location);
+        TextView minPriceTextView = view.findViewById(R.id.accommodation_details_min_price);
+        ImageView imageView = view.findViewById(R.id.accommodation_details_image);
 
         favoriteImageButton.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Added to favorites!", Toast.LENGTH_SHORT).show();
@@ -75,16 +108,46 @@ public class AccommodationDetailsFragment extends Fragment {
             });
         });
 
-        prepareReviewList();
-        reviewsListView.setAdapter(new ReviewsListAdapter(getActivity(), reviews));
+        Call<AccommodationDetailsDto> accommodationDetailsCall = accommodationClient.getAccommodationDetails(accommodationId);
+        accommodationDetailsCall.enqueue(new Callback<AccommodationDetailsDto>() {
+            @Override
+            public void onResponse(Call<AccommodationDetailsDto> call, Response<AccommodationDetailsDto> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    accommodation = (AccommodationDetailsDto) response.body();
+                    if (accommodation.getImages().size() > 0) {
+                        String imageUrl = RetrofitClientInstance.getServerIp(getContext()) + "/images/" + accommodation.getImages().get(0);
+                        Picasso.with(getContext()).load(imageUrl).into(imageView);
+                    } else {
+                        imageView.setImageResource(R.drawable.accommodation_image);
+                    }
+                    titleTextView.setText(accommodation.getTitle());
+                    String hostName = "Hosted by " + accommodation.getHost().getName();
+                    hostNameTextView.setText(hostName);
+                    hostRatingStars.setRating(((float) accommodation.getHost().getRating()));
+                    hostRatingTextView.setText(String.valueOf(accommodation.getHost().getRating()));
+                    String hostReviewCount = "(" + accommodation.getHost().getReviewCount() + ")";
+                    hostReviewCountTextView.setText(hostReviewCount);
+                    ratingStars.setRating(((float) accommodation.getRating()));
+                    ratingTextView.setText(String.valueOf(accommodation.getRating()));
+                    String reviewCount = "(" + accommodation.getReviewCount() + ")";
+                    reviewCountTextView.setText(reviewCount);
+                    String guests = accommodation.getMinGuests() + "-" + accommodation.getMaxGuests() + " guests";
+                    guestsTextView.setText(guests);
+                    benefitsTextView.setText(String.join(", ", accommodation.getBenefits()));
+                    descriptionTextView.setText(accommodation.getDescription());
+                    locationTextView.setText(accommodation.getLocation());
+                    String minPrice = "From " + accommodation.getMinPrice() + ((accommodation.getPricingType().equals("PER_GUEST")) ? " / guest" : "") + " / night";
+                    minPriceTextView.setText(minPrice);
+                    reviewsListView.setAdapter(new ReviewsListAdapter(getActivity(), (ArrayList<AccommodationDetailsReviewDto>) accommodation.getReviews()));
+                } else {
+                    Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
+                }
+            }
 
-        return view;
-    }
-
-    private void prepareReviewList() {
-        reviews.add(new Review(1, "John Doe", 5.0, "25/12/2023", "Great accommodation!"));
-        reviews.add(new Review(2, "Balsa Bulatovic", 4.0, "24/12/2023", "Great accommodation test!"));
-        reviews.add(new Review(3, "Marko Bulat", 4.5, "23/12/2023", "Great!"));
-        reviews.add(new Review(4, "Teodor Vidakovic", 5.0, "22/12/2023", "Amazing!"));
+            @Override
+            public void onFailure(Call<AccommodationDetailsDto> call, Throwable t) {
+                Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

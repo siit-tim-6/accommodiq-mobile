@@ -96,8 +96,7 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
                 Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show();
             });
             accommodationCard.setOnClickListener(v -> {
-                FragmentTransition.to(AccommodationDetailsFragment.newInstance(), (FragmentActivity) context, true, R.id.accommodations_fragment);
-                Log.i("AccommodIQ", "Clicked accommodation card with id: " + accommodation.getId());
+                FragmentTransition.to(AccommodationDetailsFragment.newInstance(accommodation.getId()), (FragmentActivity) context, true, R.id.accommodations_fragment);
             });
         }
 
