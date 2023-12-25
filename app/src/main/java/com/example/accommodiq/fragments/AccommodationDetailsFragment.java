@@ -25,12 +25,15 @@ import androidx.fragment.app.Fragment;
 import com.example.accommodiq.R;
 import com.example.accommodiq.adapters.AccommodationListAdapter;
 import com.example.accommodiq.adapters.ReviewsListAdapter;
+import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.clients.AccommodationClient;
+import com.example.accommodiq.clients.GuestClient;
 import com.example.accommodiq.dtos.AccommodationDetailsDto;
 import com.example.accommodiq.dtos.AccommodationDetailsReviewDto;
 import com.example.accommodiq.dtos.AccommodationListDto;
 import com.example.accommodiq.dtos.AccommodationPriceDto;
+import com.example.accommodiq.dtos.ReservationRequestDto;
 import com.example.accommodiq.models.Review;
 import com.example.accommodiq.utils.DateUtils;
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -48,6 +51,7 @@ public class AccommodationDetailsFragment extends Fragment {
     private AccommodationDetailsDto accommodation;
     private long accommodationId;
     private AccommodationClient accommodationClient;
+    private GuestClient guestClient;
     private Long dateFrom = null;
     private Long dateTo = null;
 
@@ -56,6 +60,7 @@ public class AccommodationDetailsFragment extends Fragment {
     public AccommodationDetailsFragment(long accommodationId) {
         this.accommodationId = accommodationId;
         this.accommodationClient = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(AccommodationClient.class);
+        this.guestClient = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(GuestClient.class);
     }
 
     public static AccommodationDetailsFragment newInstance(long accommodationId) {
@@ -97,6 +102,7 @@ public class AccommodationDetailsFragment extends Fragment {
         ImageView imageView = view.findViewById(R.id.accommodation_details_image);
         TextView totalPriceTextView = view.findViewById(R.id.accommodation_details_total_price);
         EditText guestsField = view.findViewById(R.id.accommodation_details_guests_field);
+        Button reserveButton = view.findViewById(R.id.accommodation_details_reserve);
 
         favoriteImageButton.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Added to favorites!", Toast.LENGTH_SHORT).show();
@@ -247,6 +253,50 @@ public class AccommodationDetailsFragment extends Fragment {
                     });
                 }
             }
+        });
+
+        reserveButton.setOnClickListener(v -> {
+            if (dateFrom == null || dateTo == null || guestsField.getText().toString().isEmpty() || guestsField.getText() == null) {
+                Toast.makeText(getContext(), "All fields are required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            int guestsValue;
+            try {
+                guestsValue = Integer.parseInt(guestsField.getText().toString());
+            } catch (Exception ignored) {
+                Toast.makeText(getContext(), "Guests filed is not a valid number", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (guestsValue < accommodation.getMinGuests() || guestsValue > accommodation.getMaxGuests()) {
+                Toast.makeText(getContext(), "Invalid number of guests", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            long loggedInId = JwtUtils.getLoggedInId(getActivity());
+            if (JwtUtils.getRole(getActivity()) == null || !JwtUtils.getRole(getActivity()).equals("GUEST") || loggedInId == -1) {
+                Toast.makeText(getContext(), "You must be a logged in user", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            ReservationRequestDto requestDto = new ReservationRequestDto(dateFrom, dateTo, guestsValue, accommodationId);
+            Call<ReservationRequestDto> createReservationCall = guestClient.createReservation(loggedInId, requestDto);
+            createReservationCall.enqueue(new Callback<ReservationRequestDto>() {
+                @Override
+                public void onResponse(Call<ReservationRequestDto> call, Response<ReservationRequestDto> response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(getContext(), "Reservation successfully created!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Accommodation is not available within selected date range", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ReservationRequestDto> call, Throwable t) {
+                    Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
     }
 }
