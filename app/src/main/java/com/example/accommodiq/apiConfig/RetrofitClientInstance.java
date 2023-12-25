@@ -33,7 +33,7 @@ public class RetrofitClientInstance {
         return retrofit;
     }
 
-    private static String getServerIp(Context context) {
+    public static String getServerIp(Context context) {
         Properties properties = new Properties();
         try {
             InputStream inputStream = context.getAssets().open("config.properties");

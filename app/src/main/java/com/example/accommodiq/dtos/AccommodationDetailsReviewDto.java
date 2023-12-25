@@ -4,9 +4,11 @@ public class AccommodationDetailsReviewDto {
     private String author;
     private String comment;
     private double rating;
-    private Long date;
+    private long date;
 
-    public AccommodationDetailsReviewDto(String author, String comment, double rating, Long date) {
+    public AccommodationDetailsReviewDto() { }
+
+    public AccommodationDetailsReviewDto(String author, String comment, double rating, long date) {
         this.author = author;
         this.comment = comment;
         this.rating = rating;
@@ -37,12 +39,11 @@ public class AccommodationDetailsReviewDto {
         this.rating = rating;
     }
 
-    public Long getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(Long date) {
+    public void setDate(long date) {
         this.date = date;
     }
 }
-

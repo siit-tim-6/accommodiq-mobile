@@ -19,7 +19,6 @@ import com.example.accommodiq.models.Accommodation;
 import java.util.ArrayList;
 
 public class SearchFragment extends Fragment {
-    private ArrayList<Accommodation> accommodations = new ArrayList<>();
     private FragmentSearchBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -37,10 +36,9 @@ public class SearchFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        prepareAccommodationList(accommodations);
         Activity mainActivity = getActivity();
         if (mainActivity != null) {
-            FragmentTransition.to(AccommodationsListFragment.newInstance(accommodations, false, false), getActivity(), false, R.id.accommodations_fragment);
+            FragmentTransition.to(AccommodationsListFragment.newInstance(getActivity()), getActivity(), false, R.id.accommodations_fragment);
         }
     }
 
@@ -48,13 +46,5 @@ public class SearchFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    private void prepareAccommodationList(ArrayList<Accommodation> accommodations) {
-        accommodations.clear();
-        accommodations.add(new Accommodation(1, "City Center Apartment", "test description", 4.92, 390, "Mileticeva 23, 21000 Novi Sad, Serbia", 2, 4, R.drawable.accommodation_image, 250));
-        accommodations.add(new Accommodation(2, "Petrovaradin Apartment", "test description", 5.00, 490, "Preradoviceva 23, 21000 Novi Sad, Serbia", 1, 3, R.drawable.accommodation_image, 350));
-        accommodations.add(new Accommodation(3, "Detelinara Apartment", "test description", 3.90, 300, "Koste Racina 23, 21000 Novi Sad, Serbia", 1, 4, R.drawable.accommodation_image, 200));
-        accommodations.add(new Accommodation(4, "Podbara Apartment", "test description", 4.52, 120, "Kosovska 23, 21000 Novi Sad, Serbia", 2, 5, R.drawable.accommodation_image, 100));
     }
 }

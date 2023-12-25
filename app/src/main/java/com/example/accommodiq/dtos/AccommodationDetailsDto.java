@@ -1,14 +1,10 @@
 package com.example.accommodiq.dtos;
 
-import com.example.accommodiq.models.Accommodation;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.OptionalDouble;
 import java.util.Set;
 
 public class AccommodationDetailsDto {
-    private Long id;
+    private long id;
     private String title;
     private double rating;
     private int reviewCount;
@@ -20,11 +16,13 @@ public class AccommodationDetailsDto {
     private String description;
     private List<AccommodationDetailsReviewDto> reviews;
     private Set<String> benefits;
-
     private String type;
+    private String pricingType;
+    private double minPrice;
 
-    public AccommodationDetailsDto(Long id, String title, double rating, int reviewCount, String location, AccommodationDetailsHostDto host, List<String> images,
-                                   int minGuests, int maxGuests, String description, ArrayList<AccommodationDetailsReviewDto> reviews, Set<String> benefits, String type) {
+    public AccommodationDetailsDto() {}
+
+    public AccommodationDetailsDto(long id, String title, double rating, int reviewCount, String location, AccommodationDetailsHostDto host, List<String> images, int minGuests, int maxGuests, String description, List<AccommodationDetailsReviewDto> reviews, Set<String> benefits, String type, String pricingType, double minPrice) {
         this.id = id;
         this.title = title;
         this.rating = rating;
@@ -38,13 +36,15 @@ public class AccommodationDetailsDto {
         this.reviews = reviews;
         this.benefits = benefits;
         this.type = type;
+        this.pricingType = pricingType;
+        this.minPrice = minPrice;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -142,5 +142,21 @@ public class AccommodationDetailsDto {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getPricingType() {
+        return pricingType;
+    }
+
+    public void setPricingType(String pricingType) {
+        this.pricingType = pricingType;
+    }
+
+    public double getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(double minPrice) {
+        this.minPrice = minPrice;
     }
 }

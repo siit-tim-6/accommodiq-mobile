@@ -1,25 +1,25 @@
 package com.example.accommodiq.dtos;
 
-import java.util.OptionalDouble;
-
 public class AccommodationDetailsHostDto {
-    private Long id;
+    private long id;
     private String name;
     private double rating;
     private int reviewCount;
 
-    public AccommodationDetailsHostDto(Long id, String name, double rating, int reviewCount) {
+    public AccommodationDetailsHostDto() { }
+
+    public AccommodationDetailsHostDto(long id, String name, double rating, int reviewCount) {
         this.id = id;
         this.name = name;
         this.rating = rating;
         this.reviewCount = reviewCount;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

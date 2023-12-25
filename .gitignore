@@ -41,3 +41,9 @@ app/src/main/res/xml/network_security_config.xml
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# security config (local ip)
+/app/src/main/res/xml/network_security_config.xml
+
+# config propertis (local ips and api keys)
+/app/src/main/assets/config.properties
