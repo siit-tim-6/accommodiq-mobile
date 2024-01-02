@@ -26,7 +26,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:id = "@+id/email_layout"
+            android:id="@+id/email_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -44,10 +44,10 @@
                 android:id="@+id/email_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
                 android:paddingStart="8dp"
                 android:text="john.doe@example.com"
-                android:layout_gravity="center_vertical"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -233,7 +233,9 @@
                 android:text="@string/reviews"
                 android:textSize="20sp" />
 
-            <include layout="@layout/add_review" />
+            <include
+                android:id="@+id/include_add_review"
+                layout="@layout/add_review" />
 
 
             <ListView
@@ -245,5 +247,6 @@
 
         </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    >
 </ScrollView>
