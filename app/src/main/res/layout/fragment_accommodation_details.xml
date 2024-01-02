@@ -290,6 +290,10 @@
                 android:fontFamily="@font/inter"
                 android:textSize="20sp"/>
 
+            <include
+                android:id="@+id/include_add_review"
+                layout="@layout/add_review" />
+
             <ListView
                 android:id="@+id/reviews_list"
                 android:layout_width="match_parent"
