@@ -91,4 +91,6 @@
     <string name="title_host_accommodations">Your accommodations</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="delete_review">Delete review</string>
+    <string name="report_review">Report review</string>
 </resources>
