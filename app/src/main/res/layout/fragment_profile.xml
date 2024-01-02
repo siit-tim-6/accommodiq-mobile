@@ -233,6 +233,9 @@
                 android:text="@string/reviews"
                 android:textSize="20sp" />
 
+            <include layout="@layout/add_review" />
+
+
             <ListView
                 android:id="@+id/reviews_list"
                 android:layout_width="match_parent"
