@@ -52,14 +52,15 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id ="@+id/address_layout"
+            android:id="@+id/address_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
             android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@+id/email_layout"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/email_layout">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -70,22 +71,23 @@
                 android:id="@+id/address_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingStart="8dp"
                 android:text="123 Main St"
                 android:textSize="20sp"
-                android:textStyle="normal"
-                android:paddingStart="8dp"
-                android:layout_gravity="center_vertical"/>
+                android:textStyle="normal" />
         </LinearLayout>
 
         <LinearLayout
-            android:id ="@+id/phone_number_layout"
+            android:id="@+id/phone_number_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
             android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@+id/address_layout"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/address_layout">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -96,22 +98,23 @@
                 android:id="@+id/phone_number_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingStart="8dp"
                 android:text="555-1234"
                 android:textSize="20sp"
-                android:textStyle="normal"
-                android:paddingStart="8dp"
-                android:layout_gravity="center_vertical"/>
+                android:textStyle="normal" />
         </LinearLayout>
 
         <LinearLayout
-            android:id ="@+id/role_layout"
+            android:id="@+id/role_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
             android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@+id/phone_number_layout"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/phone_number_layout">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -122,17 +125,18 @@
                 android:id="@+id/role_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingStart="8dp"
                 android:text="HOST"
                 android:textSize="20sp"
-                android:textStyle="normal"
-                android:paddingStart="8dp"
-                android:layout_gravity="center_vertical"/>
+                android:textStyle="normal" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/rating_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -147,8 +151,7 @@
                 android:isIndicator="true"
                 android:numStars="5"
                 android:rating="1.5"
-                android:stepSize="0.5"
-                />
+                android:stepSize="0.5" />
 
             <TextView
                 android:id="@+id/ratingText"
@@ -157,6 +160,47 @@
                 android:layout_marginStart="4dp"
                 android:text="1.5 2 ratings"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/buttons_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rating_layout">
+
+            <Button
+                android:id="@+id/buttonEditProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5sp"
+                android:layout_marginEnd="5sp"
+                android:text="Edit Profile"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/buttonReport"
+                style="@style/Button.Red"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5sp"
+                android:layout_marginEnd="5sp"
+                android:text="Report"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/buttonFinancialReport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5sp"
+                android:layout_marginEnd="5sp"
+                android:text="Financial Report"
+                android:visibility="visible" />
+
         </LinearLayout>
 
 
