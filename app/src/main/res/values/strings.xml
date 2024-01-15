@@ -86,4 +86,5 @@
     <string name="prompt_reported_by">Reported by:</string>
     <string name="prompt_block">Block</string>
     <string name="prompt_dismiss">Dismiss</string>
+    <string name="prompt_reports">Reports</string>
 </resources>

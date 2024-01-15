@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-
     <data>
-
         <variable
-            name="viewModel"
+            name="observable"
             type="com.example.accommodiq.ui.userReport.userReportBaseObservable" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/user_report_card_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/border_background"
@@ -26,7 +25,7 @@
                 android:id="@+id/reported_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@={viewModel.reportedUser.name}"
+                android:text="@={observable.reportedUser.name}"
                 android:textColor="@color/black"
                 android:textSize="22sp"
                 android:textStyle="bold"
@@ -52,7 +51,7 @@
                     android:id="@+id/reporting_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@={viewModel.reportingUser.name}"
+                    android:text="@={observable.reportingUser.name}"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -61,7 +60,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={viewModel.reason}"
+                android:text="@={observable.reason}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/users_info" />
 

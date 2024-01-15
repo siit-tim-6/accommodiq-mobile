@@ -8,10 +8,10 @@
         android:title="@string/title_search" />
 
     <item
-        android:id="@+id/navigation_reservations"
+        android:id="@+id/navigation_user_reports"
         android:icon="@drawable/icon_listing"
         android:menuCategory="secondary"
-        android:title="@string/title_reservations" />
+        android:title="@string/prompt_reports" />
 
     <item
         android:id="@+id/navigation_accommodation_review"
