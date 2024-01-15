@@ -6,6 +6,8 @@ import android.util.Log;
 
 import com.auth0.android.jwt.JWT;
 
+import java.util.Objects;
+
 public class JwtUtils {
     private static final String PREF_NAME = "jwt_pref";
     private static final String KEY_JWT = "jwt_key";
@@ -52,9 +54,19 @@ public class JwtUtils {
     public static long getLoggedInId(Context context) {
         try {
             JWT jwt = new JWT(getJwt(context));
-            return Integer.parseInt(jwt.getClaim("id").asString());
+            return Integer.parseInt(Objects.requireNonNull(jwt.getClaim("id").asString()));
         } catch (Exception ignored) {
             return -1;
+        }
+    }
+
+    public static boolean isTokenExpired(Context applicationContext) {
+        try {
+            JWT jwt = new JWT(getJwt(applicationContext));
+            return Long.parseLong(Objects.requireNonNull(jwt.getClaim("exp").asString())) < System.currentTimeMillis() / 1000;
+        } catch (Exception e) {
+            Log.d("REZ", e.getMessage() != null ? e.getMessage() : "error");
+            return true;
         }
     }
 }
