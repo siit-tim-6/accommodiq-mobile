@@ -36,8 +36,7 @@ public class SearchFragment extends Fragment {
         super.onStart();
         Activity mainActivity = getActivity();
         if (mainActivity != null) {
-            FragmentTransition.to(AccommodationsListFragment.newInstance(getActivity(), AccommodationListType.SEARCH), getActivity(), false, R.id.accommodations_fragment);
-            // FragmentTransition.to(AccommodationsListFragment.newInstance(accommodations, false, false), getActivity(), false, R.id.accommodations_fragment);
+            FragmentTransition.to(AccommodationsListFragment.newInstance(getActivity(), AccommodationListType.SEARCH), getActivity(), true, R.id.accommodations_fragment);
         }
     }
 
