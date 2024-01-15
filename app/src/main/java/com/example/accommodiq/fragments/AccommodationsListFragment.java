@@ -24,7 +24,6 @@ import com.example.accommodiq.dialogs.MoreFiltersDialog;
 import com.example.accommodiq.dtos.AccommodationListDto;
 import com.example.accommodiq.dtos.MoreFiltersDto;
 import com.example.accommodiq.enums.AccommodationListType;
-import com.example.accommodiq.models.Accommodation;
 import com.example.accommodiq.utils.DateUtils;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
@@ -39,32 +38,21 @@ import retrofit2.Response;
 
 public class AccommodationsListFragment extends ListFragment {
     private AccommodationListAdapter adapter;
-    private static final String ARG_PARAM = "accommodation_list";
     private AccommodationClient accommodationClient;
     private List<AccommodationListDto> accommodations;
     private AccommodationListType type;
     private Long dateFrom = null;
     private Long dateTo = null;
-    private Double priceFrom = null;
-    private Double priceTo = null;
-    private String selectedType = null;
-    private List<String> selectedBenefits = new ArrayList<>();
+    private final Double priceFrom = null;
+    private final Double priceTo = null;
+    private final String selectedType = null;
+    private final List<String> selectedBenefits = new ArrayList<>();
     private final MoreFiltersDto moreFiltersDto = new MoreFiltersDto();
 
     public static AccommodationsListFragment newInstance(Context context, AccommodationListType type) {
         AccommodationsListFragment fragment = new AccommodationsListFragment();
         fragment.accommodationClient = RetrofitClientInstance.getRetrofitInstance(context).create(AccommodationClient.class);
         fragment.type = type;
-        return fragment;
-    }
-
-    public static AccommodationsListFragment newInstance(ArrayList<Accommodation> accommodations, boolean showAcceptDenyButtons, boolean showStatus) {
-        AccommodationsListFragment fragment = new AccommodationsListFragment();
-        Bundle args = new Bundle();
-        args.putParcelableArrayList(ARG_PARAM, accommodations);
-        args.putBoolean("showAcceptDenyButtons", showAcceptDenyButtons);
-        args.putBoolean("showStatus", showStatus);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -77,14 +65,6 @@ public class AccommodationsListFragment extends ListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            accommodations = getArguments().getParcelableArrayList(ARG_PARAM);
-//            boolean showAcceptDenyButtons = getArguments().getBoolean("showAcceptDenyButtons");
-//            boolean showStatus = getArguments().getBoolean("showStatus");
-//
-//            adapter = new AccommodationListAdapter(getActivity(), accommodations, showAcceptDenyButtons, showStatus);
-//            setListAdapter(adapter);
-//        }
         switch (type) {
             case SEARCH:
                 searchAccommodations(null, null, null, null, null, null, null, null, null);

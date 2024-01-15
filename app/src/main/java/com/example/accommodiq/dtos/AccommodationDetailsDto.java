@@ -8,7 +8,7 @@ public class AccommodationDetailsDto {
     private String title;
     private double rating;
     private int reviewCount;
-    private String location;
+    private LocationDto location;
     private AccommodationDetailsHostDto host;
     private List<String> images;
     private int minGuests;
@@ -20,24 +20,7 @@ public class AccommodationDetailsDto {
     private String pricingType;
     private double minPrice;
 
-    public AccommodationDetailsDto() {}
-
-    public AccommodationDetailsDto(long id, String title, double rating, int reviewCount, String location, AccommodationDetailsHostDto host, List<String> images, int minGuests, int maxGuests, String description, List<AccommodationDetailsReviewDto> reviews, Set<String> benefits, String type, String pricingType, double minPrice) {
-        this.id = id;
-        this.title = title;
-        this.rating = rating;
-        this.reviewCount = reviewCount;
-        this.location = location;
-        this.host = host;
-        this.images = images;
-        this.minGuests = minGuests;
-        this.maxGuests = maxGuests;
-        this.description = description;
-        this.reviews = reviews;
-        this.benefits = benefits;
-        this.type = type;
-        this.pricingType = pricingType;
-        this.minPrice = minPrice;
+    public AccommodationDetailsDto() {
     }
 
     public long getId() {
@@ -70,14 +53,6 @@ public class AccommodationDetailsDto {
 
     public void setReviewCount(int reviewCount) {
         this.reviewCount = reviewCount;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public AccommodationDetailsHostDto getHost() {
@@ -158,5 +133,13 @@ public class AccommodationDetailsDto {
 
     public void setMinPrice(double minPrice) {
         this.minPrice = minPrice;
+    }
+
+    public LocationDto getLocation() {
+        return location;
+    }
+
+    public void setLocation(LocationDto location) {
+        this.location = location;
     }
 }

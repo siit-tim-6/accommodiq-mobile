@@ -193,7 +193,7 @@ public class AccommodationDetailsFragment extends Fragment {
                     guestsTextView.setText(guests);
                     benefitsTextView.setText(String.join(", ", accommodation.getBenefits()));
                     descriptionTextView.setText(accommodation.getDescription());
-                    locationTextView.setText(accommodation.getLocation());
+                    locationTextView.setText(accommodation.getLocation().getAddress());
                     String minPrice = "From " + accommodation.getMinPrice() + ((accommodation.getPricingType().equals("PER_GUEST")) ? " / guest" : "") + " / night";
                     minPriceTextView.setText(minPrice);
                     reviewsListView.setAdapter(new ReviewsListAdapter(getActivity(), (ArrayList<AccommodationDetailsReviewDto>) accommodation.getReviews()));

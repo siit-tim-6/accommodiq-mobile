@@ -40,12 +40,24 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
     private final ArrayList<AccommodationListDto> accommodations;
     private final Context context;
     private final AccommodationListType type;
+    private int layoutViewId;
 
     public AccommodationListAdapter(Context context, ArrayList<AccommodationListDto> accommodations, AccommodationListType type) {
         super(context, R.layout.accommodation_card, accommodations);
         this.accommodations = accommodations;
         this.context = context;
         this.type = type;
+        switch (type) {
+            case ADMIN_REVIEW_PENDING_ACCOMMODATIONS:
+                layoutViewId = R.id.admin_accommodation_review_fragment;
+                break;
+            case SEARCH:
+                layoutViewId = R.id.accommodations_fragment;
+                break;
+            case HOST_ACCOMMODATIONS:
+                layoutViewId = R.id.host_accommodations_fragment;
+                break;
+        }
     }
 
     @Override
@@ -111,7 +123,7 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
             pricePerNightTextView.setText(pricePerNight);
             totalPriceTextView.setText(totalPrice);
             favoriteButton.setOnClickListener(v -> Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show());
-            accommodationCard.setOnClickListener(v -> FragmentTransition.to(AccommodationDetailsFragment.newInstance(accommodation.getId()), (FragmentActivity) context, true, R.id.host_accommodations_fragment));
+            accommodationCard.setOnClickListener(v -> FragmentTransition.to(AccommodationDetailsFragment.newInstance(accommodation.getId()), (FragmentActivity) context, true, layoutViewId));
 
             acceptButton.setOnClickListener(v -> {
                 Call<AccommodationListDto> acceptAccommodationCall = accommodationClient.updateAccommodationStatus(accommodation.getId(), new AccommodationStatusDto("ACCEPTED"));
