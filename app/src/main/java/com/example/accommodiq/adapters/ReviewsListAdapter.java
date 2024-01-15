@@ -12,14 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.accommodiq.R;
+import com.example.accommodiq.dtos.AccommodationDetailsReviewDto;
 import com.example.accommodiq.models.Review;
+import com.example.accommodiq.utils.DateUtils;
 
 import java.util.ArrayList;
 
-public class ReviewsListAdapter extends ArrayAdapter<Review> {
-    private ArrayList<Review> reviews;
+public class ReviewsListAdapter extends ArrayAdapter<AccommodationDetailsReviewDto> {
+    private ArrayList<AccommodationDetailsReviewDto> reviews;
 
-    public ReviewsListAdapter(Context context, ArrayList<Review> reviews) {
+    public ReviewsListAdapter(Context context, ArrayList<AccommodationDetailsReviewDto> reviews) {
         super(context, R.layout.accommodation_card, reviews);
         this.reviews = reviews;
     }
@@ -31,7 +33,7 @@ public class ReviewsListAdapter extends ArrayAdapter<Review> {
 
     @Nullable
     @Override
-    public Review getItem(int position) {
+    public AccommodationDetailsReviewDto getItem(int position) {
         return reviews.get(position);
     }
 
@@ -43,7 +45,7 @@ public class ReviewsListAdapter extends ArrayAdapter<Review> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Review review = getItem(position);
+        AccommodationDetailsReviewDto review = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.review_card, parent, false);
         }
@@ -54,10 +56,10 @@ public class ReviewsListAdapter extends ArrayAdapter<Review> {
         TextView contentTextView = convertView.findViewById(R.id.review_content);
 
         if (review != null) {
-            userNameTextView.setText(review.getUserName());
+            userNameTextView.setText(review.getAuthor());
             rating.setRating((float) review.getRating());
-            dateTextView.setText(review.getDate());
-            contentTextView.setText(review.getContent());
+            dateTextView.setText(DateUtils.convertTimeToDate(review.getDate() * 1000));
+            contentTextView.setText(review.getComment());
         }
 
         return convertView;

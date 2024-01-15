@@ -2,6 +2,9 @@ package com.example.accommodiq.apiConfig;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
+
+import com.auth0.android.jwt.JWT;
 
 public class JwtUtils {
     private static final String PREF_NAME = "jwt_pref";
@@ -44,5 +47,14 @@ public class JwtUtils {
         String jwt = getJwt(context);
         String role = getRole(context);
         return jwt != null && !jwt.isEmpty() && role != null && !role.isEmpty();
+    }
+
+    public static long getLoggedInId(Context context) {
+        try {
+            JWT jwt = new JWT(getJwt(context));
+            return Integer.parseInt(jwt.getClaim("id").asString());
+        } catch (Exception ignored) {
+            return -1;
+        }
     }
 }

@@ -15,7 +15,7 @@
             android:layout_height="300dp">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/accommodation_image"
+                android:id="@+id/accommodation_details_image"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:contentDescription="@string/city_center_apartment"
@@ -37,6 +37,7 @@
         </FrameLayout>
 
         <TextView
+            android:id="@+id/accommodation_details_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/inter"
@@ -56,6 +57,7 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/accommodation_details_host"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/host"
@@ -75,6 +77,7 @@
                 android:layout_marginEnd="5dp" />
 
             <TextView
+                android:id="@+id/accommodation_details_host_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/rating"
@@ -82,6 +85,7 @@
                 android:fontFamily="@font/inter"/>
 
             <TextView
+                android:id="@+id/accommodation_details_host_review_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/review_count"
@@ -110,6 +114,7 @@
                 android:id="@+id/accommodation_details_rating_stars" />
 
             <TextView
+                android:id="@+id/accommodation_details_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/rating"
@@ -120,6 +125,7 @@
                 android:fontFamily="@font/inter"/>
 
             <TextView
+                android:id="@+id/accommodation_details_review_count"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/review_count"
@@ -137,6 +143,7 @@
             android:layout_margin="10dp">
 
             <TextView
+                android:id="@+id/accommodation_details_guests"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/guests"
@@ -147,30 +154,11 @@
                 android:layout_marginEnd="5dp"/>
 
             <TextView
+                android:id="@+id/accommodation_details_benefits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/wifi"
-                app:drawableStartCompat="@drawable/wifi_icon"
-                android:drawablePadding="2dp"
-                android:fontFamily="@font/inter"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/ac"
-                app:drawableStartCompat="@drawable/ac_icon"
-                android:drawablePadding="2dp"
-                android:fontFamily="@font/inter"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/free_parking"
-                app:drawableStartCompat="@drawable/parking_icon"
+                app:drawableStartCompat="@drawable/benefits_icon"
                 android:drawablePadding="2dp"
                 android:fontFamily="@font/inter"
                 android:layout_marginStart="5dp"
@@ -179,6 +167,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/accommodation_details_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -199,6 +188,7 @@
                 android:scaleType="centerCrop"/>
 
             <TextView
+                android:id="@+id/accommodation_details_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/location_address"
@@ -230,7 +220,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/inter"
-                android:text="@string/date_range" />
+                android:text="@string/date_range_hint" />
 
         </LinearLayout>
 
@@ -241,6 +231,7 @@
             android:gravity="center" >
 
             <EditText
+                android:id="@+id/accommodation_details_guests_field"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/guests_hint"
@@ -253,6 +244,7 @@
                 android:drawablePadding="5dp" />
 
             <TextView
+                android:id="@+id/accommodation_details_min_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/price_per_night"
@@ -260,6 +252,7 @@
                 android:layout_marginEnd="15dp" />
 
             <TextView
+                android:id="@+id/accommodation_details_total_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/total_price"
@@ -275,6 +268,7 @@
             android:layout_margin="10dp">
 
             <Button
+                android:id="@+id/accommodation_details_reserve"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/reserve"
@@ -299,8 +293,9 @@
             <ListView
                 android:id="@+id/reviews_list"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="wrap_content"
                 tools:listitem="@layout/review_card"
+                android:nestedScrollingEnabled="true"
                 />
 
         </LinearLayout>
