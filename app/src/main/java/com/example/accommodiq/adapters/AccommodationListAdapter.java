@@ -36,7 +36,7 @@ import retrofit2.Response;
 public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto> {
     private final ArrayList<AccommodationListDto> accommodations;
     private final Context context;
-    private AccommodationListType type;
+    private final AccommodationListType type;
 
     public AccommodationListAdapter(Context context, ArrayList<AccommodationListDto> accommodations, AccommodationListType type) {
         super(context, R.layout.accommodation_card, accommodations);
@@ -107,12 +107,8 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
             guestsTextView.setText(guests);
             pricePerNightTextView.setText(pricePerNight);
             totalPriceTextView.setText(totalPrice);
-            favoriteButton.setOnClickListener(v -> {
-                Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show();
-            });
-            accommodationCard.setOnClickListener(v -> {
-                FragmentTransition.to(AccommodationDetailsFragment.newInstance(accommodation.getId()), (FragmentActivity) context, true, R.id.accommodations_fragment);
-            });
+            favoriteButton.setOnClickListener(v -> Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show());
+            accommodationCard.setOnClickListener(v -> FragmentTransition.to(AccommodationDetailsFragment.newInstance(accommodation.getId()), (FragmentActivity) context, true, R.id.accommodations_fragment));
 
             acceptButton.setOnClickListener(v -> {
                 Call<AccommodationListDto> acceptAccommodationCall = accommodationClient.updateAccommodationStatus(accommodation.getId(), new AccommodationStatusDto("ACCEPTED"));
@@ -185,6 +181,18 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
 
                     editButton.setVisibility(View.GONE);
                     editAvailabilityButton.setVisibility(View.GONE);
+
+                    statusTextView.setVisibility(View.VISIBLE);
+                    totalPriceTextView.setVisibility(View.GONE);
+
+                    acceptButton.setVisibility(View.GONE);
+                    denyButton.setVisibility(View.GONE);
+                    break;
+                case HOST_ACCOMMODATIONS:
+                    favoriteButton.setVisibility(View.GONE);
+
+                    editButton.setVisibility(View.VISIBLE);
+                    editAvailabilityButton.setVisibility(View.VISIBLE);
 
                     statusTextView.setVisibility(View.VISIBLE);
                     totalPriceTextView.setVisibility(View.GONE);

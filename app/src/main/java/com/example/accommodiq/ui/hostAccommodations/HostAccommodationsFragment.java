@@ -13,8 +13,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
-import com.example.accommodiq.databinding.FragmentSearchBinding;
+import com.example.accommodiq.databinding.FragmentHostAccommodationsBinding;
 import com.example.accommodiq.dtos.AccommodationReviewDto;
+import com.example.accommodiq.enums.AccommodationListType;
 import com.example.accommodiq.fragments.AccommodationsListFragment;
 import com.example.accommodiq.fragments.FragmentTransition;
 import com.example.accommodiq.models.Accommodation;
@@ -29,21 +30,20 @@ import retrofit2.Response;
 
 public class HostAccommodationsFragment extends Fragment {
     private ArrayList<Accommodation> accommodations = new ArrayList<>();
-    private FragmentSearchBinding binding;
+    private FragmentHostAccommodationsBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentSearchBinding.inflate(inflater, container, false);
+        binding = FragmentHostAccommodationsBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        prepareAccommodationList();
         Activity mainActivity = getActivity();
         if (mainActivity != null) {
-            FragmentTransition.to(AccommodationsListFragment.newInstance(accommodations, false, true), getActivity(), true, R.id.accommodations_fragment);
+            FragmentTransition.to(AccommodationsListFragment.newInstance(getActivity(), AccommodationListType.HOST_ACCOMMODATIONS), getActivity(), true, R.id.host_accommodations_fragment);
         }
     }
 

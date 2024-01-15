@@ -91,7 +91,32 @@ public class AccommodationsListFragment extends ListFragment {
                 break;
             case ADMIN_REVIEW_PENDING_ACCOMMODATIONS:
                 fetchPendingAccommodations();
+                break;
+            case HOST_ACCOMMODATIONS:
+                fetchHostAccommodations();
+                break;
         }
+    }
+
+    private void fetchHostAccommodations() {
+        Call<List<AccommodationListDto>> hostAccommodationsCall = accommodationClient.getHostAccommodations();
+        hostAccommodationsCall.enqueue(new Callback<List<AccommodationListDto>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<AccommodationListDto>> call, @NonNull Response<List<AccommodationListDto>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    accommodations = (ArrayList<AccommodationListDto>) response.body();
+                    adapter = new AccommodationListAdapter(getActivity(), (ArrayList<AccommodationListDto>) accommodations, type);
+                    setListAdapter(adapter);
+                } else {
+                    Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<AccommodationListDto>> call, @NonNull Throwable t) {
+                Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void fetchPendingAccommodations() {
@@ -101,7 +126,7 @@ public class AccommodationsListFragment extends ListFragment {
             public void onResponse(@NonNull Call<List<AccommodationListDto>> call, @NonNull Response<List<AccommodationListDto>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     accommodations = (ArrayList<AccommodationListDto>) response.body();
-                    adapter = new AccommodationListAdapter(getActivity(), (ArrayList<AccommodationListDto>) accommodations, AccommodationListType.ADMIN_REVIEW_PENDING_ACCOMMODATIONS);
+                    adapter = new AccommodationListAdapter(getActivity(), (ArrayList<AccommodationListDto>) accommodations, type);
                     setListAdapter(adapter);
                 } else {
                     Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
@@ -175,15 +200,16 @@ public class AccommodationsListFragment extends ListFragment {
     }
 
     private void searchAccommodations(String title, String location, Long availableFrom, Long availableTo,
-                                      Integer priceFrom, Integer priceTo, Integer guests, String type, String benefits) {
+                                      Integer priceFrom, Integer priceTo, Integer guests, String accommodationType, String benefits) {
         Call<List<AccommodationListDto>> accommodationsCall = accommodationClient.getAccommodations(title, location, availableFrom, availableTo, priceFrom,
-                priceTo, guests, type, benefits);
+                priceTo, guests, accommodationType, benefits);
+
         accommodationsCall.enqueue(new Callback<List<AccommodationListDto>>() {
             @Override
             public void onResponse(@NonNull Call<List<AccommodationListDto>> call, @NonNull Response<List<AccommodationListDto>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     accommodations = (ArrayList<AccommodationListDto>) response.body();
-                    adapter = new AccommodationListAdapter(getActivity(), (ArrayList<AccommodationListDto>) accommodations, AccommodationListType.SEARCH);
+                    adapter = new AccommodationListAdapter(getActivity(), (ArrayList<AccommodationListDto>) accommodations, type);
                     setListAdapter(adapter);
                 } else {
                     Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
