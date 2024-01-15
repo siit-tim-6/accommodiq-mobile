@@ -101,7 +101,7 @@ public class NewAccommodationFragment extends Fragment {
                 openGallery());
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.apartment_types, android.R.layout.simple_spinner_item);
+                R.array.accommodation_types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerAccommodationType.setAdapter(adapter);
 

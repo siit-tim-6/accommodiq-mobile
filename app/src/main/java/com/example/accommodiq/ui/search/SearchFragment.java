@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.databinding.FragmentSearchBinding;
+import com.example.accommodiq.enums.AccommodationListType;
 import com.example.accommodiq.fragments.AccommodationsListFragment;
 import com.example.accommodiq.fragments.FragmentTransition;
 
@@ -35,7 +36,7 @@ public class SearchFragment extends Fragment {
         super.onStart();
         Activity mainActivity = getActivity();
         if (mainActivity != null) {
-            FragmentTransition.to(AccommodationsListFragment.newInstance(getActivity()), getActivity(), false, R.id.accommodations_fragment);
+            FragmentTransition.to(AccommodationsListFragment.newInstance(getActivity(), AccommodationListType.SEARCH), getActivity(), false, R.id.accommodations_fragment);
             // FragmentTransition.to(AccommodationsListFragment.newInstance(accommodations, false, false), getActivity(), false, R.id.accommodations_fragment);
         }
     }

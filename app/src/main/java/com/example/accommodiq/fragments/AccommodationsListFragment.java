@@ -23,9 +23,9 @@ import com.example.accommodiq.clients.AccommodationClient;
 import com.example.accommodiq.dialogs.MoreFiltersDialog;
 import com.example.accommodiq.dtos.AccommodationListDto;
 import com.example.accommodiq.dtos.MoreFiltersDto;
+import com.example.accommodiq.enums.AccommodationListType;
 import com.example.accommodiq.models.Accommodation;
 import com.example.accommodiq.utils.DateUtils;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -36,24 +36,25 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Query;
 
 public class AccommodationsListFragment extends ListFragment {
     private AccommodationListAdapter adapter;
     private static final String ARG_PARAM = "accommodation_list";
     private AccommodationClient accommodationClient;
     private List<AccommodationListDto> accommodations;
+    private AccommodationListType type;
     private Long dateFrom = null;
     private Long dateTo = null;
     private Double priceFrom = null;
     private Double priceTo = null;
     private String selectedType = null;
     private List<String> selectedBenefits = new ArrayList<>();
-    private MoreFiltersDto moreFiltersDto = new MoreFiltersDto();
+    private final MoreFiltersDto moreFiltersDto = new MoreFiltersDto();
 
-    public static AccommodationsListFragment newInstance(Context context) {
+    public static AccommodationsListFragment newInstance(Context context, AccommodationListType type) {
         AccommodationsListFragment fragment = new AccommodationsListFragment();
         fragment.accommodationClient = RetrofitClientInstance.getRetrofitInstance(context).create(AccommodationClient.class);
+        fragment.type = type;
         return fragment;
     }
 
@@ -84,7 +85,34 @@ public class AccommodationsListFragment extends ListFragment {
 //            adapter = new AccommodationListAdapter(getActivity(), accommodations, showAcceptDenyButtons, showStatus);
 //            setListAdapter(adapter);
 //        }
-        searchAccommodations(null, null, null, null, null, null, null, null, null);
+        switch (type) {
+            case SEARCH:
+                searchAccommodations(null, null, null, null, null, null, null, null, null);
+                break;
+            case ADMIN_REVIEW_PENDING_ACCOMMODATIONS:
+                fetchPendingAccommodations();
+        }
+    }
+
+    private void fetchPendingAccommodations() {
+        Call<List<AccommodationListDto>> pendingAccommodationsCall = accommodationClient.getPendingAccommodations();
+        pendingAccommodationsCall.enqueue(new Callback<List<AccommodationListDto>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<AccommodationListDto>> call, @NonNull Response<List<AccommodationListDto>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    accommodations = (ArrayList<AccommodationListDto>) response.body();
+                    adapter = new AccommodationListAdapter(getActivity(), (ArrayList<AccommodationListDto>) accommodations, AccommodationListType.ADMIN_REVIEW_PENDING_ACCOMMODATIONS);
+                    setListAdapter(adapter);
+                } else {
+                    Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<AccommodationListDto>> call, @NonNull Throwable t) {
+                Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -152,10 +180,10 @@ public class AccommodationsListFragment extends ListFragment {
                 priceTo, guests, type, benefits);
         accommodationsCall.enqueue(new Callback<List<AccommodationListDto>>() {
             @Override
-            public void onResponse(Call<List<AccommodationListDto>> call, Response<List<AccommodationListDto>> response) {
+            public void onResponse(@NonNull Call<List<AccommodationListDto>> call, @NonNull Response<List<AccommodationListDto>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     accommodations = (ArrayList<AccommodationListDto>) response.body();
-                    adapter = new AccommodationListAdapter(getActivity(), (ArrayList<AccommodationListDto>) accommodations);
+                    adapter = new AccommodationListAdapter(getActivity(), (ArrayList<AccommodationListDto>) accommodations, AccommodationListType.SEARCH);
                     setListAdapter(adapter);
                 } else {
                     Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
@@ -163,7 +191,7 @@ public class AccommodationsListFragment extends ListFragment {
             }
 
             @Override
-            public void onFailure(Call<List<AccommodationListDto>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<AccommodationListDto>> call, @NonNull Throwable t) {
                 Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
             }
         });

@@ -6,27 +6,14 @@ public class AccommodationListDto {
     private String image;
     private Double rating;
     private int reviewCount;
-    private String location;
+    private LocationDto location;
     private double minPrice;
     private int minGuests;
     private int maxGuests;
     private double totalPrice;
     private String pricingType;
 
-    public AccommodationListDto() { }
-
-    public AccommodationListDto(long id, String title, String image, Double rating, int reviewCount, String location, double minPrice, int minGuests, int maxGuests, double totalPrice, String pricingType) {
-        this.id = id;
-        this.title = title;
-        this.image = image;
-        this.rating = rating;
-        this.reviewCount = reviewCount;
-        this.location = location;
-        this.minPrice = minPrice;
-        this.minGuests = minGuests;
-        this.maxGuests = maxGuests;
-        this.totalPrice = totalPrice;
-        this.pricingType = pricingType;
+    public AccommodationListDto() {
     }
 
     public long getId() {
@@ -69,14 +56,6 @@ public class AccommodationListDto {
         this.reviewCount = reviewCount;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public double getMinPrice() {
         return minPrice;
     }
@@ -115,5 +94,13 @@ public class AccommodationListDto {
 
     public void setPricingType(String pricingType) {
         this.pricingType = pricingType;
+    }
+
+    public LocationDto getLocation() {
+        return location;
+    }
+
+    public void setLocation(LocationDto location) {
+        this.location = location;
     }
 }

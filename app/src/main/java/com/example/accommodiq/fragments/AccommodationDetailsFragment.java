@@ -174,7 +174,7 @@ public class AccommodationDetailsFragment extends Fragment {
                     accommodation = (AccommodationDetailsDto) response.body();
                     if (accommodation.getImages().size() > 0) {
                         String imageUrl = RetrofitClientInstance.getServerIp(getContext()) + "/images/" + accommodation.getImages().get(0);
-                        Picasso.with(getContext()).load(imageUrl).into(imageView);
+                        Picasso.get().load(imageUrl).into(imageView);
                     } else {
                         imageView.setImageResource(R.drawable.accommodation_image);
                     }

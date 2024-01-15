@@ -1,7 +1,5 @@
 package com.example.accommodiq.dtos;
 
-import com.google.gson.annotations.SerializedName;
-
 public class AccommodationReviewDto {
     private long id;
     private String title;
@@ -13,8 +11,7 @@ public class AccommodationReviewDto {
     private int maxGuests;
     // for demonstration purposes only, will be an URL later
     private String image;
-    @SerializedName("minPrice")
-    private double price;
+    private double minPrice;
     private String status;
 
     public AccommodationReviewDto() {
@@ -92,12 +89,12 @@ public class AccommodationReviewDto {
         this.image = image;
     }
 
-    public double getPrice() {
-        return price;
+    public double getMinPrice() {
+        return minPrice;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setMinPrice(double minPrice) {
+        this.minPrice = minPrice;
     }
 
     @Override
@@ -112,7 +109,7 @@ public class AccommodationReviewDto {
                 ", minGuests=" + minGuests +
                 ", maxGuests=" + maxGuests +
                 ", image='" + image + '\'' +
-                ", price=" + price +
+                ", price=" + minPrice +
                 '}';
     }
 
