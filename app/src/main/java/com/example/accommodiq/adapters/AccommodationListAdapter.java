@@ -21,9 +21,12 @@ import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.clients.AccommodationClient;
 import com.example.accommodiq.dtos.AccommodationListDto;
 import com.example.accommodiq.dtos.AccommodationStatusDto;
+import com.example.accommodiq.dtos.ModifyAccommodationDto;
 import com.example.accommodiq.enums.AccommodationListType;
 import com.example.accommodiq.fragments.AccommodationDetailsFragment;
 import com.example.accommodiq.fragments.FragmentTransition;
+import com.example.accommodiq.ui.newAccommodation.NewAccommodationFragment;
+import com.example.accommodiq.ui.updateAccommodationAvailability.UpdateAccommodationAvailabilityFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -108,7 +111,7 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
             pricePerNightTextView.setText(pricePerNight);
             totalPriceTextView.setText(totalPrice);
             favoriteButton.setOnClickListener(v -> Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show());
-            accommodationCard.setOnClickListener(v -> FragmentTransition.to(AccommodationDetailsFragment.newInstance(accommodation.getId()), (FragmentActivity) context, true, R.id.accommodations_fragment));
+            accommodationCard.setOnClickListener(v -> FragmentTransition.to(AccommodationDetailsFragment.newInstance(accommodation.getId()), (FragmentActivity) context, true, R.id.host_accommodations_fragment));
 
             acceptButton.setOnClickListener(v -> {
                 Call<AccommodationListDto> acceptAccommodationCall = accommodationClient.updateAccommodationStatus(accommodation.getId(), new AccommodationStatusDto("ACCEPTED"));
@@ -120,49 +123,23 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
                 changeStatus(accommodation, denyAccommodationCall);
             });
 
-//            editButton.setOnClickListener(v -> {
-//                accommodationClient.getAccommodationDetails(accommodation.getId()).enqueue(new Callback<ModifyAccommodationDto>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<ModifyAccommodationDto> call, @NonNull Response<ModifyAccommodationDto> response) {
-//                        if (response.isSuccessful()) {
-//                            ModifyAccommodationDto accommodationDetailsDto = response.body();
-//
-//                            FragmentTransition.to(NewAccommodationFragment.newInstance(accommodationDetailsDto), (FragmentActivity) context, true, R.id.accommodations_fragment);
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<ModifyAccommodationDto> call, @NonNull Throwable t) {
-//                    }
-//                });
-//            });
-//
-//            editAvailabilityButton.setOnClickListener(v -> {
-//                FragmentTransition.to(UpdateAccommodationAvailabilityFragment.newInstance(accommodation.getId()), (FragmentActivity) context, true, R.id.accommodations_fragment);
-//            });
-//
-//            if (showAcceptDenyButtons) {
-//                favoriteButton.setVisibility(View.GONE);
-//                editButton.setVisibility(View.GONE);
-//                editAvailabilityButton.setVisibility(View.GONE);
-//            } else {
-//                acceptButton.setVisibility(View.GONE);
-//                denyButton.setVisibility(View.GONE);
-//            }
-//            if (showStatus) {
-//                statusTextView.setVisibility(View.VISIBLE);
-//                statusTextView.setText("STATUS: " + accommodation.getStatus());
-//                editButton.setVisibility(View.VISIBLE);
-//                editAvailabilityButton.setVisibility(View.VISIBLE);
-//
-//                favoriteButton.setVisibility(View.GONE);
-//                acceptButton.setVisibility(View.GONE);
-//                denyButton.setVisibility(View.GONE);
-//            } else {
-//                statusTextView.setVisibility(View.GONE);
-//                editButton.setVisibility(View.GONE);
-//                editAvailabilityButton.setVisibility(View.GONE);
-//            }
+            editButton.setOnClickListener(v -> accommodationClient.getAccommodationAdvancedDetails(accommodation.getId()).enqueue(new Callback<ModifyAccommodationDto>() {
+                @Override
+                public void onResponse(@NonNull Call<ModifyAccommodationDto> call, @NonNull Response<ModifyAccommodationDto> response) {
+                    if (response.isSuccessful()) {
+                        ModifyAccommodationDto accommodationDetailsDto = response.body();
+
+                        FragmentTransition.to(NewAccommodationFragment.newInstance(accommodationDetailsDto), (FragmentActivity) context, true, R.id.host_accommodations_fragment);
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ModifyAccommodationDto> call, @NonNull Throwable t) {
+                }
+            }));
+
+            editAvailabilityButton.setOnClickListener(v -> FragmentTransition.to(UpdateAccommodationAvailabilityFragment.newInstance(accommodation.getId()), (FragmentActivity) context, true, R.id.host_accommodations_fragment));
+
             switch (type) {
                 case ADMIN_REVIEW_PENDING_ACCOMMODATIONS:
                     favoriteButton.setVisibility(View.GONE);

@@ -5,6 +5,7 @@ import com.example.accommodiq.dtos.AccommodationListDto;
 import com.example.accommodiq.dtos.AccommodationPriceDto;
 import com.example.accommodiq.dtos.AccommodationReviewDto;
 import com.example.accommodiq.dtos.AccommodationStatusDto;
+import com.example.accommodiq.dtos.ModifyAccommodationDto;
 import com.example.accommodiq.models.Accommodation;
 
 import java.util.List;
@@ -61,4 +62,15 @@ public interface AccommodationClient {
     })
     @GET("/hosts/accommodations")
     Call<List<AccommodationListDto>> getHostAccommodations();
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json"
+    })
+    @PUT("/accommodations/{accommodationId}")
+    Call<AccommodationDetailsDto> updateAccommodation(ModifyAccommodationDto dto);
+
+    @GET("/accommodations/{accommodationId}/advanced")
+    Call<ModifyAccommodationDto> getAccommodationAdvancedDetails(@Path("accommodationId") Long accommodationId);
+
 }
