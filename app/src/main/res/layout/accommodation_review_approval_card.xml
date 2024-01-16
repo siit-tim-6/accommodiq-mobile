@@ -2,7 +2,7 @@
 <layout>
     <data>
         <variable
-            name="viewModel"
+            name="observable"
             type="com.example.accommodiq.ui.accommodationReviewApproval.AccommodationReviewApprovalBaseObservable" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -34,7 +34,7 @@
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.dismissButtonText}"
+                android:text="@{observable.dismissButtonText}"
                 app:strokeColor="@color/black" />
         </LinearLayout>
 
@@ -52,7 +52,7 @@
             <TextView
                 android:layout_width="115dp"
                 android:layout_height="wrap_content"
-                android:text="@={viewModel.accommodationReviewApprovalDto.title}"
+                android:text="@={observable.accommodationReviewApprovalDto.title}"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="16sp"
@@ -65,7 +65,7 @@
                 android:layout_height="19dp"
                 style="?android:attr/ratingBarStyleSmall"
                 android:numStars="5"
-                android:rating="@{viewModel.accommodationReviewApprovalDto.review.rating}"
+                android:rating="@{observable.accommodationReviewApprovalDto.review.rating}"
                 android:max="5"
                 android:progressTint="@color/black"
                 android:id="@+id/accommodation_details_host_stars"
@@ -74,7 +74,7 @@
             <TextView
                 android:layout_width="115dp"
                 android:layout_height="wrap_content"
-                android:text="@={viewModel.accommodationReviewApprovalDto.review.author}"
+                android:text="@={observable.accommodationReviewApprovalDto.review.author}"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="14sp"
@@ -87,7 +87,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="@={viewModel.accommodationReviewApprovalDto.review.comment}"
+            android:text="@={observable.accommodationReviewApprovalDto.review.comment}"
             android:background="@drawable/user_report_card"
             android:textSize="16sp"
             android:paddingRight="5dp"
