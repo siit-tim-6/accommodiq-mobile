@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 import com.example.accommodiq.R;
 import com.example.accommodiq.databinding.UserReportCardBinding;
 import com.example.accommodiq.dtos.UserReportDto;
-import com.example.accommodiq.ui.userReport.userReportBaseObservable;
+import com.example.accommodiq.ui.userReport.UserReportBaseObservable;
 
 import java.util.ArrayList;
 
@@ -56,7 +56,7 @@ public class UserReportsListAdapter extends ArrayAdapter<UserReportDto> {
             convertView = LayoutInflater.from(context).inflate(R.layout.user_report_card, parent, false);
         }
         UserReportCardBinding binding = UserReportCardBinding.bind(convertView);
-        binding.setObservable(new userReportBaseObservable(report));
+        binding.setObservable(new UserReportBaseObservable(report));
         return binding.getRoot();
     }
 }

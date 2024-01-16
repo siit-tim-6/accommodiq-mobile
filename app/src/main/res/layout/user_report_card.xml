@@ -3,7 +3,7 @@
     <data>
         <variable
             name="observable"
-            type="com.example.accommodiq.ui.userReport.userReportBaseObservable" />
+            type="com.example.accommodiq.ui.userReport.UserReportBaseObservable" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

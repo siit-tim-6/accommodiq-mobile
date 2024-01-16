@@ -1,6 +1,5 @@
 package com.example.accommodiq.ui.userReport;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,27 +26,17 @@ import retrofit2.Response;
 public class UserReportListFragment extends ListFragment {
     private UserReportsListAdapter adapter;
     private List<UserReportDto> reports;
-    private ReportsClient reportsClient;
-
-    public static UserReportListFragment newInstance(Context context) {
-        UserReportListFragment fragment = new UserReportListFragment();
-        fragment.reportsClient = RetrofitClientInstance.getRetrofitInstance(context).create(ReportsClient.class);
-        return fragment;
-    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getReports();
         return inflater.inflate(R.layout.fragment_user_report_list, container, false);
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getReports();
-    }
-
     private void getReports() {
+        ReportsClient reportsClient = RetrofitClientInstance.getRetrofitInstance(getContext()).create(ReportsClient.class);
+
         Call<ArrayList<UserReportDto>> call = reportsClient.getReports();
         call.enqueue(new Callback<ArrayList<UserReportDto>>() {
             @Override

@@ -9,8 +9,8 @@ import com.example.accommodiq.dtos.UserReportDto;
 
 import java.util.Objects;
 
-public class userReportBaseObservable extends BaseObservable {
-    UserReportDto userReportDto = new UserReportDto();
+public class UserReportBaseObservable extends BaseObservable {
+    UserReportDto userReportDto;
 
     @Bindable
     public String getReason() {
@@ -60,7 +60,7 @@ public class userReportBaseObservable extends BaseObservable {
         notifyPropertyChanged(BR.reportingUser);
     }
 
-    public userReportBaseObservable(UserReportDto userReportDto) {
+    public UserReportBaseObservable(UserReportDto userReportDto) {
         this.userReportDto = userReportDto;
     }
 }
