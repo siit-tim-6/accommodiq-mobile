@@ -3,6 +3,7 @@ package com.example.accommodiq.clients;
 import com.example.accommodiq.dtos.AccommodationDetailsDto;
 import com.example.accommodiq.dtos.AccommodationListDto;
 import com.example.accommodiq.dtos.AccommodationPriceDto;
+import com.example.accommodiq.dtos.AccommodationReviewApprovalDto;
 import com.example.accommodiq.dtos.AccommodationReviewDto;
 import com.example.accommodiq.dtos.AccommodationStatusDto;
 import com.example.accommodiq.dtos.ModifyAccommodationDto;
@@ -72,5 +73,13 @@ public interface AccommodationClient {
 
     @GET("/accommodations/{accommodationId}/advanced")
     Call<ModifyAccommodationDto> getAccommodationAdvancedDetails(@Path("accommodationId") Long accommodationId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json"
+    })
+    @GET("/accommodations/reviews")
+    Call<List<AccommodationReviewApprovalDto>> getReviewsByStatus(@Body AccommodationStatusDto status);
+
 
 }
