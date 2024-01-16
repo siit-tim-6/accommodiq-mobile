@@ -24,10 +24,10 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <Button
-                android:id="@+id/approve_button"
-                android:layout_width="wrap_content"
+                android:id="@+id/confirm_button"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/prompt_approve" />
+                android:text="@string/prompt_accept" />
 
             <Button
                 android:id="@+id/dismiss_button"
@@ -42,7 +42,6 @@
             android:id="@+id/accommodation_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/user_report_card"
             android:orientation="vertical"
             android:gravity="center"
             app:layout_constraintStart_toStartOf="parent"
@@ -88,7 +87,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:text="@={observable.accommodationReviewApprovalDto.review.comment}"
-            android:background="@drawable/user_report_card"
+            android:background="@drawable/review_approval_card_background"
             android:textSize="16sp"
             android:paddingRight="5dp"
             android:paddingLeft="5dp"
