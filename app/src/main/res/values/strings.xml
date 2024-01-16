@@ -88,4 +88,5 @@
     <string name="prompt_dismiss">Dismiss</string>
     <string name="prompt_reports">Reports</string>
     <string name="prompt_user_reports">User Reports</string>
+    <string name="prompt_approve">Approve</string>
 </resources>
