@@ -13,6 +13,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.PUT;
@@ -81,5 +82,18 @@ public interface AccommodationClient {
     @GET("/accommodations/reviews")
     Call<List<AccommodationReviewApprovalDto>> getReviewsByStatus(@Body AccommodationStatusDto status);
 
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json"
+    })
+    @DELETE("/reviews/{id}")
+    Call<Void> deleteReview(long id);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json"
+    })
+    @PUT("/accommodations/reviews/{id}/status")
+    Call<Void> changeReviewStatus(long id, @Body AccommodationStatusDto status);
 
 }
