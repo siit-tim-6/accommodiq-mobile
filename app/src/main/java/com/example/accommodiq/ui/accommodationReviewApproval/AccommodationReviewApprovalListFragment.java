@@ -19,6 +19,6 @@ public class AccommodationReviewApprovalListFragment extends ListFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setListAdapter(new AccommodationReviewApprovalsAdapter(getContext(), new ArrayList<>()));
-        return inflater.inflate(R.layout.fragment_user_report_list, container, false);
+        return inflater.inflate(R.layout.fragment_accommodation_review_approval_list, container, false);
     }
 }

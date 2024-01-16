@@ -80,7 +80,7 @@ public interface AccommodationClient {
             "Content-Type: application/json"
     })
     @GET("/accommodations/reviews")
-    Call<List<AccommodationReviewApprovalDto>> getReviewsByStatus(@Body AccommodationStatusDto status);
+    Call<List<AccommodationReviewApprovalDto>> getReviewsByStatus(@Query("status") String status);
 
     @Headers({
             "User-Agent: Mobile-Android",
@@ -94,6 +94,6 @@ public interface AccommodationClient {
             "Content-Type: application/json"
     })
     @PUT("/accommodations/reviews/{id}/status")
-    Call<Void> changeReviewStatus(long id, @Body AccommodationStatusDto status);
+    Call<Void> changeReviewStatus(@Path("id") long id, @Body AccommodationStatusDto status);
 
 }

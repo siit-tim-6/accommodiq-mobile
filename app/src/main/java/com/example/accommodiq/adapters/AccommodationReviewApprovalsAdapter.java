@@ -66,7 +66,7 @@ public class AccommodationReviewApprovalsAdapter extends ArrayAdapter<Accommodat
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         AccommodationReviewApprovalDto reviewApproval = reviews.get(position);
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.fragment_accommodation_review_approval_list, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.accommodation_review_approval_card, parent, false);
         }
         AccommodationReviewApprovalCardBinding binding = AccommodationReviewApprovalCardBinding.bind(convertView);
         binding.setObservable(new AccommodationReviewApprovalBaseObservable(reviewApproval));
@@ -107,12 +107,17 @@ public class AccommodationReviewApprovalsAdapter extends ArrayAdapter<Accommodat
     }
 
     private void fetchReviews(String status) {
-        Call<List<AccommodationReviewApprovalDto>> call = client.getReviewsByStatus(new AccommodationStatusDto(status));
+        Call<List<AccommodationReviewApprovalDto>> call = client.getReviewsByStatus(status);
         call.enqueue(new Callback<List<AccommodationReviewApprovalDto>>() {
             @Override
             public void onResponse(@NonNull Call<List<AccommodationReviewApprovalDto>> call, @NonNull Response<List<AccommodationReviewApprovalDto>> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(context, "Error " + response.message(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 assert response.body() != null;
                 reviews.addAll(response.body());
+                notifyDataSetChanged();
             }
 
             @Override
