@@ -1,5 +1,6 @@
 package com.example.accommodiq.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,54 +29,58 @@ import retrofit2.Response;
 
 public class AccommodationReviewApprovalsAdapter extends ArrayAdapter<AccommodationReviewApprovalDto> {
     private final Context context;
-    private final ArrayList<AccommodationReviewApprovalDto> reviews;
+    private final ArrayList<AccommodationReviewApprovalDto> reviewsToShow;
+    private final ArrayList<AccommodationReviewApprovalDto> allReviews = new ArrayList<>();
     private final AccommodationClient client;
 
     public AccommodationReviewApprovalsAdapter(Context context, ArrayList<AccommodationReviewApprovalDto> reviews) {
         super(context, R.layout.fragment_accommodation_review_approval_list, reviews);
         this.client = RetrofitClientInstance.getRetrofitInstance(context).create(AccommodationClient.class);
         this.context = context;
-        this.reviews = reviews;
+        this.reviewsToShow = reviews;
         fetchReviews("PENDING");
         fetchReviews("REPORTED");
     }
 
     @Override
     public int getCount() {
-        return reviews.size();
+        return reviewsToShow.size();
     }
 
     @Override
     public AccommodationReviewApprovalDto getItem(int position) {
-        return reviews.get(position);
+        return reviewsToShow.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return reviews.get(position).hashCode();
+        return reviewsToShow.get(position).hashCode();
     }
 
     @Override
     public void remove(@Nullable AccommodationReviewApprovalDto object) {
-        reviews.remove(object);
+        reviewsToShow.remove(object);
         notifyDataSetChanged();
     }
 
+    @SuppressLint("ViewHolder")
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        AccommodationReviewApprovalDto reviewApproval = reviews.get(position);
-        if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.accommodation_review_approval_card, parent, false);
-        }
+        AccommodationReviewApprovalDto reviewApproval = reviewsToShow.get(position);
+        convertView = LayoutInflater.from(context).inflate(R.layout.accommodation_review_approval_card, parent, false);
         AccommodationReviewApprovalCardBinding binding = AccommodationReviewApprovalCardBinding.bind(convertView);
         binding.setObservable(new AccommodationReviewApprovalBaseObservable(reviewApproval));
 
-        binding.approveButton.setOnClickListener(v -> {
-            Call<Void> call = client.changeReviewStatus(reviewApproval.getReview().getId(), new AccommodationStatusDto("APPROVED"));
+        binding.confirmButton.setOnClickListener(v -> {
+            Call<Void> call = client.changeReviewStatus(reviewApproval.getReview().getId(), new AccommodationStatusDto("ACCEPTED"));
             call.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                    if (!response.isSuccessful()) {
+                        Toast.makeText(context, "Error " + response.message(), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     remove(reviewApproval);
                 }
 
@@ -93,6 +98,10 @@ public class AccommodationReviewApprovalsAdapter extends ArrayAdapter<Accommodat
             call.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                    if (!response.isSuccessful()) {
+                        Toast.makeText(context, "Error " + response.message(), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     remove(reviewApproval);
                 }
 
@@ -116,8 +125,10 @@ public class AccommodationReviewApprovalsAdapter extends ArrayAdapter<Accommodat
                     return;
                 }
                 assert response.body() != null;
-                reviews.addAll(response.body());
-                notifyDataSetChanged();
+                allReviews.addAll(response.body());
+                if (status.equals("PENDING")) {
+                    showReviewsByType("PENDING");
+                }
             }
 
             @Override
@@ -125,5 +136,17 @@ public class AccommodationReviewApprovalsAdapter extends ArrayAdapter<Accommodat
                 Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
             }
         });
+    }
+
+    public void showReviewsByType(String type) {
+        reviewsToShow.clear();
+        ArrayList<AccommodationReviewApprovalDto> reportedReviews = new ArrayList<>();
+        allReviews.forEach(review -> {
+            if (review.getReview().getStatus().equals(type.toUpperCase())) {
+                reportedReviews.add(review);
+            }
+        });
+        reviewsToShow.addAll(reportedReviews);
+        notifyDataSetChanged();
     }
 }
