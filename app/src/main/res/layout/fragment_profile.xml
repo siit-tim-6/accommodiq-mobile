@@ -203,6 +203,18 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/signOutBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/red"
+            android:text="@string/sign_out"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttons_layout"
+            app:layout_constraintWidth_max="150dp" />
+
         <View
             android:id="@+id/separator_line"
             android:layout_width="match_parent"
@@ -210,10 +222,10 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
-            android:background="@color/cardview_light_background"
+            android:background="@color/designGrey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttons_layout" />
+            app:layout_constraintTop_toBottomOf="@+id/signOutBtn" />
 
         <LinearLayout
             android:id="@+id/review_layout"

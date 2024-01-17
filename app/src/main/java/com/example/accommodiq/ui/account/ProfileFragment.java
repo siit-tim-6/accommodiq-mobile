@@ -1,5 +1,7 @@
 package com.example.accommodiq.ui.account;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.accommodiq.R;
+import com.example.accommodiq.activities.LoginActivity;
 import com.example.accommodiq.adapters.ReviewsAdapter;
 import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.dtos.AccountDetailsDto;
@@ -46,6 +49,7 @@ public class ProfileFragment extends Fragment {
     private Button buttonFinancialReport;
     private ListView reviewsList;
     private Long accountId;
+    private Button buttonSignOut;
     private ArrayAdapter<ReviewDto> reviewsAdapter;
     private AccountDetailsDto accountDetails;
 
@@ -97,6 +101,7 @@ public class ProfileFragment extends Fragment {
         buttonReport = view.findViewById(R.id.buttonReport);
         buttonFinancialReport = view.findViewById(R.id.buttonFinancialReport);
         reviewsList = view.findViewById(R.id.reviews_list);
+        buttonSignOut = view.findViewById(R.id.signOutBtn);
         buttonEditProfile.setOnClickListener(v -> {
             FragmentTransition.to(new AuthorizedProfileFragment(), getActivity(), true, R.id.my_profile_fragment);
         });
@@ -106,6 +111,17 @@ public class ProfileFragment extends Fragment {
         buttonFinancialReport.setOnClickListener(v -> {
             //FragmentTransition.to(new FinancialReportFragment(), getActivity(), true, R.id.my_profile_fragment);
             Toast.makeText(getContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
+        });
+        buttonSignOut.setOnClickListener(v -> {
+            Activity mainActivity = getActivity();
+            if (mainActivity != null) {
+                startActivity(new Intent(mainActivity, LoginActivity.class));
+                mainActivity.finish();
+                JwtUtils.clearJwtAndRole(requireContext());
+
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivity(intent);
+            }
         });
 
         return view;
@@ -157,12 +173,14 @@ public class ProfileFragment extends Fragment {
         if(JwtUtils.getLoggedInId(getContext()) != accountId) {
             buttonEditProfile.setVisibility(View.GONE);
             buttonFinancialReport.setVisibility(View.GONE);
+            buttonSignOut.setVisibility(View.GONE);
             if(isAbleToReport()) {
                 buttonReport.setVisibility(View.VISIBLE);
             }
         }else {
             buttonReport.setVisibility(View.GONE);
             buttonEditProfile.setVisibility(View.VISIBLE);
+            buttonSignOut.setVisibility(View.VISIBLE);
             if(accountDetails.getRole().equals(AccountRole.HOST)) {
                 buttonFinancialReport.setVisibility(View.VISIBLE);
             }else {

@@ -35,7 +35,7 @@ public class AuthInterceptor implements Interceptor {
 
         Response response = chain.proceed(original);
 
-        if (JwtUtils.isTokenExpired(context)) {
+        if (JwtUtils.isTokenExpired(context) && JwtUtils.isUserLoggedIn(context)) {
             redirectToLogin();
         }
 
