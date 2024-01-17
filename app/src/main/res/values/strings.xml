@@ -92,4 +92,7 @@
     <string name="prompt_review_approval">Review Approval</string>
     <string name="prompt_accommodation_reviews">Accommodation Reviews</string>
     <string name="prompt_show_reported_reviews">Show reported reviews</string>
+    <string name="prompt_delete">Delete</string>
+    <string name="reported_host_reviews_title">Reported Host Reviews</string>
+    <string name="prompt_host_reviews">Host Reviews</string>
 </resources>

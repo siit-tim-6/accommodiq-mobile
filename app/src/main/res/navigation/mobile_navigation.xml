@@ -71,4 +71,10 @@
         android:label="@string/prompt_review_approval"
         tools:layout="@layout/fragment_accommodation_review_approval_list" />
 
+    <fragment
+        android:id="@+id/navigation_host_review_approval"
+        android:name="com.example.accommodiq.ui.hostReviewApproval.HostReviewApprovalListFragment"
+        android:label="@string/prompt_host_reviews"
+        tools:layout="@layout/fragment_host_review_approval_list" />
+
 </navigation>

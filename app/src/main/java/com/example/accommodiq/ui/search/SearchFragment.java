@@ -8,13 +8,15 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.accommodiq.R;
+import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.databinding.FragmentSearchBinding;
 import com.example.accommodiq.enums.AccommodationListType;
 import com.example.accommodiq.fragments.AccommodationsListFragment;
 import com.example.accommodiq.fragments.FragmentTransition;
+
+import java.util.Objects;
 
 public class SearchFragment extends Fragment {
     private FragmentSearchBinding binding;
@@ -22,9 +24,6 @@ public class SearchFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-
-        SearchViewModel searchViewModel =
-                new ViewModelProvider(this).get(SearchViewModel.class);
 
         binding = FragmentSearchBinding.inflate(inflater, container, false);
 
@@ -36,6 +35,10 @@ public class SearchFragment extends Fragment {
         super.onStart();
         Activity mainActivity = getActivity();
         if (mainActivity != null) {
+            if (Objects.equals(JwtUtils.getRole(mainActivity), "ADMIN")) {
+                getLayoutInflater().inflate(R.layout.fragment_user_report_list, binding.getRoot(), true); // attach to root maybe false
+                return;
+            }
             FragmentTransition.to(AccommodationsListFragment.newInstance(getActivity(), AccommodationListType.SEARCH), getActivity(), true, R.id.accommodations_fragment);
         }
     }
