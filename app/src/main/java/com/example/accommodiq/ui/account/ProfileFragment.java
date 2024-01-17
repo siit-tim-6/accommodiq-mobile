@@ -2,7 +2,10 @@ package com.example.accommodiq.ui.account;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +16,11 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.accommodiq.R;
+import com.example.accommodiq.apiConfig.JwtUtils;
 
 public class ProfileFragment extends Fragment {
 
-    // Define views
+    private ProfileViewModel profileViewModel;
     private TextView fullNameTextView;
     private TextView emailTextView;
     private TextView addressTextView;
@@ -28,6 +32,7 @@ public class ProfileFragment extends Fragment {
     private Button buttonReport;
     private Button buttonFinancialReport;
     private ListView reviewsList;
+    private Long accountId;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -40,17 +45,32 @@ public class ProfileFragment extends Fragment {
         return fragment;
     }
 
+    public static ProfileFragment newInstance(@Nullable Long accountId) {
+        ProfileFragment fragment = new ProfileFragment();
+        Bundle args = new Bundle();
+        if (accountId != null) {
+            args.putLong("accountId", accountId);
+        }
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        if (args != null && args.containsKey("accountId")) {
+            accountId = args.getLong("accountId");
+        } else {
+            accountId = JwtUtils.getLoggedInId(getContext());
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        // Initialize views
         fullNameTextView = view.findViewById(R.id.full_name_text_view);
         emailTextView = view.findViewById(R.id.email_text_view);
         addressTextView = view.findViewById(R.id.address_text_view);
@@ -63,9 +83,28 @@ public class ProfileFragment extends Fragment {
         buttonFinancialReport = view.findViewById(R.id.buttonFinancialReport);
         reviewsList = view.findViewById(R.id.reviews_list);
 
-        // Here you can set listeners for your buttons, bind data to views, etc.
-
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Initialize ViewModel
+        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+
+        if (accountId != null) {
+            profileViewModel.loadAccountDetails(accountId);
+        }
+
+        // Observe the LiveData
+        profileViewModel.getAccountDetailsLiveData().observe(getViewLifecycleOwner(), accountDetails -> {
+            fullNameTextView.setText(accountDetails.getFirstName()+" "+accountDetails.getLastName());
+            emailTextView.setText(accountDetails.getEmail());
+            addressTextView.setText(accountDetails.getAddress());
+            phoneNumberTextView.setText(accountDetails.getPhoneNumber());
+            roleTextView.setText(accountDetails.getRole().toString());
+        });
     }
 
     // Additional methods for event handling and data binding
