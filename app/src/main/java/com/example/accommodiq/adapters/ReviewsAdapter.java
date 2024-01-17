@@ -1,7 +1,5 @@
 package com.example.accommodiq.adapters;
 
-import static java.security.AccessController.getContext;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +14,9 @@ import androidx.annotation.Nullable;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.dtos.ReviewDto;
+import com.example.accommodiq.listener.OnDeleteClickListener;
+import com.example.accommodiq.listener.OnReportClickListener;
+import com.example.accommodiq.listener.OnUserNameClickListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,9 +24,20 @@ import java.util.List;
 import java.util.Locale;
 
 public class ReviewsAdapter extends ArrayAdapter<ReviewDto> {
+    private OnReportClickListener reportClickListener;
+    private OnDeleteClickListener deleteClickListener;
+    private OnUserNameClickListener userNameClickListener;
+    private boolean canReport;
 
-    public ReviewsAdapter(Context context, List<ReviewDto> reviews) {
+    public ReviewsAdapter(Context context, List<ReviewDto> reviews,
+                          OnReportClickListener reportClickListener,
+                          OnDeleteClickListener deleteClickListener,
+                          OnUserNameClickListener userNameClickListener,boolean canReport) {
         super(context, 0, reviews);
+        this.reportClickListener = reportClickListener;
+        this.deleteClickListener = deleteClickListener;
+        this.canReport = canReport;
+        this.userNameClickListener = userNameClickListener;
     }
 
     @NonNull
@@ -46,21 +58,33 @@ public class ReviewsAdapter extends ArrayAdapter<ReviewDto> {
 
         userName.setText(review.getAuthor());
         ratingBar.setRating(review.getRating());
-        // Format and set the review date
         reviewDate.setText(formatDate(review.getDate()));
         reviewContent.setText(review.getComment());
 
-        // Set visibility and click listeners for report and delete icons
-        reportIcon.setVisibility(review.isDeletable() ? View.VISIBLE : View.GONE);
+        reportIcon.setVisibility(this.canReport ? View.VISIBLE : View.GONE);
         deleteIcon.setVisibility(review.isDeletable() ? View.VISIBLE : View.GONE);
 
-        reportIcon.setOnClickListener(v -> {
-            // Handle report action
-        });
+        if (review != null) {
+            long reviewId = review.getId();
 
-        deleteIcon.setOnClickListener(v -> {
-            // Handle delete action
-        });
+            reportIcon.setOnClickListener(v -> {
+                if (reportClickListener != null) {
+                    reportClickListener.onReportClicked(reviewId);
+                }
+            });
+
+            deleteIcon.setOnClickListener(v -> {
+                if (deleteClickListener != null) {
+                    deleteClickListener.onDeleteClicked(reviewId);
+                }
+            });
+
+            userName.setOnClickListener(v -> {
+                if (userNameClickListener != null) {
+                    userNameClickListener.onUserNameClicked(review.getAuthorId());
+                }
+            });
+        }
 
         return convertView;
     }

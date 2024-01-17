@@ -16,12 +16,16 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.adapters.ReviewsAdapter;
 import com.example.accommodiq.apiConfig.JwtUtils;
+import com.example.accommodiq.dtos.AccountDetailsDto;
 import com.example.accommodiq.dtos.ReviewDto;
 import com.example.accommodiq.enums.AccountRole;
+import com.example.accommodiq.fragments.FragmentTransition;
+import com.example.accommodiq.ui.report.ReportFragment;
 import com.example.accommodiq.ui.updateAccommodationAvailability.UpdateAccommodationAvailabilityViewModel;
 
 import java.util.ArrayList;
@@ -43,6 +47,7 @@ public class ProfileFragment extends Fragment {
     private ListView reviewsList;
     private Long accountId;
     private ArrayAdapter<ReviewDto> reviewsAdapter;
+    private AccountDetailsDto accountDetails;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -92,6 +97,16 @@ public class ProfileFragment extends Fragment {
         buttonReport = view.findViewById(R.id.buttonReport);
         buttonFinancialReport = view.findViewById(R.id.buttonFinancialReport);
         reviewsList = view.findViewById(R.id.reviews_list);
+        buttonEditProfile.setOnClickListener(v -> {
+            FragmentTransition.to(new AuthorizedProfileFragment(), getActivity(), true, R.id.my_profile_fragment);
+        });
+        buttonReport.setOnClickListener(v -> {
+            FragmentTransition.to(new ReportFragment(), getActivity(), true, R.id.my_profile_fragment);
+        });
+        buttonFinancialReport.setOnClickListener(v -> {
+            //FragmentTransition.to(new FinancialReportFragment(), getActivity(), true, R.id.my_profile_fragment);
+            Toast.makeText(getContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
+        });
 
         return view;
     }
@@ -100,7 +115,8 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        reviewsAdapter = new ReviewsAdapter(getContext(), new ArrayList<>());
+        reviewsAdapter = new ReviewsAdapter(getContext(), new ArrayList<>(),
+                this::onReportReview, this::onDeleteReview,this::onUserNameClicked, canReportReview());
         reviewsList.setAdapter(reviewsAdapter);
 
         profileViewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
@@ -111,25 +127,70 @@ public class ProfileFragment extends Fragment {
             }
         }).get(ProfileViewModel.class);
 
+        profileViewModel.getMessageLiveData().observe(getViewLifecycleOwner(), message -> {
+            if (message != null && !message.isEmpty()) {
+                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+                profileViewModel.clearMessage();
+            }
+        });
+
         if (accountId != null) {
             profileViewModel.loadAccountDetails(accountId);
         }
 
         profileViewModel.getAccountDetailsLiveData().observe(getViewLifecycleOwner(), accountDetails -> {
-            fullNameTextView.setText(accountDetails.getFirstName() + " " + accountDetails.getLastName());
-            emailTextView.setText(accountDetails.getEmail());
-            addressTextView.setText(accountDetails.getAddress());
-            phoneNumberTextView.setText(accountDetails.getPhoneNumber());
-            roleTextView.setText(accountDetails.getRole().toString());
-
-            if (accountDetails.getRole().equals(AccountRole.HOST)) {
-                profileViewModel.loadHostReviews(accountId);
-            }
+            this.accountDetails = accountDetails;
+            updateUIWithAccountDetails(accountDetails);
+            updateUIButtonsVisibility();
         });
 
         profileViewModel.getReviewsLiveData().observe(getViewLifecycleOwner(), reviews -> {
             updateReviewsList(reviews);
         });
+    }
+
+    private boolean canReportReview() {
+        return JwtUtils.getLoggedInId(getContext()) == accountId && JwtUtils.getRole(getContext()).equals("HOST");
+    }
+
+    private void updateUIButtonsVisibility() {
+        if(JwtUtils.getLoggedInId(getContext()) != accountId) {
+            buttonEditProfile.setVisibility(View.GONE);
+            buttonFinancialReport.setVisibility(View.GONE);
+            if(isAbleToReport()) {
+                buttonReport.setVisibility(View.VISIBLE);
+            }
+        }else {
+            buttonReport.setVisibility(View.GONE);
+            buttonEditProfile.setVisibility(View.VISIBLE);
+            if(accountDetails.getRole().equals(AccountRole.HOST)) {
+                buttonFinancialReport.setVisibility(View.VISIBLE);
+            }else {
+                buttonFinancialReport.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private boolean isAbleToReport() {
+        if(accountDetails.getRole().equals(AccountRole.HOST) && JwtUtils.getRole(getContext()).equals("GUEST")) {
+            return true;
+        }
+        if(accountDetails.getRole().equals(AccountRole.GUEST) && JwtUtils.getRole(getContext()).equals("HOST")) {
+            return true;
+        }
+        return false;
+    }
+
+    private void updateUIWithAccountDetails(AccountDetailsDto accountDetails) {
+        fullNameTextView.setText(accountDetails.getFirstName() + " " + accountDetails.getLastName());
+        emailTextView.setText(accountDetails.getEmail());
+        addressTextView.setText(accountDetails.getAddress());
+        phoneNumberTextView.setText(accountDetails.getPhoneNumber());
+        roleTextView.setText(accountDetails.getRole().toString());
+
+        if (accountDetails.getRole().equals(AccountRole.HOST)) {
+            profileViewModel.loadHostReviews(accountId);
+        }
     }
 
     private void updateReviewsList(List<ReviewDto> reviews) {
@@ -138,6 +199,15 @@ public class ProfileFragment extends Fragment {
         reviewsAdapter.notifyDataSetChanged();
     }
 
+    private void onReportReview(long reviewId) {
+        profileViewModel.reportReview(reviewId);
+    }
 
-    // Additional methods for event handling and data binding
+    private void onDeleteReview(long reviewId) {
+        profileViewModel.deleteReview(reviewId);
+    }
+
+    private void onUserNameClicked(long userId) {
+        FragmentTransition.to(ProfileFragment.newInstance(userId), getActivity(), true, R.id.my_profile_fragment);
+    }
 }
