@@ -24,7 +24,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.adapters.AccommodationListAdapter;
-import com.example.accommodiq.adapters.ReviewsListAdapter;
+import com.example.accommodiq.adapters.ReviewsAdapter;
 import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.clients.AccommodationClient;
@@ -34,7 +34,11 @@ import com.example.accommodiq.dtos.AccommodationDetailsReviewDto;
 import com.example.accommodiq.dtos.AccommodationListDto;
 import com.example.accommodiq.dtos.AccommodationPriceDto;
 import com.example.accommodiq.dtos.ReservationRequestDto;
+import com.example.accommodiq.listener.OnDeleteClickListener;
+import com.example.accommodiq.listener.OnReportClickListener;
+import com.example.accommodiq.listener.OnUserNameClickListener;
 import com.example.accommodiq.models.Review;
+import com.example.accommodiq.ui.account.ProfileFragment;
 import com.example.accommodiq.utils.DateUtils;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
@@ -196,7 +200,16 @@ public class AccommodationDetailsFragment extends Fragment {
                     locationTextView.setText(accommodation.getLocation().getAddress());
                     String minPrice = "From " + accommodation.getMinPrice() + ((accommodation.getPricingType().equals("PER_GUEST")) ? " / guest" : "") + " / night";
                     minPriceTextView.setText(minPrice);
-                    reviewsListView.setAdapter(new ReviewsListAdapter(getActivity(), (ArrayList<AccommodationDetailsReviewDto>) accommodation.getReviews()));
+                    boolean canReport = accommodation.getHost().getId() == JwtUtils.getLoggedInId(getActivity());
+                    ReviewsAdapter reviewsAdapter = new ReviewsAdapter(
+                            getContext(),
+                            accommodation.getReviews(),
+                            reportClickListener,
+                            deleteClickListener,
+                            userNameClickListener,
+                            canReport
+                    );
+                    reviewsListView.setAdapter(reviewsAdapter);
                 } else {
                     Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
                 }
@@ -299,4 +312,16 @@ public class AccommodationDetailsFragment extends Fragment {
             });
         });
     }
+
+    private OnReportClickListener reportClickListener = reviewId -> {
+        // Implement reporting logic here
+    };
+
+    private OnDeleteClickListener deleteClickListener = reviewId -> {
+        // Implement delete logic here
+    };
+
+    private OnUserNameClickListener userNameClickListener = userId -> {
+        FragmentTransition.to(ProfileFragment.newInstance(userId), getActivity(), true, R.id.my_profile_fragment);
+    };
 }
