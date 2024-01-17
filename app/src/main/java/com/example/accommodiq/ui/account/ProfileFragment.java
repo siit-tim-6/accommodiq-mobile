@@ -5,18 +5,27 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.accommodiq.R;
+import com.example.accommodiq.adapters.ReviewsAdapter;
 import com.example.accommodiq.apiConfig.JwtUtils;
+import com.example.accommodiq.dtos.ReviewDto;
+import com.example.accommodiq.enums.AccountRole;
+import com.example.accommodiq.ui.updateAccommodationAvailability.UpdateAccommodationAvailabilityViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProfileFragment extends Fragment {
 
@@ -33,6 +42,7 @@ public class ProfileFragment extends Fragment {
     private Button buttonFinancialReport;
     private ListView reviewsList;
     private Long accountId;
+    private ArrayAdapter<ReviewDto> reviewsAdapter;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -90,22 +100,44 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize ViewModel
-        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        reviewsAdapter = new ReviewsAdapter(getContext(), new ArrayList<>());
+        reviewsList.setAdapter(reviewsAdapter);
+
+        profileViewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new ProfileViewModel(getContext());
+            }
+        }).get(ProfileViewModel.class);
 
         if (accountId != null) {
             profileViewModel.loadAccountDetails(accountId);
         }
 
-        // Observe the LiveData
         profileViewModel.getAccountDetailsLiveData().observe(getViewLifecycleOwner(), accountDetails -> {
-            fullNameTextView.setText(accountDetails.getFirstName()+" "+accountDetails.getLastName());
+            fullNameTextView.setText(accountDetails.getFirstName() + " " + accountDetails.getLastName());
             emailTextView.setText(accountDetails.getEmail());
             addressTextView.setText(accountDetails.getAddress());
             phoneNumberTextView.setText(accountDetails.getPhoneNumber());
             roleTextView.setText(accountDetails.getRole().toString());
+
+            if (accountDetails.getRole().equals(AccountRole.HOST)) {
+                profileViewModel.loadHostReviews(accountId);
+            }
+        });
+
+        profileViewModel.getReviewsLiveData().observe(getViewLifecycleOwner(), reviews -> {
+            updateReviewsList(reviews);
         });
     }
+
+    private void updateReviewsList(List<ReviewDto> reviews) {
+        reviewsAdapter.clear();
+        reviewsAdapter.addAll(reviews);
+        reviewsAdapter.notifyDataSetChanged();
+    }
+
 
     // Additional methods for event handling and data binding
 }

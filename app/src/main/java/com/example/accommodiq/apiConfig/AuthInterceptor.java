@@ -2,6 +2,8 @@ package com.example.accommodiq.apiConfig;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
 import com.example.accommodiq.activities.LoginActivity;
@@ -44,7 +46,6 @@ public class AuthInterceptor implements Interceptor {
         JwtUtils.clearJwtAndRole(context);
         Intent intent = new Intent(context, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        Toast.makeText(context, "Your session has expired. Please log in again.", Toast.LENGTH_SHORT).show();
         context.startActivity(intent);
     }
 }

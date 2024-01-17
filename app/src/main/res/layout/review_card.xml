@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/border_background"
     android:padding="10dp"
-    android:id="@+id/accommodation_card_item"
+    android:id="@+id/review_card_item"
     android:orientation="vertical"
     >
 
