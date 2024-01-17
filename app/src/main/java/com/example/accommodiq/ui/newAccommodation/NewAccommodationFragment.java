@@ -101,7 +101,7 @@ public class NewAccommodationFragment extends Fragment {
                 openGallery());
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.apartment_types, android.R.layout.simple_spinner_item);
+                R.array.accommodation_types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerAccommodationType.setAdapter(adapter);
 
@@ -127,7 +127,7 @@ public class NewAccommodationFragment extends Fragment {
     private void populateFields() {
         binding.editTextName.setText(accommodationDetailsDto.getTitle());
         binding.editTextDescription.setText(accommodationDetailsDto.getDescription());
-        binding.editTextAddress.setText(accommodationDetailsDto.getLocation());
+        binding.editTextAddress.setText(accommodationDetailsDto.getLocation().getAddress());
         binding.editTextMinGuests.setText(String.valueOf(accommodationDetailsDto.getMinGuests()));
         binding.editTextMaxGuests.setText(String.valueOf(accommodationDetailsDto.getMaxGuests()));
         binding.automaticallyAcceptCB.setChecked(accommodationDetailsDto.getAutomaticAcceptance());
@@ -179,7 +179,7 @@ public class NewAccommodationFragment extends Fragment {
         ModifyAccommodationDto newAccommodationDto = new ModifyAccommodationDto();
         newAccommodationDto.setTitle(title);
         newAccommodationDto.setDescription(description);
-        newAccommodationDto.setLocation(location);
+        newAccommodationDto.setLocation(null); // TODO: Add location
         newAccommodationDto.setMinGuests(minGuests);
         newAccommodationDto.setMaxGuests(maxGuests);
         newAccommodationDto.setAutomaticAcceptance(automaticAcceptance);

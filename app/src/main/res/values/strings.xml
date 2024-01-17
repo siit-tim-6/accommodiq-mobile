@@ -50,12 +50,6 @@
     <string name="title_new_accommodation">New Accommodation</string>
     <string name="log_in_or_sign_up_btn_text">Log in or Sign up</string>
     <string name="sign_out">Sign Out</string>
-    <string-array name="apartment_types">
-        <item>Entire apartment</item>
-        <item>Private room</item>
-        <item>Shared room</item>
-        <item>Hotel room</item>
-    </string-array>
     <string name="prompt_change_password">Change Password</string>
     <string name="title_hint">Title</string>
     <string name="location_hint">Location</string>

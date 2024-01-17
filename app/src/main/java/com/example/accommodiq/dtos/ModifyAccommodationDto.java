@@ -6,7 +6,7 @@ public class ModifyAccommodationDto {
     private Long id;
     private String title;
     private String description;
-    private String location;
+    private LocationDto location;
     private int minGuests;
     private int maxGuests;
     private String pricingType;
@@ -14,8 +14,19 @@ public class ModifyAccommodationDto {
     private List<String> images;
     private String type;
     private List<String> benefits;
-
     public ModifyAccommodationDto() {
+    }
+
+    public LocationDto getLocation() {
+        return location;
+    }
+
+    public void setLocation(LocationDto location) {
+        this.location = location;
+    }
+
+    public boolean isAutomaticAcceptance() {
+        return automaticAcceptance;
     }
 
     public String getTitle() {
@@ -32,14 +43,6 @@ public class ModifyAccommodationDto {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public int getMinGuests() {
@@ -86,16 +89,16 @@ public class ModifyAccommodationDto {
         return type;
     }
 
-    public void setBenefits(List<String> benefits) {
-        this.benefits = benefits;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public List<String> getBenefits() {
         return benefits;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setBenefits(List<String> benefits) {
+        this.benefits = benefits;
     }
 
     public Long getId() {

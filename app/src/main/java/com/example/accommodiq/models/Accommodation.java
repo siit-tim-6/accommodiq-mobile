@@ -62,7 +62,7 @@ public class Accommodation implements Parcelable {
         this.minGuests = accommodationReviewDto.getMinGuests();
         this.maxGuests = accommodationReviewDto.getMaxGuests();
         this.image = R.drawable.accommodation_image;
-        this.price = accommodationReviewDto.getPrice();
+        this.price = accommodationReviewDto.getMinPrice();
         this.status = accommodationReviewDto.getStatus();
     }
 

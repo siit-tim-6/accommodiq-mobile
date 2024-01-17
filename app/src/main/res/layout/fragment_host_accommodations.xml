@@ -7,7 +7,7 @@
     tools:context=".ui.hostAccommodations.HostAccommodationsFragment">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/accommodations_fragment"
+        android:id="@+id/host_accommodations_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

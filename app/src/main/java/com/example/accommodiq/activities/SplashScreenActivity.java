@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.example.accommodiq.R;
 import com.example.accommodiq.apiConfig.JwtUtils;
 
+@SuppressLint("CustomSplashScreen")
 public class SplashScreenActivity extends AppCompatActivity {
     int SPLASH_TIME_OUT=2000;
     @Override
@@ -42,7 +44,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private void navigateToWelcomeScreenAfterDelay(int delayMilliseconds) {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            if (JwtUtils.isUserLoggedIn(getApplicationContext())) {
+            if (JwtUtils.isUserLoggedIn(getApplicationContext()) && !JwtUtils.isTokenExpired(getApplicationContext())) {
                 Intent mainIntent = new Intent(SplashScreenActivity.this, MainActivity.class);
                 startActivity(mainIntent);
                 finish();

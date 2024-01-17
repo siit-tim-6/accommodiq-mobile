@@ -2,12 +2,11 @@ package com.example.accommodiq.services.interfaces;
 
 import com.example.accommodiq.dtos.AccommodationBookingDetailFormDto;
 import com.example.accommodiq.dtos.AccommodationBookingDetailsDto;
-import com.example.accommodiq.dtos.ModifyAccommodationDto;
 import com.example.accommodiq.dtos.AccommodationDetailsDto;
 import com.example.accommodiq.dtos.AccommodationReviewDto;
-import com.example.accommodiq.dtos.AccommodationStatusDto;
 import com.example.accommodiq.dtos.AvailabilityDto;
 import com.example.accommodiq.dtos.MessageDto;
+import com.example.accommodiq.dtos.ModifyAccommodationDto;
 import com.example.accommodiq.models.Availability;
 
 import java.util.List;
@@ -42,18 +41,6 @@ public interface AccommodationApiService {
 
     @DELETE("/accommodations/{accommodationId}/availabilities/{availabilityId}")
     Call<MessageDto> removeAccommodationAvailability(@Path("accommodationId") Long accommodationId, @Path("availabilityId") Long availabilityId);
-
-    @GET("/accommodations/pending")
-    Call<List<AccommodationReviewDto>> getPendingAccommodations();
-
-    @PUT("/accommodations/{accommodationId}/status")
-    Call<AccommodationReviewDto> updateAccommodationStatus(@Path("accommodationId") Long accommodationId, @Body AccommodationStatusDto status);
-
-    @GET("/hosts/accommodations")
-    Call<List<AccommodationReviewDto>> getHostAccommodations();
-
-    @GET("/accommodations/{accommodationId}/advanced")
-    Call<ModifyAccommodationDto> getAccommodationDetails(@Path("accommodationId") Long accommodationId);
 
     @PUT("/accommodations/{accommodationId}")
     Call<AccommodationDetailsDto> updateAccommodation(ModifyAccommodationDto dto);

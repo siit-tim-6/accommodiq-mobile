@@ -121,5 +121,14 @@
             android:textStyle="bold"
             android:id="@+id/accommodation_total_price"/>
 
+        <TextView
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/total_price"
+            android:fontFamily="@font/inter"
+            android:textStyle="bold"
+            android:id="@+id/accommodation_total_price"/>
+
     </LinearLayout>
 </LinearLayout>
