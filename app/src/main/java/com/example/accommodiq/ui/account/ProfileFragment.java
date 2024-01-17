@@ -7,43 +7,35 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.example.accommodiq.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    // Define views
+    private TextView fullNameTextView;
+    private TextView emailTextView;
+    private TextView addressTextView;
+    private TextView phoneNumberTextView;
+    private TextView roleTextView;
+    private RatingBar ratingBar;
+    private TextView ratingText;
+    private Button buttonEditProfile;
+    private Button buttonReport;
+    private Button buttonFinancialReport;
+    private ListView reviewsList;
 
     public ProfileFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
+    public static ProfileFragment newInstance() {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,16 +43,30 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        // Initialize views
+        fullNameTextView = view.findViewById(R.id.full_name_text_view);
+        emailTextView = view.findViewById(R.id.email_text_view);
+        addressTextView = view.findViewById(R.id.address_text_view);
+        phoneNumberTextView = view.findViewById(R.id.phone_number_text_view);
+        roleTextView = view.findViewById(R.id.role_text_view);
+        ratingBar = view.findViewById(R.id.ratingBar);
+        ratingText = view.findViewById(R.id.ratingText);
+        buttonEditProfile = view.findViewById(R.id.buttonEditProfile);
+        buttonReport = view.findViewById(R.id.buttonReport);
+        buttonFinancialReport = view.findViewById(R.id.buttonFinancialReport);
+        reviewsList = view.findViewById(R.id.reviews_list);
+
+        // Here you can set listeners for your buttons, bind data to views, etc.
+
+        return view;
     }
+
+    // Additional methods for event handling and data binding
 }

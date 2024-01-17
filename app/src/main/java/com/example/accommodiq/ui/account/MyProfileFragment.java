@@ -23,7 +23,7 @@ public class MyProfileFragment extends Fragment {
                 FragmentTransition.to(new UnauthorizedProfileFragment(), getActivity(), true, R.id.my_profile_fragment);
             }
             else {
-                FragmentTransition.to(new AuthorizedProfileFragment(), getActivity(), true, R.id.my_profile_fragment);
+                FragmentTransition.to(new ProfileFragment(), getActivity(), true, R.id.my_profile_fragment);
             }
         }
         return inflater.inflate(R.layout.fragment_my_profile, container, false);
