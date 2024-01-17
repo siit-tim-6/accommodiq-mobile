@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.apiConfig.JwtUtils;
@@ -36,7 +37,7 @@ public class SearchFragment extends Fragment {
         Activity mainActivity = getActivity();
         if (mainActivity != null) {
             if (Objects.equals(JwtUtils.getRole(mainActivity), "ADMIN")) {
-                getLayoutInflater().inflate(R.layout.fragment_user_report_list, binding.getRoot(), true); // attach to root maybe false
+                Navigation.findNavController(requireView()).navigate(R.id.navigation_user_reports);
                 return;
             }
             FragmentTransition.to(AccommodationsListFragment.newInstance(getActivity(), AccommodationListType.SEARCH), getActivity(), true, R.id.accommodations_fragment);
