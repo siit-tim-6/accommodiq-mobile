@@ -95,4 +95,7 @@
     <string name="prompt_delete">Delete</string>
     <string name="reported_host_reviews_title">Reported Host Reviews</string>
     <string name="prompt_host_reviews">Host Reviews</string>
+    <string name="prompt_seen">Seen</string>
+    <string name="notifications_heading">Notifications</string>
+    <string name="null_prompt">O</string>
 </resources>

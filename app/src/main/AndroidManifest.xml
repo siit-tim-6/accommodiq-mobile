@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -38,6 +39,10 @@
         <activity
             android:name=".activities.MainActivity"
             android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
+        <service
+            android:name=".services.UserNotificationsService"
+            android:enabled="true"
             android:exported="false" />
     </application>
 

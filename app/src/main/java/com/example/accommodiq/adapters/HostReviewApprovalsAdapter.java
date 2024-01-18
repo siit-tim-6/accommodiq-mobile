@@ -56,7 +56,7 @@ public class HostReviewApprovalsAdapter extends ArrayAdapter<HostReviewApprovalD
 
             @Override
             public void onFailure(@NonNull Call<List<HostReviewApprovalDto>> call, @NonNull Throwable t) {
-                Toast.makeText(context, "Error bla", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
                 Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
             }
         });
