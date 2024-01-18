@@ -27,7 +27,21 @@
         android:id="@+id/navigation_search"
         android:name="com.example.accommodiq.ui.search.SearchFragment"
         android:label="@string/title_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_navigation_search_to_accommodationsListFragment"
+            app:destination="@id/navigation_accommodationListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_accommodationListFragment"
+        android:name="com.example.accommodiq.fragments.AccommodationsListFragment"
+        android:label="AccommodationsListFragment"
+        tools:layout="@layout/fragment_accommodations_list">
+        <action
+            android:id="@+id/action_accommodationsListFragment_to_accommodationDetailsFragment"
+            app:destination="@id/navigation_accommodationDetails" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_my_profile"
@@ -59,4 +73,28 @@
         android:label="@string/title_host_accommodations"
         tools:layout="@layout/fragment_host_accommodations" />
 
+    <fragment
+        android:id="@+id/navigation_accommodationDetails"
+        android:name="com.example.accommodiq.fragments.AccommodationDetailsFragment"
+        android:label="Accommodation Details"
+        tools:layout="@layout/fragment_accommodation_details">
+        <argument
+            android:name="accommodationId"
+            app:argType="long" />
+
+        <action
+            android:id="@+id/action_accommodationDetailsFragment_to_profileFragment"
+            app:destination="@id/navigation_profile"/>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.accommodiq.ui.account.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile">
+        <argument
+            android:name="accountId"
+            app:argType="long" />
+    </fragment>
 </navigation>

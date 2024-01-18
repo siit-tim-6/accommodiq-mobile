@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.databinding.FragmentSearchBinding;
@@ -36,7 +37,8 @@ public class SearchFragment extends Fragment {
         super.onStart();
         Activity mainActivity = getActivity();
         if (mainActivity != null) {
-            FragmentTransition.to(AccommodationsListFragment.newInstance(getActivity(), AccommodationListType.SEARCH), getActivity(), true, R.id.accommodations_fragment);
+            //FragmentTransition.to(AccommodationsListFragment.newInstance(getActivity(), AccommodationListType.SEARCH), getActivity(), true, R.id.accommodations_fragment);
+            Navigation.findNavController(requireView()).navigate(R.id.action_navigation_search_to_accommodationsListFragment);
         }
     }
 

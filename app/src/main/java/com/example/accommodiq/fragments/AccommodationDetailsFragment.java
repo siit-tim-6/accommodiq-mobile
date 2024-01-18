@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.adapters.AccommodationListAdapter;
@@ -74,6 +75,10 @@ public class AccommodationDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null && getArguments().containsKey("accommodationId") && accommodationClient == null ) {
+            accommodationId = getArguments().getLong("accommodationId");
+            accommodationClient = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(AccommodationClient.class);
+        }
     }
 
     @Nullable
@@ -321,7 +326,9 @@ public class AccommodationDetailsFragment extends Fragment {
         // Implement delete logic here
     };
 
-    private OnUserNameClickListener userNameClickListener = userId -> {
-        FragmentTransition.to(ProfileFragment.newInstance(userId), getActivity(), true, R.id.my_profile_fragment);
+    private OnUserNameClickListener userNameClickListener = accountId -> {
+        Bundle bundle = new Bundle();
+        bundle.putLong("accountId", accountId);
+        Navigation.findNavController(getView()).navigate(R.id.action_accommodationDetailsFragment_to_profileFragment, bundle);
     };
 }
