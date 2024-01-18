@@ -50,7 +50,14 @@
         android:id="@+id/navigation_my_profile"
         android:name="com.example.accommodiq.ui.account.MyProfileFragment"
         android:label="@string/title_my_profile"
-        tools:layout="@layout/fragment_my_profile" />
+        tools:layout="@layout/fragment_my_profile">
+        <action
+            android:id="@+id/action_myProfileFragment_to_profileFragment"
+            app:destination="@id/navigation_profile" />
+        <action
+            android:id="@+id/action_myProfileFragment_to_unauthorizedProfileFragment"
+            app:destination="@id/navigation_unauthorizedProfile" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_new_accommodation"
@@ -94,6 +101,12 @@
             app:destination="@id/navigation_profile"/>
     </fragment>
 
+    <fragment
+        android:id="@+id/navigation_unauthorizedProfile"
+        android:name="com.example.accommodiq.ui.account.UnauthorizedProfileFragment"
+        android:label="Unauthorized Profile"
+        tools:layout="@layout/fragment_unauthorized_profile">
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_profile"
@@ -103,6 +116,15 @@
         <argument
             android:name="accountId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_profileFragment_self"
+            app:destination="@id/navigation_profile" />
+        <action
+            android:id="@+id/action_profileFragment_to_authorizedProfileFragment"
+            app:destination="@id/navigation_authorizedProfile" />
+        <action
+            android:id="@+id/action_profileFragment_to_reportUserFragment"
+            app:destination="@id/navigation_reportUser" />
     </fragment>
 
     <fragment
@@ -113,5 +135,22 @@
         <action
             android:id="@+id/action_accommodationReview_to_accommodationsListFragment"
             app:destination="@id/navigation_accommodationListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_authorizedProfile"
+        android:name="com.example.accommodiq.ui.account.AuthorizedProfileFragment"
+        android:label="Authorized Profile Update"
+        tools:layout="@layout/fragment_authorized_profile">
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_reportUser"
+        android:name="com.example.accommodiq.ui.report.ReportFragment"
+        android:label="Report User"
+        tools:layout="@layout/fragment_report">
+        <argument
+            android:name="accountId"
+            app:argType="long" />
     </fragment>
 </navigation>

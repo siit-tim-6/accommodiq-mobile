@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,24 +58,6 @@ public class ProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static ProfileFragment newInstance() {
-        ProfileFragment fragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public static ProfileFragment newInstance(@Nullable Long accountId) {
-        ProfileFragment fragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        if (accountId != null) {
-            args.putLong("accountId", accountId);
-        }
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,13 +86,14 @@ public class ProfileFragment extends Fragment {
         reviewsList = view.findViewById(R.id.reviews_list);
         buttonSignOut = view.findViewById(R.id.signOutBtn);
         buttonEditProfile.setOnClickListener(v -> {
-            FragmentTransition.to(new AuthorizedProfileFragment(), getActivity(), true, R.id.my_profile_fragment);
+            Navigation.findNavController(requireView()).navigate(R.id.action_profileFragment_to_authorizedProfileFragment);
         });
         buttonReport.setOnClickListener(v -> {
-            FragmentTransition.to(new ReportFragment(), getActivity(), true, R.id.my_profile_fragment);
+            Bundle bundle = new Bundle();
+            bundle.putLong("accountId", accountId);
+            Navigation.findNavController(requireView()).navigate(R.id.action_profileFragment_to_reportUserFragment, bundle);
         });
         buttonFinancialReport.setOnClickListener(v -> {
-            //FragmentTransition.to(new FinancialReportFragment(), getActivity(), true, R.id.my_profile_fragment);
             Toast.makeText(getContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
         });
         buttonSignOut.setOnClickListener(v -> {
@@ -176,6 +160,8 @@ public class ProfileFragment extends Fragment {
             buttonSignOut.setVisibility(View.GONE);
             if(isAbleToReport()) {
                 buttonReport.setVisibility(View.VISIBLE);
+            } else {
+                buttonReport.setVisibility(View.GONE);
             }
         }else {
             buttonReport.setVisibility(View.GONE);
@@ -190,6 +176,9 @@ public class ProfileFragment extends Fragment {
     }
 
     private boolean isAbleToReport() {
+        if(JwtUtils.getRole(getContext()) == null) {
+            return false;
+        }
         if(accountDetails.getRole().equals(AccountRole.HOST) && JwtUtils.getRole(getContext()).equals("GUEST")) {
             return true;
         }
@@ -225,7 +214,10 @@ public class ProfileFragment extends Fragment {
         profileViewModel.deleteReview(reviewId);
     }
 
-    private void onUserNameClicked(long userId) {
-        FragmentTransition.to(ProfileFragment.newInstance(userId), getActivity(), true, R.id.my_profile_fragment);
+    private void onUserNameClicked(long accountId) {
+        //FragmentTransition.to(ProfileFragment.newInstance(userId), getActivity(), true, R.id.my_profile_fragment);
+        Bundle bundle = new Bundle();
+        bundle.putLong("accountId", accountId);
+        Navigation.findNavController(requireView()).navigate(R.id.action_profileFragment_self, bundle);
     }
 }

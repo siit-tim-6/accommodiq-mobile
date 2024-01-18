@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.apiConfig.JwtUtils;
@@ -17,15 +19,20 @@ public class MyProfileFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_my_profile, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         Activity mainActivity = getActivity();
-        if (mainActivity != null){
+        if (mainActivity != null) {
             if (!JwtUtils.isUserLoggedIn(getContext())) {
-                FragmentTransition.to(new UnauthorizedProfileFragment(), getActivity(), true, R.id.my_profile_fragment);
-            }
-            else {
-                FragmentTransition.to(new ProfileFragment(), getActivity(), true, R.id.my_profile_fragment);
+                Navigation.findNavController(view).navigate(R.id.action_myProfileFragment_to_unauthorizedProfileFragment);
+            } else {
+                Navigation.findNavController(view).navigate(R.id.action_myProfileFragment_to_profileFragment);
             }
         }
-        return inflater.inflate(R.layout.fragment_my_profile, container, false);
     }
 }

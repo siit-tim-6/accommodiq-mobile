@@ -113,6 +113,12 @@ public class AccommodationDetailsFragment extends Fragment {
         EditText guestsField = view.findViewById(R.id.accommodation_details_guests_field);
         Button reserveButton = view.findViewById(R.id.accommodation_details_reserve);
 
+        hostNameTextView.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putLong("accountId", accommodation.getHost().getId());
+            Navigation.findNavController(getView()).navigate(R.id.action_accommodationDetailsFragment_to_profileFragment, bundle);
+        });
+
         favoriteImageButton.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Added to favorites!", Toast.LENGTH_SHORT).show();
         });

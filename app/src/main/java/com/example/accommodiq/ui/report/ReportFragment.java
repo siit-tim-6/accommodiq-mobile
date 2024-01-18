@@ -11,17 +11,25 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.accommodiq.R;
+import com.example.accommodiq.apiConfig.JwtUtils;
 
 public class ReportFragment extends Fragment {
 
     private ReportViewModel mViewModel;
+    private Long accountId;
+    private boolean shouldNavigateBack = false;
 
-    public static ReportFragment newInstance() {
-        return new ReportFragment();
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        if (args != null && args.containsKey("accountId")) {
+            accountId = args.getLong("accountId");
+        }
     }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -29,10 +37,14 @@ public class ReportFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(ReportViewModel.class);
-        // TODO: Use the ViewModel
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (shouldNavigateBack) {
+            Toast.makeText(getContext(), "Invalid arguments", Toast.LENGTH_SHORT).show();
+            if (getParentFragmentManager() != null) {
+                getParentFragmentManager().popBackStack();
+            }
+        }
     }
 
 }
