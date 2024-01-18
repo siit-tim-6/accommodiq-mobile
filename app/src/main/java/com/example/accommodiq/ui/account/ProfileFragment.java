@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -25,8 +26,10 @@ import com.example.accommodiq.R;
 import com.example.accommodiq.activities.LoginActivity;
 import com.example.accommodiq.adapters.ReviewsAdapter;
 import com.example.accommodiq.apiConfig.JwtUtils;
+import com.example.accommodiq.databinding.AddReviewBinding;
 import com.example.accommodiq.dtos.AccountDetailsDto;
 import com.example.accommodiq.dtos.ReviewDto;
+import com.example.accommodiq.dtos.ReviewRequestDto;
 import com.example.accommodiq.enums.AccountRole;
 import com.example.accommodiq.fragments.FragmentTransition;
 import com.example.accommodiq.ui.report.ReportFragment;
@@ -53,6 +56,10 @@ public class ProfileFragment extends Fragment {
     private Button buttonSignOut;
     private ArrayAdapter<ReviewDto> reviewsAdapter;
     private AccountDetailsDto accountDetails;
+    private View addReviewLayout;
+    private EditText editTextReview;
+    private RatingBar ratingBarReview;
+    private Button buttonSendReview;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -108,6 +115,11 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        addReviewLayout = view.findViewById(R.id.include_add_review);
+        editTextReview = view.findViewById(R.id.editTextReview);
+        ratingBarReview = view.findViewById(R.id.ratingBarReview);
+        buttonSendReview = view.findViewById(R.id.buttonSendReview);
+
         return view;
     }
 
@@ -147,6 +159,14 @@ public class ProfileFragment extends Fragment {
         profileViewModel.getReviewsLiveData().observe(getViewLifecycleOwner(), reviews -> {
             updateReviewsList(reviews);
         });
+
+        buttonSendReview.setOnClickListener( v ->  {
+            String reviewComment = editTextReview.getText().toString();
+            int starRating = (int) ratingBarReview.getRating();
+            profileViewModel.sendReview(new ReviewRequestDto(starRating, reviewComment), accountId);
+            editTextReview.setText("");
+            ratingBarReview.setRating(0);
+        });
     }
 
     private boolean canReportReview() {
@@ -163,7 +183,13 @@ public class ProfileFragment extends Fragment {
             } else {
                 buttonReport.setVisibility(View.GONE);
             }
+            if(JwtUtils.getRole(getContext()) != null && JwtUtils.getRole(getContext()).equals("GUEST")) {
+                addReviewLayout.setVisibility(View.VISIBLE);
+            } else {
+                addReviewLayout.setVisibility(View.GONE);
+            }
         }else {
+            addReviewLayout.setVisibility(View.GONE);
             buttonReport.setVisibility(View.GONE);
             buttonEditProfile.setVisibility(View.VISIBLE);
             buttonSignOut.setVisibility(View.VISIBLE);
@@ -215,7 +241,6 @@ public class ProfileFragment extends Fragment {
     }
 
     private void onUserNameClicked(long accountId) {
-        //FragmentTransition.to(ProfileFragment.newInstance(userId), getActivity(), true, R.id.my_profile_fragment);
         Bundle bundle = new Bundle();
         bundle.putLong("accountId", accountId);
         Navigation.findNavController(requireView()).navigate(R.id.action_profileFragment_self, bundle);

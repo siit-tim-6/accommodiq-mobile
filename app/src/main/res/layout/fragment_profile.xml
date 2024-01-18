@@ -180,7 +180,7 @@
                 android:layout_marginStart="5sp"
                 android:layout_marginEnd="5sp"
                 android:text="Edit Profile"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/buttonReport"
@@ -190,7 +190,7 @@
                 android:layout_marginStart="5sp"
                 android:layout_marginEnd="5sp"
                 android:text="Report"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/buttonFinancialReport"
@@ -199,7 +199,7 @@
                 android:layout_marginStart="5sp"
                 android:layout_marginEnd="5sp"
                 android:text="Financial Report"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
         </LinearLayout>
 
@@ -213,7 +213,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttons_layout"
-            app:layout_constraintWidth_max="150dp" />
+            app:layout_constraintWidth_max="150dp"
+            android:visibility="gone"/>
 
         <View
             android:id="@+id/separator_line"
@@ -248,7 +249,8 @@
 
             <include
                 android:id="@+id/include_add_review"
-                layout="@layout/add_review" />
+                layout="@layout/add_review"
+                android:visibility="gone"/>
 
 
             <ListView
