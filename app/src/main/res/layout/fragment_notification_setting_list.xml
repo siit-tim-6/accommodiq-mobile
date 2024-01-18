@@ -9,7 +9,7 @@
         android:id="@+id/textViewNotificationSettingTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/notifications_heading"
+        android:text="@string/notification_settings_heading"
         android:textSize="36sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -24,7 +24,6 @@
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewNotificationSettingTitle"
         tools:listitem="@layout/notification_setting_card"/>
 

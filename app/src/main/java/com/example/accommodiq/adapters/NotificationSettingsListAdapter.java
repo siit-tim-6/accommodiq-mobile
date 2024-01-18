@@ -83,7 +83,7 @@ public class NotificationSettingsListAdapter extends ArrayAdapter<NotificationSe
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         NotificationSettingDto notification = notificationSettings.get(position);
-        convertView = LayoutInflater.from(context).inflate(R.layout.notification_card, parent, false);
+        convertView = LayoutInflater.from(context).inflate(R.layout.notification_setting_card, parent, false);
 
         @NonNull NotificationSettingCardBinding binding = NotificationSettingCardBinding.bind(convertView);
         binding.setObservable(new NotificationSettingBaseObservable(notification));

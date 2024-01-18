@@ -100,4 +100,6 @@
     <string name="null_prompt">O</string>
     <string name="save">Save</string>
     <string name="prompt_settings">Settings</string>
+    <string name="title_notification_settings">Notification Settings\t</string>
+    <string name="notification_settings_heading">Notification Settings</string>
 </resources>
