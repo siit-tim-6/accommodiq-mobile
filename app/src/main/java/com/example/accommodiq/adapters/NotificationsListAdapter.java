@@ -15,17 +15,13 @@ import androidx.annotation.Nullable;
 import com.example.accommodiq.R;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.clients.NotificationsClient;
-import com.example.accommodiq.clients.ReviewClient;
-import com.example.accommodiq.databinding.HostReviewApprovalCardBinding;
 import com.example.accommodiq.databinding.NotificationCardBinding;
-import com.example.accommodiq.dtos.AccommodationStatusDto;
-import com.example.accommodiq.dtos.HostReviewApprovalDto;
 import com.example.accommodiq.dtos.NotificationDto;
-import com.example.accommodiq.ui.hostReviewApproval.HostReviewApprovalBaseObservable;
 import com.example.accommodiq.ui.notifications.NotificationBaseObservable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,7 +51,7 @@ public class NotificationsListAdapter extends ArrayAdapter<NotificationDto> {
                     return;
                 }
                 assert response.body() != null;
-                notifications.addAll(response.body());
+                notifications.addAll(new ArrayList<>(response.body()).stream().filter(notification -> !notification.isSeen()).collect(Collectors.toList()));
                 notifyDataSetChanged();
             }
 
