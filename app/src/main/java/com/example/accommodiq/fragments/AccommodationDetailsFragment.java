@@ -34,11 +34,13 @@ import com.example.accommodiq.dtos.AccommodationDetailsDto;
 import com.example.accommodiq.dtos.AccommodationDetailsReviewDto;
 import com.example.accommodiq.dtos.AccommodationListDto;
 import com.example.accommodiq.dtos.AccommodationPriceDto;
+import com.example.accommodiq.dtos.MessageDto;
 import com.example.accommodiq.dtos.ReservationRequestDto;
 import com.example.accommodiq.listener.OnDeleteClickListener;
 import com.example.accommodiq.listener.OnReportClickListener;
 import com.example.accommodiq.listener.OnUserNameClickListener;
 import com.example.accommodiq.models.Review;
+import com.example.accommodiq.services.interfaces.ReviewApiService;
 import com.example.accommodiq.ui.account.ProfileFragment;
 import com.example.accommodiq.utils.DateUtils;
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -59,6 +61,7 @@ public class AccommodationDetailsFragment extends Fragment {
     private GuestClient guestClient;
     private Long dateFrom = null;
     private Long dateTo = null;
+    private ReviewApiService reviewApiService;
 
     public AccommodationDetailsFragment() { }
 
@@ -66,6 +69,7 @@ public class AccommodationDetailsFragment extends Fragment {
         this.accommodationId = accommodationId;
         this.accommodationClient = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(AccommodationClient.class);
         this.guestClient = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(GuestClient.class);
+        this.reviewApiService = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(ReviewApiService.class);
     }
 
     public static AccommodationDetailsFragment newInstance(long accommodationId) {
@@ -78,6 +82,7 @@ public class AccommodationDetailsFragment extends Fragment {
         if (getArguments() != null && getArguments().containsKey("accommodationId") && accommodationClient == null ) {
             accommodationId = getArguments().getLong("accommodationId");
             accommodationClient = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(AccommodationClient.class);
+            reviewApiService = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(ReviewApiService.class);
         }
     }
 
@@ -325,11 +330,31 @@ public class AccommodationDetailsFragment extends Fragment {
     }
 
     private OnReportClickListener reportClickListener = reviewId -> {
-        // Implement reporting logic here
+        reviewApiService.reportReview(reviewId).enqueue(new Callback<MessageDto>() {
+            @Override
+            public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
+                Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<MessageDto> call, Throwable t) {
+                Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
+            }
+        });
     };
 
     private OnDeleteClickListener deleteClickListener = reviewId -> {
-        // Implement delete logic here
+        reviewApiService.deleteReview(reviewId).enqueue(new Callback<MessageDto>() {
+            @Override
+            public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
+                Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<MessageDto> call, Throwable t) {
+                Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
+            }
+        });
     };
 
     private OnUserNameClickListener userNameClickListener = accountId -> {
