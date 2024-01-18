@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -15,6 +16,18 @@
         android:layout_margin="10dp"
         android:textColor="@color/black"
         />
+
+    <Button
+        android:id="@+id/notification_settings_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/icon_settings"
+        android:text="@string/prompt_settings"
+        android:layout_marginStart="10dp"
+        app:strokeColor="@color/black"
+        style="?attr/materialButtonOutlinedStyle"
+        android:drawableTint="@color/black"
+        tools:ignore="RtlHardcoded" />
 
     <ListView
         android:id="@android:id/list"

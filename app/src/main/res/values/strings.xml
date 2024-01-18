@@ -98,4 +98,6 @@
     <string name="prompt_seen">Seen</string>
     <string name="notifications_heading">Notifications</string>
     <string name="null_prompt">O</string>
+    <string name="save">Save</string>
+    <string name="prompt_settings">Settings</string>
 </resources>

@@ -8,10 +8,8 @@ import androidx.databinding.Bindable;
 import com.example.accommodiq.dtos.NotificationDto;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -32,15 +30,6 @@ public class NotificationBaseObservable extends BaseObservable {
         Date date = new Date(notificationDto.getTime());
         DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
         return dateFormat.format(date);
-    }
-
-    @Bindable
-    public String getNotificationType() {
-        return Arrays.stream(notificationDto.getType().split("_"))
-                .filter(word -> !word.isEmpty())
-                .map(String::toLowerCase)
-                .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1))
-                .collect(Collectors.joining(" "));
     }
 
     @Bindable

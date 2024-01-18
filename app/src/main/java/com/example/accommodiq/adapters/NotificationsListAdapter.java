@@ -33,7 +33,7 @@ public class NotificationsListAdapter extends ArrayAdapter<NotificationDto> {
     private final NotificationsClient client;
 
     public NotificationsListAdapter(Context context, ArrayList<NotificationDto> notifications) {
-        super(context, R.layout.fragment_host_review_approval_list, notifications);
+        super(context, R.layout.fragment_notification_list, notifications);
         this.client = RetrofitClientInstance.getRetrofitInstance(context).create(NotificationsClient.class);
         this.context = context;
         this.notifications = notifications;
