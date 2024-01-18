@@ -38,7 +38,9 @@ public class SearchFragment extends Fragment {
         Activity mainActivity = getActivity();
         if (mainActivity != null) {
             //FragmentTransition.to(AccommodationsListFragment.newInstance(getActivity(), AccommodationListType.SEARCH), getActivity(), true, R.id.accommodations_fragment);
-            Navigation.findNavController(requireView()).navigate(R.id.action_navigation_search_to_accommodationsListFragment);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("accommodationListType", AccommodationListType.SEARCH);
+            Navigation.findNavController(requireView()).navigate(R.id.action_navigation_search_to_accommodationsListFragment, bundle);
         }
     }
 

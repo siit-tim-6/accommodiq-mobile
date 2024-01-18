@@ -126,7 +126,6 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
             pricePerNightTextView.setText(pricePerNight);
             totalPriceTextView.setText(totalPrice);
             favoriteButton.setOnClickListener(v -> Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show());
-            //accommodationCard.setOnClickListener(v -> FragmentTransition.to(AccommodationDetailsFragment.newInstance(accommodation.getId()), (FragmentActivity) context, true, layoutViewId));
             accommodationCard.setOnClickListener(v -> {
                 NavController navController = Navigation.findNavController(v);
                 Bundle args = new Bundle();
