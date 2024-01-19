@@ -2,6 +2,9 @@ package com.example.accommodiq.apiConfig;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.Toast;
 
 import com.example.accommodiq.activities.LoginActivity;
 
@@ -32,7 +35,7 @@ public class AuthInterceptor implements Interceptor {
 
         Response response = chain.proceed(original);
 
-        if (response.code() == 401) {
+        if (JwtUtils.isTokenExpired(context) && JwtUtils.isUserLoggedIn(context)) {
             redirectToLogin();
         }
 

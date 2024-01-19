@@ -27,13 +27,37 @@
         android:id="@+id/navigation_search"
         android:name="com.example.accommodiq.ui.search.SearchFragment"
         android:label="@string/title_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_navigation_search_to_accommodationsListFragment"
+            app:destination="@id/navigation_accommodationListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_accommodationListFragment"
+        android:name="com.example.accommodiq.fragments.AccommodationsListFragment"
+        android:label="AccommodationsListFragment"
+        tools:layout="@layout/fragment_accommodations_list">
+        <argument
+            android:name="accommodationListType"
+            app:argType="com.example.accommodiq.enums.AccommodationListType" />
+        <action
+            android:id="@+id/action_accommodationsListFragment_to_accommodationDetailsFragment"
+            app:destination="@id/navigation_accommodationDetails" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_my_profile"
         android:name="com.example.accommodiq.ui.account.MyProfileFragment"
         android:label="@string/title_my_profile"
-        tools:layout="@layout/fragment_my_profile" />
+        tools:layout="@layout/fragment_my_profile">
+        <action
+            android:id="@+id/action_myProfileFragment_to_profileFragment"
+            app:destination="@id/navigation_profile" />
+        <action
+            android:id="@+id/action_myProfileFragment_to_unauthorizedProfileFragment"
+            app:destination="@id/navigation_unauthorizedProfile" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_new_accommodation"
@@ -57,8 +81,78 @@
         android:id="@+id/navigation_host_accommodations"
         android:name="com.example.accommodiq.ui.hostAccommodations.HostAccommodationsFragment"
         android:label="@string/title_host_accommodations"
-        tools:layout="@layout/fragment_host_accommodations" />
+        tools:layout="@layout/fragment_host_accommodations">
+        <action
+            android:id="@+id/action_hostAccommodations_to_accommodationsListFragment"
+            app:destination="@id/navigation_accommodationListFragment" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/navigation_accommodationDetails"
+        android:name="com.example.accommodiq.fragments.AccommodationDetailsFragment"
+        android:label="Accommodation Details"
+        tools:layout="@layout/fragment_accommodation_details">
+        <argument
+            android:name="accommodationId"
+            app:argType="long" />
+
+        <action
+            android:id="@+id/action_accommodationDetailsFragment_to_profileFragment"
+            app:destination="@id/navigation_profile"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_unauthorizedProfile"
+        android:name="com.example.accommodiq.ui.account.UnauthorizedProfileFragment"
+        android:label="Unauthorized Profile"
+        tools:layout="@layout/fragment_unauthorized_profile">
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.accommodiq.ui.account.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile">
+        <argument
+            android:name="accountId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_profileFragment_self"
+            app:destination="@id/navigation_profile" />
+        <action
+            android:id="@+id/action_profileFragment_to_authorizedProfileFragment"
+            app:destination="@id/navigation_authorizedProfile" />
+        <action
+            android:id="@+id/action_profileFragment_to_reportUserFragment"
+            app:destination="@id/navigation_reportUser" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_accommodation_reviews"
+        android:name="com.example.accommodiq.ui.accommodationReview.AccommodationReviewFragment"
+        android:label="Accommodation Reviews"
+        tools:layout="@layout/fragment_accommodation_review">
+        <action
+            android:id="@+id/action_accommodationReview_to_accommodationsListFragment"
+            app:destination="@id/navigation_accommodationListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_authorizedProfile"
+        android:name="com.example.accommodiq.ui.account.AuthorizedProfileFragment"
+        android:label="Authorized Profile Update"
+        tools:layout="@layout/fragment_authorized_profile">
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_reportUser"
+        android:name="com.example.accommodiq.ui.report.ReportFragment"
+        android:label="Report User"
+        tools:layout="@layout/fragment_report">
+        <argument
+            android:name="accountId"
+            app:argType="long" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_user_reports"
         android:name="com.example.accommodiq.ui.userReport.UserReportListFragment"
@@ -70,5 +164,4 @@
         android:name="com.example.accommodiq.ui.accommodationReviewApproval.AccommodationReviewApprovalListFragment"
         android:label="@string/prompt_review_approval"
         tools:layout="@layout/fragment_accommodation_review_approval_list" />
-
 </navigation>

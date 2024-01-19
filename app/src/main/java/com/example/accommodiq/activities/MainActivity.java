@@ -25,8 +25,7 @@ public class MainActivity extends AppCompatActivity {
         if (role == null) {
             binding.navView.getMenu().clear();
             binding.navView.inflateMenu(R.menu.bottom_nav_menu_unauthorized);
-        }
-        else {
+        } else {
             switch (role) {
                 case "HOST":
                     binding.navView.getMenu().clear();
@@ -45,6 +44,4 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
-
-
 }

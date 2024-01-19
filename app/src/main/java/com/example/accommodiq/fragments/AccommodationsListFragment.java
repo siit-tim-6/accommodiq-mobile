@@ -67,6 +67,13 @@ public class AccommodationsListFragment extends ListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        accommodationClient = RetrofitClientInstance.getRetrofitInstance(getContext()).create(AccommodationClient.class);
+        if (getArguments() != null) {
+            type = (AccommodationListType) getArguments().getSerializable("accommodationListType");
+        }
+        if (type == null) {
+            type = AccommodationListType.SEARCH; // Handling NULL type
+        }
         switch (type) {
             case SEARCH:
                 searchAccommodations(null, null, null, null, null, null, null, null, null);

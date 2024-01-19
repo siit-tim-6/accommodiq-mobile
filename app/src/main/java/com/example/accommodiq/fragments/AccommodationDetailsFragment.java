@@ -22,10 +22,11 @@ import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.adapters.AccommodationListAdapter;
-import com.example.accommodiq.adapters.ReviewsListAdapter;
+import com.example.accommodiq.adapters.ReviewsAdapter;
 import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.clients.AccommodationClient;
@@ -35,7 +36,11 @@ import com.example.accommodiq.dtos.AccommodationDetailsReviewDto;
 import com.example.accommodiq.dtos.AccommodationListDto;
 import com.example.accommodiq.dtos.AccommodationPriceDto;
 import com.example.accommodiq.dtos.ReservationRequestDto;
+import com.example.accommodiq.listener.OnDeleteClickListener;
+import com.example.accommodiq.listener.OnReportClickListener;
+import com.example.accommodiq.listener.OnUserNameClickListener;
 import com.example.accommodiq.models.Review;
+import com.example.accommodiq.ui.account.ProfileFragment;
 import com.example.accommodiq.utils.DateUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -79,6 +84,10 @@ public class AccommodationDetailsFragment extends Fragment implements OnMapReady
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null && getArguments().containsKey("accommodationId") && accommodationClient == null ) {
+            accommodationId = getArguments().getLong("accommodationId");
+            accommodationClient = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(AccommodationClient.class);
+        }
     }
 
     @Nullable
@@ -135,6 +144,12 @@ public class AccommodationDetailsFragment extends Fragment implements OnMapReady
         TextView totalPriceTextView = view.findViewById(R.id.accommodation_details_total_price);
         EditText guestsField = view.findViewById(R.id.accommodation_details_guests_field);
         Button reserveButton = view.findViewById(R.id.accommodation_details_reserve);
+
+        hostNameTextView.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putLong("accountId", accommodation.getHost().getId());
+            Navigation.findNavController(getView()).navigate(R.id.action_accommodationDetailsFragment_to_profileFragment, bundle);
+        });
 
         favoriteImageButton.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Added to favorites!", Toast.LENGTH_SHORT).show();
@@ -228,8 +243,17 @@ public class AccommodationDetailsFragment extends Fragment implements OnMapReady
                     locationTextView.setText(accommodation.getLocation().getAddress());
                     String minPrice = "From " + accommodation.getMinPrice() + ((accommodation.getPricingType().equals("PER_GUEST")) ? " / guest" : "") + " / night";
                     minPriceTextView.setText(minPrice);
-                    reviewsListView.setAdapter(new ReviewsListAdapter(getActivity(), (ArrayList<AccommodationDetailsReviewDto>) accommodation.getReviews()));
                     createMapAndInflate();
+                    boolean canReport = accommodation.getHost().getId() == JwtUtils.getLoggedInId(getActivity());
+                    ReviewsAdapter reviewsAdapter = new ReviewsAdapter(
+                            getContext(),
+                            accommodation.getReviews(),
+                            reportClickListener,
+                            deleteClickListener,
+                            userNameClickListener,
+                            canReport
+                    );
+                    reviewsListView.setAdapter(reviewsAdapter);
                 } else {
                     Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
                 }
@@ -332,4 +356,18 @@ public class AccommodationDetailsFragment extends Fragment implements OnMapReady
             });
         });
     }
+
+    private OnReportClickListener reportClickListener = reviewId -> {
+        // Implement reporting logic here
+    };
+
+    private OnDeleteClickListener deleteClickListener = reviewId -> {
+        // Implement delete logic here
+    };
+
+    private OnUserNameClickListener userNameClickListener = accountId -> {
+        Bundle bundle = new Bundle();
+        bundle.putLong("accountId", accountId);
+        Navigation.findNavController(getView()).navigate(R.id.action_accommodationDetailsFragment_to_profileFragment, bundle);
+    };
 }

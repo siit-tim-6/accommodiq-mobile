@@ -14,7 +14,7 @@ public class AccommodationDetailsDto {
     private int minGuests;
     private int maxGuests;
     private String description;
-    private List<AccommodationDetailsReviewDto> reviews;
+    private List<ReviewDto> reviews;
     private Set<String> benefits;
     private String type;
     private String pricingType;
@@ -95,11 +95,11 @@ public class AccommodationDetailsDto {
         this.description = description;
     }
 
-    public List<AccommodationDetailsReviewDto> getReviews() {
+    public List<ReviewDto> getReviews() {
         return reviews;
     }
 
-    public void setReviews(List<AccommodationDetailsReviewDto> reviews) {
+    public void setReviews(List<ReviewDto> reviews) {
         this.reviews = reviews;
     }
 

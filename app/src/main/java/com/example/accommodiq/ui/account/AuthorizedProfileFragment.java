@@ -91,18 +91,6 @@ public class AuthorizedProfileFragment extends Fragment {
         binding.setViewModel(new AuthorizedProfileViewModel(accountApiService));
         View root = binding.getRoot();
 
-        binding.signOutBtn.setOnClickListener(view -> {
-            Activity mainActivity = getActivity();
-            if (mainActivity != null) {
-                startActivity(new Intent(mainActivity, LoginActivity.class));
-                mainActivity.finish();
-                JwtUtils.clearJwtAndRole(requireContext());
-
-                Intent intent = new Intent(getContext(), LoginActivity.class);
-                startActivity(intent);
-            }
-        });
-
         binding.toggleButtonChangePassword.setOnClickListener(this::onToggleClicked);
 
         collapse(binding.changePasswordContainer);
