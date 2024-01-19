@@ -1,7 +1,6 @@
 package com.example.accommodiq.activities;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,14 +11,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.accommodiq.R;
-import com.example.accommodiq.services.UserNotificationsService;
-import com.example.accommodiq.utils.TextUtils;
 import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.databinding.ActivityLoginBinding;
 import com.example.accommodiq.dtos.CredentialsDto;
 import com.example.accommodiq.dtos.LoginResponseDto;
 import com.example.accommodiq.services.interfaces.AccountApiService;
+import com.example.accommodiq.utils.TextUtils;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,9 +36,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setUpCreateAccountTextView();
         setUpCloseBtn();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            stopService(new Intent(this, UserNotificationsService.class));
-        }
         accountApiService = RetrofitClientInstance.getRetrofitInstance(this).create(AccountApiService.class);
     }
 
@@ -60,9 +56,7 @@ public class LoginActivity extends AppCompatActivity {
                     JwtUtils.saveJwt(getApplicationContext(), jwt);
                     JwtUtils.saveRole(getApplicationContext(), role);
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        startForegroundService(new Intent(LoginActivity.this, UserNotificationsService.class));
-                    }
+                    FirebaseMessaging.getInstance().subscribeToTopic("user-" + JwtUtils.getLoggedInId(getApplicationContext()));
 
                     // Navigate to MainActivity
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);

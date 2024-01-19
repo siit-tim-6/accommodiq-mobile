@@ -44,9 +44,12 @@
             android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <service
-            android:name=".services.UserNotificationsService"
-            android:enabled="true"
-            android:exported="false" />
+            android:name=".services.UserFirebaseService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

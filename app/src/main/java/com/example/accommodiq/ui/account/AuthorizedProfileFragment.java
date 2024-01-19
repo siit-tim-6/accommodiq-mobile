@@ -18,8 +18,7 @@ import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.databinding.FragmentAuthorizedProfileBinding;
 import com.example.accommodiq.services.interfaces.AccountApiService;
-
-import java.util.Objects;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class AuthorizedProfileFragment extends Fragment {
     private FragmentAuthorizedProfileBinding binding;
@@ -96,6 +95,7 @@ public class AuthorizedProfileFragment extends Fragment {
             if (mainActivity != null) {
                 startActivity(new Intent(mainActivity, LoginActivity.class));
                 mainActivity.finish();
+                FirebaseMessaging.getInstance().unsubscribeFromTopic("user-" + JwtUtils.getLoggedInId(requireContext()));
                 JwtUtils.clearJwtAndRole(requireContext());
 
                 Intent intent = new Intent(getContext(), LoginActivity.class);
