@@ -46,6 +46,7 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
     private final Context context;
     private final AccommodationListType type;
     private final List<Long> favoriteIds = new ArrayList<>();
+    private final List<ImageButton> favoriteButtons = new ArrayList<>();
 
     public AccommodationListAdapter(Context context, ArrayList<AccommodationListDto> accommodations, AccommodationListType type) {
         super(context, R.layout.accommodation_card, accommodations);
@@ -66,9 +67,14 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
             public void onResponse(@NonNull Call<List<AccommodationListDto>> call, @NonNull Response<List<AccommodationListDto>> response) {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
+                    favoriteIds.clear();
                     List<AccommodationListDto> accommodations = response.body();
                     accommodations.forEach(a -> favoriteIds.add(a.getId()));
                 }
+                favoriteButtons.forEach(b -> {
+                    AccommodationListDto accommodation = (AccommodationListDto) b.getTag();
+                    refreshFavoriteIcon(accommodation, b);
+                });
             }
 
             @Override
@@ -139,8 +145,9 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
             guestsTextView.setText(guests);
             pricePerNightTextView.setText(pricePerNight);
             totalPriceTextView.setText(totalPrice);
-            favoriteButton.setOnClickListener(v -> Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show());
-            this.refreshFavoriteIcon(accommodation, favoriteButton);
+
+            favoriteButton.setTag(accommodation);
+            favoriteButtons.add(favoriteButton);
 
             favoriteButton.setOnClickListener(v -> {
                 Call<Void> call = favoriteIds.contains(accommodation.getId()) ? accommodationClient.deleteFavorite(accommodation.getId()) : accommodationClient.addFavorite(new GuestFavoriteDto(accommodation.getId()));
@@ -161,7 +168,10 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
                 NavController navController = Navigation.findNavController(v);
                 Bundle args = new Bundle();
                 args.putLong("accommodationId", accommodation.getId());
-                navController.navigate(R.id.action_accommodationsListFragment_to_accommodationDetailsFragment, args);
+                int actionId = type == AccommodationListType.FAVORITES ?
+                        R.id.action_navigation_favorites_to_navigation_accommodationDetails :
+                        R.id.action_accommodationsListFragment_to_accommodationDetailsFragment;
+                navController.navigate(actionId, args);
             });
 
             acceptButton.setOnClickListener(v -> {
