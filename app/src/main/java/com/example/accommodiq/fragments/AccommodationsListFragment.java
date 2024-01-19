@@ -49,6 +49,8 @@ public class AccommodationsListFragment extends ListFragment {
     private final List<String> selectedBenefits = new ArrayList<>();
     private final MoreFiltersDto moreFiltersDto = new MoreFiltersDto();
 
+    public AccommodationsListFragment() {}
+
     public static AccommodationsListFragment newInstance(Context context, AccommodationListType type) {
         AccommodationsListFragment fragment = new AccommodationsListFragment();
         fragment.accommodationClient = RetrofitClientInstance.getRetrofitInstance(context).create(AccommodationClient.class);
