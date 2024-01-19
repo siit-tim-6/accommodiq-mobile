@@ -1,6 +1,7 @@
 package com.example.accommodiq.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
@@ -123,7 +126,12 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
             pricePerNightTextView.setText(pricePerNight);
             totalPriceTextView.setText(totalPrice);
             favoriteButton.setOnClickListener(v -> Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show());
-            accommodationCard.setOnClickListener(v -> FragmentTransition.to(AccommodationDetailsFragment.newInstance(accommodation.getId()), (FragmentActivity) context, true, layoutViewId));
+            accommodationCard.setOnClickListener(v -> {
+                NavController navController = Navigation.findNavController(v);
+                Bundle args = new Bundle();
+                args.putLong("accommodationId", accommodation.getId());
+                navController.navigate(R.id.action_accommodationsListFragment_to_accommodationDetailsFragment, args);
+            });
 
             acceptButton.setOnClickListener(v -> {
                 Call<AccommodationListDto> acceptAccommodationCall = accommodationClient.updateAccommodationStatus(accommodation.getId(), new AccommodationStatusDto("ACCEPTED"));
