@@ -49,13 +49,6 @@ public class AccommodationsListFragment extends ListFragment {
     private final List<String> selectedBenefits = new ArrayList<>();
     private final MoreFiltersDto moreFiltersDto = new MoreFiltersDto();
 
-    public static AccommodationsListFragment newInstance(Context context, AccommodationListType type) {
-        AccommodationsListFragment fragment = new AccommodationsListFragment();
-        fragment.accommodationClient = RetrofitClientInstance.getRetrofitInstance(context).create(AccommodationClient.class);
-        fragment.type = type;
-        return fragment;
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceBundle) {
@@ -65,6 +58,13 @@ public class AccommodationsListFragment extends ListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        accommodationClient = RetrofitClientInstance.getRetrofitInstance(getContext()).create(AccommodationClient.class);
+        if (getArguments() != null) {
+            type = (AccommodationListType) getArguments().getSerializable("accommodationListType");
+        }
+        if (type == null) {
+            type = AccommodationListType.SEARCH; // Handling NULL type
+        }
         switch (type) {
             case SEARCH:
                 searchAccommodations(null, null, null, null, null, null, null, null, null);

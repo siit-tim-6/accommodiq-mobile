@@ -83,6 +83,10 @@
     <string name="title_accommodation_review">Review</string>
     <string name="host_accommodations">Your accommodations</string>
     <string name="title_host_accommodations">Your accommodations</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="delete_review">Delete review</string>
+    <string name="report_review">Report review</string>
+    <string name="title_profile">Profile</string>
     <string name="prompt_reported_by">Reported by:</string>
     <string name="prompt_block">Block</string>
     <string name="prompt_dismiss">Dismiss</string>

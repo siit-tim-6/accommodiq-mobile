@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.apiConfig.JwtUtils;
@@ -39,7 +41,10 @@ public class SearchFragment extends Fragment {
                 getLayoutInflater().inflate(R.layout.fragment_user_report_list, binding.getRoot(), true); // attach to root maybe false
                 return;
             }
-            FragmentTransition.to(AccommodationsListFragment.newInstance(getActivity(), AccommodationListType.SEARCH), getActivity(), true, R.id.accommodations_fragment);
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("accommodationListType", AccommodationListType.SEARCH);
+            Navigation.findNavController(requireView()).navigate(R.id.action_navigation_search_to_accommodationsListFragment, bundle);
         }
     }
 

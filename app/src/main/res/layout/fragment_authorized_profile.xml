@@ -271,23 +271,11 @@
                 android:layout_marginTop="16dp"
                 android:backgroundTint="@color/red"
                 android:text="@string/delete_account"
-                app:layout_constraintEnd_toEndOf="@+id/signOutBtn"
-                app:layout_constraintStart_toStartOf="@+id/signOutBtn"
-                app:layout_constraintTop_toBottomOf="@+id/signOutBtn"
-                app:layout_constraintWidth_max="300dp"
-                android:onClick="@{viewModel::deleteAccount}" />
-
-            <Button
-                android:id="@+id/signOutBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="@color/red"
-                android:text="@string/sign_out"
                 app:layout_constraintEnd_toEndOf="@+id/confirmBtn"
                 app:layout_constraintStart_toStartOf="@+id/confirmBtn"
                 app:layout_constraintTop_toBottomOf="@+id/confirmBtn"
-                app:layout_constraintWidth_max="300dp" />
+                app:layout_constraintWidth_max="300dp"
+                android:onClick="@{viewModel::deleteAccount}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

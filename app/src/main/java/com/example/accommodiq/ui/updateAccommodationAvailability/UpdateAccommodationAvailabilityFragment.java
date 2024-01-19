@@ -62,7 +62,7 @@ public class UpdateAccommodationAvailabilityFragment extends Fragment implements
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        mViewModel = mViewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
+        mViewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
