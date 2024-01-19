@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_search"
+        android:id="@+id/navigation_accommodationListFragment"
         android:icon="@drawable/icon_search"
         android:menuCategory="secondary"
         android:title="@string/title_search" />

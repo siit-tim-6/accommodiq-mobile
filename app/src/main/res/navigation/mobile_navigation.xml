@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_search">
+    app:startDestination="@+id/navigation_accommodationListFragment">
 
     <fragment
         android:id="@+id/navigation_reservations"
@@ -15,23 +15,17 @@
         android:id="@+id/navigation_favorites"
         android:name="com.example.accommodiq.ui.favorites.FavoritesFragment"
         android:label="@string/title_favorites"
-        tools:layout="@layout/fragment_favorites" />
+        tools:layout="@layout/fragment_favorites" >
+        <action
+            android:id="@+id/action_navigation_favorites_to_navigation_accommodationDetails"
+            app:destination="@id/navigation_accommodationDetails" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.accommodiq.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
-
-    <fragment
-        android:id="@+id/navigation_search"
-        android:name="com.example.accommodiq.ui.search.SearchFragment"
-        android:label="@string/title_search"
-        tools:layout="@layout/fragment_accommodations_list">
-        <action
-            android:id="@+id/action_navigation_search_to_accommodationsListFragment"
-            app:destination="@id/navigation_accommodationListFragment" />
-    </fragment>
 
     <fragment
         android:id="@+id/navigation_accommodationListFragment"
