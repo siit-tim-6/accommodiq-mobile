@@ -41,7 +41,7 @@ public class ReportViewModel extends ViewModel {
                     if (response.errorBody() != null) {
                         try {
                             ErrorResponseDto errorResponse = new Gson().fromJson(response.errorBody().charStream(), ErrorResponseDto.class);
-                            errorMessage += ": " + errorResponse.getMessage();
+                            errorMessage += errorResponse.getMessage();
                         } catch (Exception e) {
                             errorMessage += "Error parsing error message";
                         }
