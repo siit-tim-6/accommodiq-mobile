@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.databinding.FragmentAccommodationReviewBinding;
@@ -29,7 +30,10 @@ public class AccommodationReviewFragment extends Fragment {
         super.onStart();
         Activity mainActivity = getActivity();
         if (mainActivity != null) {
-            FragmentTransition.to(AccommodationsListFragment.newInstance(getActivity(), AccommodationListType.ADMIN_REVIEW_PENDING_ACCOMMODATIONS), getActivity(), true, R.id.admin_accommodation_review_fragment);
+            //FragmentTransition.to(AccommodationsListFragment.newInstance(getActivity(), AccommodationListType.ADMIN_REVIEW_PENDING_ACCOMMODATIONS), getActivity(), true, R.id.admin_accommodation_review_fragment);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("accommodationListType", AccommodationListType.ADMIN_REVIEW_PENDING_ACCOMMODATIONS);
+            Navigation.findNavController(requireView()).navigate(R.id.action_accommodationReview_to_accommodationsListFragment, bundle);
         }
     }
 

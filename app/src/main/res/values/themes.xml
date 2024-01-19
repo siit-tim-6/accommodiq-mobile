@@ -21,4 +21,9 @@
     <style name="ThemeMaterialCalendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
         <item name="android:windowFullscreen">false</item>
     </style>
+
+    <style name="Button.Red" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/red</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 </resources>
