@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -28,9 +27,6 @@ import com.example.accommodiq.dtos.AccommodationStatusDto;
 import com.example.accommodiq.dtos.GuestFavoriteDto;
 import com.example.accommodiq.dtos.ModifyAccommodationDto;
 import com.example.accommodiq.enums.AccommodationListType;
-import com.example.accommodiq.fragments.FragmentTransition;
-import com.example.accommodiq.ui.newAccommodation.NewAccommodationFragment;
-import com.example.accommodiq.ui.updateAccommodationAvailability.UpdateAccommodationAvailabilityFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -190,7 +186,7 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
                     if (response.isSuccessful()) {
                         ModifyAccommodationDto accommodationDetailsDto = response.body();
 
-                        FragmentTransition.to(NewAccommodationFragment.newInstance(accommodationDetailsDto), (FragmentActivity) context, true, R.id.host_accommodations_fragment);
+                        // FragmentTransition.to(NewAccommodationFragment.newInstance(accommodationDetailsDto), (FragmentActivity) context, true, R.id.host_accommodations_fragment);
                     }
                 }
 
@@ -199,7 +195,9 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
                 }
             }));
 
-            editAvailabilityButton.setOnClickListener(v -> FragmentTransition.to(UpdateAccommodationAvailabilityFragment.newInstance(accommodation.getId()), (FragmentActivity) context, true, R.id.host_accommodations_fragment));
+            editAvailabilityButton.setOnClickListener(v -> {}
+                    // FragmentTransition.to(UpdateAccommodationAvailabilityFragment.newInstance(accommodation.getId()), (FragmentActivity) context, true, R.id.host_accommodations_fragment)
+            );
 
             switch (type) {
                 case ADMIN_REVIEW_PENDING_ACCOMMODATIONS:
