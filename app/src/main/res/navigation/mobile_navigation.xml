@@ -59,4 +59,10 @@
         android:label="@string/title_host_accommodations"
         tools:layout="@layout/fragment_host_accommodations" />
 
+    <fragment
+        android:id="@+id/navigation_user_reports"
+        android:name="com.example.accommodiq.ui.userReport.UserReportListFragment"
+        android:label="@string/prompt_reports"
+        tools:layout="@layout/fragment_user_report_list" />
+
 </navigation>

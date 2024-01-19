@@ -83,4 +83,9 @@
     <string name="title_accommodation_review">Review</string>
     <string name="host_accommodations">Your accommodations</string>
     <string name="title_host_accommodations">Your accommodations</string>
+    <string name="prompt_reported_by">Reported by:</string>
+    <string name="prompt_block">Block</string>
+    <string name="prompt_dismiss">Dismiss</string>
+    <string name="prompt_reports">Reports</string>
+    <string name="prompt_user_reports">User Reports</string>
 </resources>
