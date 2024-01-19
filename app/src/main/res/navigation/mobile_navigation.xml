@@ -65,4 +65,10 @@
         android:label="@string/prompt_reports"
         tools:layout="@layout/fragment_user_report_list" />
 
+    <fragment
+        android:id="@+id/navigation_accommodation_review_approval"
+        android:name="com.example.accommodiq.ui.accommodationReviewApproval.AccommodationReviewApprovalListFragment"
+        android:label="@string/prompt_review_approval"
+        tools:layout="@layout/fragment_accommodation_review_approval_list" />
+
 </navigation>
