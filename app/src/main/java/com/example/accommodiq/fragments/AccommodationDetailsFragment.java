@@ -34,8 +34,11 @@ import com.example.accommodiq.dtos.AccommodationDetailsDto;
 import com.example.accommodiq.dtos.AccommodationDetailsReviewDto;
 import com.example.accommodiq.dtos.AccommodationListDto;
 import com.example.accommodiq.dtos.AccommodationPriceDto;
+import com.example.accommodiq.dtos.ErrorResponseDto;
 import com.example.accommodiq.dtos.MessageDto;
 import com.example.accommodiq.dtos.ReservationRequestDto;
+import com.example.accommodiq.dtos.ReviewDto;
+import com.example.accommodiq.dtos.ReviewRequestDto;
 import com.example.accommodiq.listener.OnDeleteClickListener;
 import com.example.accommodiq.listener.OnReportClickListener;
 import com.example.accommodiq.listener.OnUserNameClickListener;
@@ -46,6 +49,7 @@ import com.example.accommodiq.utils.DateUtils;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -117,6 +121,10 @@ public class AccommodationDetailsFragment extends Fragment {
         TextView totalPriceTextView = view.findViewById(R.id.accommodation_details_total_price);
         EditText guestsField = view.findViewById(R.id.accommodation_details_guests_field);
         Button reserveButton = view.findViewById(R.id.accommodation_details_reserve);
+        View addReviewLayout = view.findViewById(R.id.include_add_review);
+        EditText editTextReview = view.findViewById(R.id.editTextReview);
+        RatingBar ratingBarReview = view.findViewById(R.id.ratingBarReview);
+        Button buttonSendReview = view.findViewById(R.id.buttonSendReview);
 
         hostNameTextView.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
@@ -184,6 +192,14 @@ public class AccommodationDetailsFragment extends Fragment {
                     });
                 }
             });
+            buttonSendReview.setOnClickListener( v ->  {
+                String reviewComment = editTextReview.getText().toString();
+                int starRating = (int) ratingBarReview.getRating();
+                sendReview(new ReviewRequestDto(starRating, reviewComment), accommodation.getId());
+                editTextReview.setText("");
+                ratingBarReview.setRating(0);
+            });
+
         });
 
         Call<AccommodationDetailsDto> accommodationDetailsCall = accommodationClient.getAccommodationDetails(accommodationId);
@@ -326,6 +342,29 @@ public class AccommodationDetailsFragment extends Fragment {
                     Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
                 }
             });
+        });
+    }
+
+    private void sendReview(ReviewRequestDto reviewRequestDto, long accommodationId) {
+        reviewApiService.addAccommodationReview(accommodationId, reviewRequestDto).enqueue(new Callback<ReviewDto>() {
+            @Override
+            public void onResponse(Call<ReviewDto> call, Response<ReviewDto> response) {
+                if (response.isSuccessful()) {
+
+                } else {
+                    String errorMessage = "";
+                    if (response.errorBody() != null) {
+                        try {
+                            ErrorResponseDto errorResponse = new Gson().fromJson(response.errorBody().charStream(), ErrorResponseDto.class);
+                            errorMessage += ": " + errorResponse.getMessage();
+                        } catch (Exception e) {
+                            errorMessage += "Error parsing error message";
+                        }
+                    }
+                    Log.d("Review", errorMessage);
+                    Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                }
+            }
         });
     }
 

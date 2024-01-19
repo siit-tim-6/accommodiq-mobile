@@ -137,7 +137,7 @@ public class ProfileViewModel extends ViewModel {
                             ErrorResponseDto errorResponse = new Gson().fromJson(response.errorBody().charStream(), ErrorResponseDto.class);
                             errorMessage += ": " + errorResponse.getMessage();
                         } catch (Exception e) {
-                            errorMessage += ": Error parsing error message";
+                            errorMessage += "Error parsing error message";
                         }
                     }
                     Log.d("Review", errorMessage);
