@@ -107,6 +107,9 @@ public class ProfileViewModel extends ViewModel {
         reviewApiService.deleteReview(reviewId).enqueue(new Callback<MessageDto>() {
             @Override
             public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
+                reviewsLiveData.postValue(new ArrayList<ReviewDto>(reviewsLiveData.getValue()) {{
+                    removeIf(review -> review.getId() == reviewId);
+                }});
                 messageLiveData.postValue(response.body().getMessage());
             }
 

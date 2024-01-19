@@ -362,7 +362,7 @@ public class AccommodationDetailsFragment extends Fragment {
             @Override
             public void onResponse(Call<ReviewDto> call, Response<ReviewDto> response) {
                 if (response.isSuccessful()) {
-
+                    Toast.makeText(getContext(), "Review added successfully", Toast.LENGTH_SHORT).show();
                 } else {
                     String errorMessage = "";
                     if (response.errorBody() != null) {

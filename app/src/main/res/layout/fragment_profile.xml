@@ -150,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:isIndicator="true"
                 android:numStars="5"
-                android:rating="1.5"
+                android:rating="0"
                 android:stepSize="0.5" />
 
             <TextView
@@ -158,7 +158,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="1.5 2 ratings"
+                android:text="0.0 0 ratings"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </LinearLayout>
 
@@ -240,6 +240,7 @@
             app:layout_constraintTop_toBottomOf="@+id/separator_line">
 
             <TextView
+                android:id="@+id/reviews_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/inter"
