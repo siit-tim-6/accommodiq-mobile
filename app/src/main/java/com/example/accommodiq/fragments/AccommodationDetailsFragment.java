@@ -126,6 +126,10 @@ public class AccommodationDetailsFragment extends Fragment {
         RatingBar ratingBarReview = view.findViewById(R.id.ratingBarReview);
         Button buttonSendReview = view.findViewById(R.id.buttonSendReview);
 
+        if (JwtUtils.getRole(getActivity()) == null || !JwtUtils.getRole(getActivity()).equals("GUEST")) {
+            addReviewLayout.setVisibility(View.GONE);
+        }
+
         hostNameTextView.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putLong("accountId", accommodation.getHost().getId());
@@ -192,14 +196,22 @@ public class AccommodationDetailsFragment extends Fragment {
                     });
                 }
             });
-            buttonSendReview.setOnClickListener( v ->  {
-                String reviewComment = editTextReview.getText().toString();
-                int starRating = (int) ratingBarReview.getRating();
-                sendReview(new ReviewRequestDto(starRating, reviewComment), accommodation.getId());
-                editTextReview.setText("");
-                ratingBarReview.setRating(0);
-            });
+        });
 
+        buttonSendReview.setOnClickListener( v ->  {
+            String reviewComment = editTextReview.getText().toString();
+            int starRating = (int) ratingBarReview.getRating();
+            if(reviewComment.length()<3){
+                Toast.makeText(getContext(), "Review must be at least 3 characters long", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(starRating==0){
+                Toast.makeText(getContext(), "Please select a rating", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            sendReview(new ReviewRequestDto(starRating, reviewComment), accommodation.getId());
+            editTextReview.setText("");
+            ratingBarReview.setRating(0);
         });
 
         Call<AccommodationDetailsDto> accommodationDetailsCall = accommodationClient.getAccommodationDetails(accommodationId);
@@ -365,6 +377,11 @@ public class AccommodationDetailsFragment extends Fragment {
                     Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
                 }
             }
+
+            @Override
+            public void onFailure(Call<ReviewDto> call, Throwable t) {
+                Toast.makeText(getContext(), "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -386,7 +403,21 @@ public class AccommodationDetailsFragment extends Fragment {
         reviewApiService.deleteReview(reviewId).enqueue(new Callback<MessageDto>() {
             @Override
             public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
+                accommodation.getReviews().removeIf(review -> review.getId() == reviewId);
+                ((ReviewsAdapter) ((ListView) getView().findViewById(R.id.reviews_list)).getAdapter()).notifyDataSetChanged();
+                calculateRating();
                 Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            private void calculateRating() {
+                float rating = 0;
+                for ( ReviewDto review : accommodation.getReviews()) {
+                    rating += review.getRating();
+                }
+                rating /= accommodation.getReviews().size();
+                accommodation.setRating(rating);
+                ((TextView) getView().findViewById(R.id.accommodation_details_rating)).setText(String.valueOf(rating));
+                ((RatingBar) getView().findViewById(R.id.accommodation_details_rating_stars)).setRating(rating);
             }
 
             @Override
