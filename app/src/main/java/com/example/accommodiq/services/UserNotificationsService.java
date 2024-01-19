@@ -1,46 +1,60 @@
 package com.example.accommodiq.services;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
+import android.Manifest;
+import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.IBinder;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.example.accommodiq.R;
+import com.example.accommodiq.apiConfig.RetrofitClientInstance;
+import com.example.accommodiq.app.App;
+import com.example.accommodiq.clients.NotificationsClient;
+import com.example.accommodiq.dtos.NotificationDto;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+@RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
 public class UserNotificationsService extends Service {
 
-    private static final String TAG_FOREGROUND_SERVICE = "FOREGROUND_SERVICE";
-    public static final String ACTION_START_FOREGROUND_SERVICE = "ACTION_START_FOREGROUND_SERVICE";
-    public static final String ACTION_STOP_FOREGROUND_SERVICE = "ACTION_STOP_FOREGROUND_SERVICE";
-    public static final String ACTION_PAUSE = "ACTION_PAUSE";
-    public static final String ACTION_PLAY = "ACTION_PLAY";
-    public static final String ACTION_STOP = "ACTION_STOP";
-    private static final String CHANNEL_ID = "Zero channel";
-    private NotificationManager notificationManager;
-    private NotificationChannel channel;
+    private final long INTERVAL = 15 * 1000; // Fetch notifications every minute
+    private NotificationsClient apiService;
+    private Timer timer;
+    private int notificationID = 50;
+    private final String[] permissions = {Manifest.permission.POST_NOTIFICATIONS};
 
-    private final int notificationID = 50;
+
+    private ArrayList<NotificationDto> notifications = new ArrayList<>();
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        notificationManager = getSystemService(NotificationManager.class);
-        if (intent != null)
-        {
-            String action = intent.getAction();
-            assert action != null;
-            if (action.equals(ACTION_START_FOREGROUND_SERVICE)) {
-                startForegroundService();
-                Toast.makeText(getApplicationContext(), "Foreground service is started.", Toast.LENGTH_LONG).show();
+    public void onCreate() {
+        super.onCreate();
 
+        this.apiService = RetrofitClientInstance.getRetrofitInstance(getApplicationContext()).create(NotificationsClient.class);
+        fetchUserNotifications();
+
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                fetchUserNotifications();
             }
-        }
-        return START_NOT_STICKY;
+        }, 0, INTERVAL);
     }
 
     @Nullable
@@ -49,59 +63,59 @@ public class UserNotificationsService extends Service {
         return null;
     }
 
-    private void startForegroundService()
-    {
-        // Create notification default intent.
-        Intent intent = new Intent();
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, notificationID, intent, PendingIntent.FLAG_IMMUTABLE); // 0
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    private void showNotification(NotificationDto notification) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, App.getChannelID(notification.getType()))
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle(notification.getType().replace("_", " "))
+                .setContentText(notification.getText())
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
 
-        // Create notification builder.
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
-
-        // Make notification show big text.
-        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
-        bigTextStyle.setBigContentTitle("New Notification");
-        bigTextStyle.bigText("Notification text");
-        // Set big text style.
-        builder.setStyle(bigTextStyle);
-
-        builder.setWhen(System.currentTimeMillis());
-        builder.setSmallIcon(R.mipmap.ic_launcher);
-        // Make head-up notification.
-        builder.setFullScreenIntent(pendingIntent, true);
-
-        // Add Play button intent in notification.
-        Intent playIntent = new Intent(this, UserNotificationsService.class);
-        playIntent.setAction(ACTION_PLAY);
-        PendingIntent pendingPlayIntent = PendingIntent.getService(this, 0, playIntent, PendingIntent.FLAG_IMMUTABLE);
-        NotificationCompat.Action playAction = new NotificationCompat.Action(android.R.drawable.ic_media_play, "Play", pendingPlayIntent);
-        builder.addAction(playAction);
-
-        // Add Pause button intent in notification.
-        Intent pauseIntent = new Intent(this, UserNotificationsService.class);
-        pauseIntent.setAction(ACTION_PAUSE);
-        PendingIntent pendingPrevIntent = PendingIntent.getService(this, 1, pauseIntent, PendingIntent.FLAG_IMMUTABLE);
-        NotificationCompat.Action prevAction = new NotificationCompat.Action(android.R.drawable.ic_media_pause, "Pause", pendingPrevIntent);
-        builder.addAction(prevAction);
-
-        // Add Stop button intent in notification.
-        Intent stopIntent = new Intent(this, UserNotificationsService.class);
-        stopIntent.setAction(ACTION_STOP);
-        PendingIntent pendingStopIntent = PendingIntent.getService(this, 2, stopIntent, PendingIntent.FLAG_IMMUTABLE);
-        NotificationCompat.Action stopAction = new NotificationCompat.Action(android.R.drawable.ic_media_pause, "Stop", pendingStopIntent);
-        builder.addAction(stopAction);
-
-        // Start foreground service.
-        startForeground(notificationID, builder.build());
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity) this.getApplicationContext(), permissions, 101);
+            return;
+        }
+        notificationManager.notify(notificationID, builder.build());
     }
 
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Toast.makeText(getApplicationContext(), "Stop foreground service.", Toast.LENGTH_LONG).show();
+    private void fetchUserNotifications() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            NotificationDto n = new NotificationDto();
+            n.setText("Bdjkajdkl jslkadjklsjad lajdklsj dlkadj sa");
+            n.setType("HOST_REPLY_TO_REQUEST");
+            showNotification(n);
+        }
+    }
 
-        stopForeground(true);
-        stopSelf();
+    private void fetchUserNotifications2() {
+        // Retrofit call to fetch notifications
+        Call<List<NotificationDto>> call = apiService.getNotifications();
+        call.enqueue(new Callback<List<NotificationDto>>() {
+            @Override
+            public void onResponse(Call<List<NotificationDto>> call, Response<List<NotificationDto>> response) {
+                if (response.isSuccessful()) {
+                    List<NotificationDto> notifications = response.body();
+                    checkForNewNotificationDto(notifications);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<NotificationDto>> call, Throwable t) {
+                // Handle failure
+            }
+        });
+    }
+
+    private void checkForNewNotificationDto(List<NotificationDto> notifications) {
+        if (this.notifications.size() == notifications.size())
+            return;
+
+        this.notifications = (ArrayList<NotificationDto>) notifications;
+        NotificationDto notificationToShow = this.notifications.get(0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            showNotification(notificationToShow);
+        }
     }
 }

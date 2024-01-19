@@ -1,15 +1,18 @@
 package com.example.accommodiq.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.accommodiq.R;
+import com.example.accommodiq.services.UserNotificationsService;
 import com.example.accommodiq.utils.TextUtils;
 import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
@@ -34,6 +37,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setUpCreateAccountTextView();
         setUpCloseBtn();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            stopService(new Intent(this, UserNotificationsService.class));
+        }
         accountApiService = RetrofitClientInstance.getRetrofitInstance(this).create(AccountApiService.class);
     }
 
@@ -45,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         Call<LoginResponseDto> call = accountApiService.login(credentials);
         call.enqueue(new Callback<LoginResponseDto>() {
             @Override
-            public void onResponse(Call<LoginResponseDto> call, Response<LoginResponseDto> response) {
+            public void onResponse(@NonNull Call<LoginResponseDto> call, @NonNull Response<LoginResponseDto> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     // Store JWT in SharedPreferences
                     String jwt = response.body().getJwt();
@@ -53,6 +59,10 @@ public class LoginActivity extends AppCompatActivity {
 
                     JwtUtils.saveJwt(getApplicationContext(), jwt);
                     JwtUtils.saveRole(getApplicationContext(), role);
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        startForegroundService(new Intent(LoginActivity.this, UserNotificationsService.class));
+                    }
 
                     // Navigate to MainActivity
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -68,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<LoginResponseDto> call, Throwable t) {
+            public void onFailure(@NonNull Call<LoginResponseDto> call, @NonNull Throwable t) {
                 // Display network error message
                 Toast.makeText(LoginActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
