@@ -87,4 +87,13 @@
     <string name="delete_review">Delete review</string>
     <string name="report_review">Report review</string>
     <string name="title_profile">Profile</string>
+    <string name="prompt_reported_by">Reported by:</string>
+    <string name="prompt_block">Block</string>
+    <string name="prompt_dismiss">Dismiss</string>
+    <string name="prompt_reports">Reports</string>
+    <string name="prompt_user_reports">User Reports</string>
+    <string name="prompt_accept">Accept</string>
+    <string name="prompt_review_approval">Review Approval</string>
+    <string name="prompt_accommodation_reviews">Accommodation Reviews</string>
+    <string name="prompt_show_reported_reviews">Show reported reviews</string>
 </resources>

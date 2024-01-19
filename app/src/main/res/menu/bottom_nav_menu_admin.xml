@@ -8,10 +8,10 @@
         android:title="@string/title_search" />
 
     <item
-        android:id="@+id/navigation_reservations"
+        android:id="@+id/navigation_user_reports"
         android:icon="@drawable/icon_listing"
         android:menuCategory="secondary"
-        android:title="@string/title_reservations" />
+        android:title="@string/prompt_reports" />
 
     <item
         android:id="@+id/navigation_accommodation_review"
@@ -21,9 +21,16 @@
 
 
     <item
+        android:id="@+id/navigation_accommodation_review_approval"
+        android:icon="@drawable/icon_favorites"
+        android:menuCategory="secondary"
+        android:title="@string/prompt_review_approval" />
+
+    <item
         android:id="@+id/navigation_my_profile"
         android:icon="@drawable/icon_my_profile"
         android:menuCategory="secondary"
         android:title="@string/title_my_profile" />
+
 
 </menu>
