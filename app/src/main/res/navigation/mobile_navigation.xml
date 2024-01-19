@@ -27,7 +27,7 @@
         android:id="@+id/navigation_search"
         android:name="com.example.accommodiq.ui.search.SearchFragment"
         android:label="@string/title_search"
-        tools:layout="@layout/fragment_search">
+        tools:layout="@layout/fragment_accommodations_list">
         <action
             android:id="@+id/action_navigation_search_to_accommodationsListFragment"
             app:destination="@id/navigation_accommodationListFragment" />

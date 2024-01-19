@@ -1,7 +1,5 @@
 package com.example.accommodiq.ui.account;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
-import com.example.accommodiq.activities.LoginActivity;
-import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.databinding.FragmentAuthorizedProfileBinding;
 import com.example.accommodiq.services.interfaces.AccountApiService;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 public class AuthorizedProfileFragment extends Fragment {
     private FragmentAuthorizedProfileBinding binding;
@@ -89,19 +84,6 @@ public class AuthorizedProfileFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, com.example.accommodiq.R.layout.fragment_authorized_profile, container, false);
         binding.setViewModel(new AuthorizedProfileViewModel(accountApiService));
         View root = binding.getRoot();
-
-        binding.signOutBtn.setOnClickListener(view -> {
-            Activity mainActivity = getActivity();
-            if (mainActivity != null) {
-                startActivity(new Intent(mainActivity, LoginActivity.class));
-                mainActivity.finish();
-                FirebaseMessaging.getInstance().unsubscribeFromTopic("user-" + JwtUtils.getLoggedInId(requireContext()));
-                JwtUtils.clearJwtAndRole(requireContext());
-
-                Intent intent = new Intent(getContext(), LoginActivity.class);
-                startActivity(intent);
-            }
-        });
 
         binding.toggleButtonChangePassword.setOnClickListener(this::onToggleClicked);
 

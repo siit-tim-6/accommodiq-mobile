@@ -3,14 +3,6 @@ package com.example.accommodiq.ui.account;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,18 +14,22 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+
 import com.example.accommodiq.R;
 import com.example.accommodiq.activities.LoginActivity;
 import com.example.accommodiq.adapters.ReviewsAdapter;
 import com.example.accommodiq.apiConfig.JwtUtils;
-import com.example.accommodiq.databinding.AddReviewBinding;
 import com.example.accommodiq.dtos.AccountDetailsDto;
 import com.example.accommodiq.dtos.ReviewDto;
 import com.example.accommodiq.dtos.ReviewRequestDto;
 import com.example.accommodiq.enums.AccountRole;
-import com.example.accommodiq.fragments.FragmentTransition;
-import com.example.accommodiq.ui.report.ReportFragment;
-import com.example.accommodiq.ui.updateAccommodationAvailability.UpdateAccommodationAvailabilityViewModel;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +99,9 @@ public class ProfileFragment extends Fragment {
             if (mainActivity != null) {
                 startActivity(new Intent(mainActivity, LoginActivity.class));
                 mainActivity.finish();
+
+                FirebaseMessaging.getInstance().unsubscribeFromTopic("user-" + JwtUtils.getLoggedInId(requireContext()));
+
                 JwtUtils.clearJwtAndRole(requireContext());
 
                 Intent intent = new Intent(getContext(), LoginActivity.class);
