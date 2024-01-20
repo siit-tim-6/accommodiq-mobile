@@ -26,7 +26,6 @@ import com.example.accommodiq.R;
 import com.example.accommodiq.activities.LoginActivity;
 import com.example.accommodiq.adapters.ReviewsAdapter;
 import com.example.accommodiq.apiConfig.JwtUtils;
-import com.example.accommodiq.databinding.AddReviewBinding;
 import com.example.accommodiq.dtos.AccountDetailsDto;
 import com.example.accommodiq.dtos.ReviewDto;
 import com.example.accommodiq.dtos.ReviewRequestDto;
