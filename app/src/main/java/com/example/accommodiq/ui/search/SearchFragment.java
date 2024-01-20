@@ -8,14 +8,14 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.example.accommodiq.R;
+import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.databinding.FragmentSearchBinding;
 import com.example.accommodiq.enums.AccommodationListType;
-import com.example.accommodiq.fragments.AccommodationsListFragment;
-import com.example.accommodiq.fragments.FragmentTransition;
+
+import java.util.Objects;
 
 public class SearchFragment extends Fragment {
     private FragmentSearchBinding binding;
@@ -23,9 +23,6 @@ public class SearchFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-
-        SearchViewModel searchViewModel =
-                new ViewModelProvider(this).get(SearchViewModel.class);
 
         binding = FragmentSearchBinding.inflate(inflater, container, false);
 
@@ -37,6 +34,11 @@ public class SearchFragment extends Fragment {
         super.onStart();
         Activity mainActivity = getActivity();
         if (mainActivity != null) {
+            if (Objects.equals(JwtUtils.getRole(mainActivity), "ADMIN")) {
+                Navigation.findNavController(requireView()).navigate(R.id.navigation_user_reports);
+                return;
+            }
+
             Bundle bundle = new Bundle();
             bundle.putSerializable("accommodationListType", AccommodationListType.SEARCH);
             Navigation.findNavController(requireView()).navigate(R.id.action_navigation_search_to_accommodationsListFragment, bundle);
