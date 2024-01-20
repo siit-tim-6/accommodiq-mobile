@@ -19,8 +19,6 @@ import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.databinding.FragmentAuthorizedProfileBinding;
 import com.example.accommodiq.services.interfaces.AccountApiService;
 
-import java.util.Objects;
-
 public class AuthorizedProfileFragment extends Fragment {
     private FragmentAuthorizedProfileBinding binding;
 

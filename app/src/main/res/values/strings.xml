@@ -99,4 +99,11 @@
     <string name="prompt_delete">Delete</string>
     <string name="reported_host_reviews_title">Reported Host Reviews</string>
     <string name="prompt_host_reviews">Host Reviews</string>
+    <string name="prompt_seen">Seen</string>
+    <string name="notifications_heading">Notifications</string>
+    <string name="null_prompt">O</string>
+    <string name="save">Save</string>
+    <string name="prompt_settings">Settings</string>
+    <string name="title_notification_settings">Notification Settings\t</string>
+    <string name="notification_settings_heading">Notification Settings</string>
 </resources>

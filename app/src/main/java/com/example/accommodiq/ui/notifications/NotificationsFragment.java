@@ -4,34 +4,27 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.ListFragment;
+import androidx.navigation.Navigation;
 
-import com.example.accommodiq.databinding.FragmentNotificationsBinding;
+import com.example.accommodiq.R;
+import com.example.accommodiq.adapters.NotificationsListAdapter;
+import com.example.accommodiq.databinding.FragmentNotificationListBinding;
 
-public class NotificationsFragment extends Fragment {
+import java.util.ArrayList;
 
-    private FragmentNotificationsBinding binding;
-
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        NotificationsViewModel notificationsViewModel =
-                new ViewModelProvider(this).get(NotificationsViewModel.class);
-
-        binding = FragmentNotificationsBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
-        final TextView textView = binding.textNotifications;
-        notificationsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        return root;
-    }
-
+public class NotificationsFragment extends ListFragment {
+    @Nullable
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        NotificationsListAdapter adapter = new NotificationsListAdapter(getContext(), new ArrayList<>());
+        setListAdapter(adapter);
+        View view = inflater.inflate(R.layout.fragment_notification_list, container, false);
+        FragmentNotificationListBinding binding = FragmentNotificationListBinding.bind(view);
+        binding.notificationSettingsButton.setOnClickListener(v -> Navigation.findNavController(requireView()).navigate(R.id.navigation_notification_settings));
+        return binding.getRoot();
     }
 }

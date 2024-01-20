@@ -38,7 +38,6 @@ public class SearchFragment extends Fragment {
                 Navigation.findNavController(requireView()).navigate(R.id.navigation_user_reports);
                 return;
             }
-
             Bundle bundle = new Bundle();
             bundle.putSerializable("accommodationListType", AccommodationListType.SEARCH);
             Navigation.findNavController(requireView()).navigate(R.id.action_navigation_search_to_accommodationsListFragment, bundle);

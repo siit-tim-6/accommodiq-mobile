@@ -171,4 +171,10 @@
         android:label="@string/prompt_host_reviews"
         tools:layout="@layout/fragment_host_review_approval_list" />
 
+    <fragment
+        android:id="@+id/navigation_notification_settings"
+        android:name="com.example.accommodiq.ui.notifications.NotificationSettingsFragment"
+        android:label="@string/title_notification_settings"
+        tools:layout="@layout/fragment_notification_setting_list" />
+
 </navigation>
