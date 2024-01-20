@@ -35,6 +35,9 @@
         <action
             android:id="@+id/action_accommodationsListFragment_to_accommodationDetailsFragment"
             app:destination="@id/navigation_accommodationDetails" />
+        <action
+            android:id="@+id/action_navigation_accommodationListFragment_to_navigation_user_reports"
+            app:destination="@id/navigation_user_reports" />
     </fragment>
 
     <fragment

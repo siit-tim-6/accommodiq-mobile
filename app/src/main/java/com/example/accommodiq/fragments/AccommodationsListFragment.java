@@ -14,9 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.fragment.app.ListFragment;
+import androidx.navigation.Navigation;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.adapters.AccommodationListAdapter;
+import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.clients.AccommodationClient;
 import com.example.accommodiq.dialogs.MoreFiltersDialog;
@@ -47,6 +49,7 @@ public class AccommodationsListFragment extends ListFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceBundle) {
         searchAccommodations();
+
         return inflater.inflate(R.layout.fragment_accommodations_list, container, false);
     }
 
@@ -60,6 +63,9 @@ public class AccommodationsListFragment extends ListFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (JwtUtils.getRole(requireContext()).equals("ADMIN")) {
+            Navigation.findNavController(requireView()).navigate(R.id.navigation_user_reports);
+        }
 
         EditText titleSearch = view.findViewById(R.id.title_search);
         EditText guestsSearch = view.findViewById(R.id.guests_search);
