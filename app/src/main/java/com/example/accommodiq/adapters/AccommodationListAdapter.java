@@ -165,9 +165,21 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
                 NavController navController = Navigation.findNavController(v);
                 Bundle args = new Bundle();
                 args.putLong("accommodationId", accommodation.getId());
-                int actionId = type == AccommodationListType.FAVORITES ?
-                        R.id.action_navigation_favorites_to_navigation_accommodationDetails :
-                        R.id.action_accommodationsListFragment_to_accommodationDetailsFragment;
+                int actionId = -1;
+                switch (type) {
+                    case ADMIN_REVIEW_PENDING_ACCOMMODATIONS:
+                        actionId = R.id.action_navigation_accommodation_review_to_navigation_accommodationDetails;
+                        break;
+                    case SEARCH:
+                        actionId = R.id.action_accommodationsListFragment_to_accommodationDetailsFragment;
+                        break;
+                    case HOST_ACCOMMODATIONS:
+                        actionId = R.id.action_navigation_host_accommodations_to_navigation_accommodationDetails;
+                        break;
+                    case FAVORITES:
+                        actionId = R.id.action_navigation_favorites_to_navigation_accommodationDetails;
+                        break;
+                }
                 navController.navigate(actionId, args);
             });
 

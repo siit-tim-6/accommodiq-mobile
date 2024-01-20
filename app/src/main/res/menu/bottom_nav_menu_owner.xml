@@ -13,13 +13,6 @@
         android:menuCategory="secondary"
         android:title="@string/host_accommodations" />
 
-
-    <item
-        android:id="@+id/navigation_new_accommodation"
-        android:icon="@drawable/icon_add_accommodation"
-        android:menuCategory="secondary"
-        android:title="@string/title_new_accommodation" />
-
     <item
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/icon_notifications"

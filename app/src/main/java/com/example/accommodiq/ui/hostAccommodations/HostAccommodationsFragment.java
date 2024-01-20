@@ -8,11 +8,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.ListFragment;
+import androidx.navigation.Navigation;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.adapters.AccommodationListAdapter;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.clients.AccommodationClient;
+import com.example.accommodiq.databinding.FragmentHostAccommodationsBinding;
 import com.example.accommodiq.dtos.AccommodationListDto;
 import com.example.accommodiq.enums.AccommodationListType;
 
@@ -26,6 +28,11 @@ import retrofit2.Response;
 public class HostAccommodationsFragment extends ListFragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        FragmentHostAccommodationsBinding binding = FragmentHostAccommodationsBinding.inflate(inflater, container, false);
+        binding.buttonNewAccommodation.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.action_navigation_host_accommodations_to_navigation_new_accommodation);
+        });
+
         AccommodationClient accommodationClient = RetrofitClientInstance.getRetrofitInstance(requireContext()).create(AccommodationClient.class);
         accommodationClient.getHostAccommodations().enqueue(new Callback<List<AccommodationListDto>>() {
             @Override
@@ -47,7 +54,7 @@ public class HostAccommodationsFragment extends ListFragment {
             }
         });
 
-        return inflater.inflate(R.layout.fragment_host_accommodations, container, false);
+        return binding.getRoot();
     }
 
     @Override

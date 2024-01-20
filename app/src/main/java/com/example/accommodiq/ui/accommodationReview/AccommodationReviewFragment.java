@@ -1,6 +1,5 @@
 package com.example.accommodiq.ui.accommodationReview;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.ListFragment;
-import androidx.navigation.Navigation;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.adapters.AccommodationListAdapter;

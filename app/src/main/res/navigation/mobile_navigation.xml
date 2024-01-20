@@ -32,9 +32,6 @@
         android:name="com.example.accommodiq.fragments.AccommodationsListFragment"
         android:label="AccommodationsListFragment"
         tools:layout="@layout/fragment_accommodations_list">
-        <argument
-            android:name="accommodationListType"
-            app:argType="com.example.accommodiq.enums.AccommodationListType" />
         <action
             android:id="@+id/action_accommodationsListFragment_to_accommodationDetailsFragment"
             app:destination="@id/navigation_accommodationDetails" />
@@ -79,14 +76,14 @@
         android:label="@string/title_host_accommodations"
         tools:layout="@layout/fragment_host_accommodations">
         <action
-            android:id="@+id/action_hostAccommodations_to_accommodationsListFragment"
-            app:destination="@id/navigation_accommodationListFragment" />
-        <action
             android:id="@+id/action_navigation_host_accommodations_to_navigation_update_accommodation_availability"
             app:destination="@id/navigation_update_accommodation_availability" />
         <action
             android:id="@+id/action_navigation_host_accommodations_to_navigation_new_accommodation"
             app:destination="@id/navigation_new_accommodation" />
+        <action
+            android:id="@+id/action_navigation_host_accommodations_to_navigation_accommodationDetails"
+            app:destination="@id/navigation_accommodationDetails" />
     </fragment>
 
     <fragment
@@ -135,8 +132,8 @@
         android:label="Accommodation Reviews"
         tools:layout="@layout/fragment_accommodation_review">
         <action
-            android:id="@+id/action_accommodationReview_to_accommodationsListFragment"
-            app:destination="@id/navigation_accommodationListFragment" />
+            android:id="@+id/action_navigation_accommodation_review_to_navigation_accommodationDetails"
+            app:destination="@id/navigation_accommodationDetails" />
     </fragment>
 
     <fragment
