@@ -8,15 +8,16 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+<<<<<<< HEAD
 import androidx.lifecycle.ViewModelProvider;
+=======
+>>>>>>> development
 import androidx.navigation.Navigation;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.databinding.FragmentSearchBinding;
 import com.example.accommodiq.enums.AccommodationListType;
-import com.example.accommodiq.fragments.AccommodationsListFragment;
-import com.example.accommodiq.fragments.FragmentTransition;
 
 import java.util.Objects;
 
@@ -41,6 +42,10 @@ public class SearchFragment extends Fragment {
                 Navigation.findNavController(requireView()).navigate(R.id.navigation_user_reports);
                 return;
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> development
             Bundle bundle = new Bundle();
             bundle.putSerializable("accommodationListType", AccommodationListType.SEARCH);
             Navigation.findNavController(requireView()).navigate(R.id.action_navigation_search_to_accommodationsListFragment, bundle);
