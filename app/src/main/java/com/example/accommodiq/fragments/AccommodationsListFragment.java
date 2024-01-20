@@ -47,13 +47,6 @@ public class AccommodationsListFragment extends ListFragment {
 
     public AccommodationsListFragment() {}
 
-    public static AccommodationsListFragment newInstance(Context context, AccommodationListType type) {
-        AccommodationsListFragment fragment = new AccommodationsListFragment();
-        fragment.accommodationClient = RetrofitClientInstance.getRetrofitInstance(context).create(AccommodationClient.class);
-        fragment.type = type;
-        return fragment;
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceBundle) {
