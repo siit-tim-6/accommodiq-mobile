@@ -54,7 +54,7 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
     }
 
     private void fetchFavoriteIds() {
-        if (!JwtUtils.getRole(context).equals("GUEST")) {
+        if (JwtUtils.getRole(context) == null || !JwtUtils.getRole(context).equals("GUEST")) {
             return;
         }
         AccommodationClient accommodationClient = RetrofitClientInstance.getRetrofitInstance(context).create(AccommodationClient.class);
@@ -229,7 +229,7 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
                     denyButton.setVisibility(View.VISIBLE);
                     break;
                 case SEARCH:
-                    if (JwtUtils.getRole(context).equals("GUEST"))
+                    if (JwtUtils.getRole(context) != null && JwtUtils.getRole(context).equals("GUEST"))
                         favoriteButton.setVisibility(View.VISIBLE);
                     else
                         favoriteButton.setVisibility(View.GONE);
