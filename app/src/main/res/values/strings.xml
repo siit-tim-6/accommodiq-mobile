@@ -110,4 +110,5 @@
     <string name="cancel_reservation">CANCEL</string>
     <string name="accept_reservation">ACCEPT</string>
     <string name="decline_reservation">DECLINE</string>
+    <string name="reservation_guest_info">Bob Johnson (5 cancels)</string>
 </resources>

@@ -15,10 +15,12 @@ public class ReservationCardDto {
     private long endDate;
     private String status;
     private double totalPrice;
+    private String guestName;
+    private int pastCancellations;
 
     public ReservationCardDto() {}
 
-    public ReservationCardDto(long id, long accommodationId, String accommodationImage, String accommodationTitle, double accommodationRating, int accommodationReviewCount, LocationDto accommodationLocation, int guests, long startDate, long endDate, String status, double totalPrice) {
+    public ReservationCardDto(long id, long accommodationId, String accommodationImage, String accommodationTitle, double accommodationRating, int accommodationReviewCount, LocationDto accommodationLocation, int guests, long startDate, long endDate, String status, double totalPrice, String guestName, int pastCancellations) {
         this.id = id;
         this.accommodationId = accommodationId;
         this.accommodationImage = accommodationImage;
@@ -31,6 +33,8 @@ public class ReservationCardDto {
         this.endDate = endDate;
         this.status = status;
         this.totalPrice = totalPrice;
+        this.guestName = guestName;
+        this.pastCancellations = pastCancellations;
     }
 
     public long getId() {
@@ -127,5 +131,21 @@ public class ReservationCardDto {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public String getGuestName() {
+        return guestName;
+    }
+
+    public void setGuestName(String guestName) {
+        this.guestName = guestName;
+    }
+
+    public int getPastCancellations() {
+        return pastCancellations;
+    }
+
+    public void setPastCancellations(int pastCancellations) {
+        this.pastCancellations = pastCancellations;
     }
 }

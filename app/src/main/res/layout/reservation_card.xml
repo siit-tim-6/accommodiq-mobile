@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -23,7 +23,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -53,6 +53,14 @@
                 android:drawablePadding="2dp"
                 android:text="@string/reservation_guests"
                 app:drawableStartCompat="@drawable/guest_icon" />
+
+            <TextView
+                android:id="@+id/reservation_guest_info"
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reservation_guest_info"
+                android:drawableStart="@drawable/ic_person"/>
 
             <TextView
                 android:layout_margin="5dp"

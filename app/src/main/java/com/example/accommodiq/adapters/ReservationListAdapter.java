@@ -89,6 +89,7 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationCardDto> {
         Button declineReservationButton = convertView.findViewById(R.id.decline_reservation);
         LinearLayout guestControls = convertView.findViewById(R.id.guest_reservation_controls);
         LinearLayout hostControls = convertView.findViewById(R.id.host_reservation_controls);
+        TextView guestInfoTextView = convertView.findViewById(R.id.reservation_guest_info);
 
         if (reservation != null) {
             String guests = reservation.getGuests() + " guests";
@@ -143,6 +144,7 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationCardDto> {
             });
 
             if (type == ReservationListType.GUEST) {
+                guestInfoTextView.setVisibility(View.GONE);
                 hostControls.setVisibility(View.GONE);
                 guestControls.setVisibility(View.VISIBLE);
                 if (Objects.equals(reservation.getStatus(), "PENDING")) {
@@ -161,6 +163,9 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationCardDto> {
                     deleteReservationButton.setVisibility(View.GONE);
                 }
             } else if (type == ReservationListType.HOST) {
+                String guestInfo = reservation.getGuestName() + " (" + reservation.getPastCancellations() + " cancellations)";
+                guestInfoTextView.setVisibility(View.VISIBLE);
+                guestInfoTextView.setText(guestInfo);
                 guestControls.setVisibility(View.GONE);
                 hostControls.setVisibility(View.VISIBLE);
                 if (!Objects.equals(reservation.getStatus(), "PENDING")) {
