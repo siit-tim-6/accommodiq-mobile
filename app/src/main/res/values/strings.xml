@@ -108,4 +108,6 @@
     <string name="reservation_status">ACCEPTED</string>
     <string name="delete_reservation">DELETE</string>
     <string name="cancel_reservation">CANCEL</string>
+    <string name="accept_reservation">ACCEPT</string>
+    <string name="decline_reservation">DECLINE</string>
 </resources>

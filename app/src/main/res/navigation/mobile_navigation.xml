@@ -45,6 +45,10 @@
         android:name="com.example.accommodiq.fragments.reservation.ReservationsListFragment"
         android:label="ReservationsListFragment"
         tools:layout="@layout/fragment_reservations_list">
+        <action
+            android:id="@+id/action_reservations_to_accommodationDetailsFragment"
+            app:destination="@id/navigation_accommodationDetails" />
+
     </fragment>
 
     <fragment

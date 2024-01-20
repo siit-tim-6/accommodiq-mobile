@@ -84,7 +84,7 @@ public class ReservationsListFragment extends ListFragment {
                 if (response.isSuccessful() && response.body() != null) {
                     reservations = response.body();
 
-                    if (type == ReservationListType.GUEST && reservations != null && cancellableReservationIds != null) {
+                    if ((type == ReservationListType.GUEST && reservations != null && cancellableReservationIds != null) || type == ReservationListType.HOST) {
                         adapter = new ReservationListAdapter(getActivity(), (ArrayList<ReservationCardDto>) reservations, type, (ArrayList<Long>) cancellableReservationIds);
                         setListAdapter(adapter);
                     }

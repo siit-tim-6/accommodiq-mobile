@@ -1,6 +1,7 @@
 package com.example.accommodiq.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
@@ -32,7 +34,6 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationCardDto> {
     private final ArrayList<ReservationCardDto> reservations;
     private final Context context;
     private final ReservationListType type;
-    private int layoutViewId;
     private ArrayList<Long> cancellableReservationIds;
 
     public ReservationListAdapter(Context context, ArrayList<ReservationCardDto> reservations, ReservationListType type, ArrayList<Long> cancellableReservationIds) {
@@ -40,10 +41,6 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationCardDto> {
         this.reservations = reservations;
         this.context = context;
         this.type = type;
-        this.cancellableReservationIds = cancellableReservationIds;
-    }
-
-    public void setCancellableReservationIds(ArrayList<Long> cancellableReservationIds) {
         this.cancellableReservationIds = cancellableReservationIds;
     }
 
@@ -82,6 +79,10 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationCardDto> {
         TextView totalPriceTextView = convertView.findViewById(R.id.reservation_total_price);
         Button deleteReservationButton = convertView.findViewById(R.id.delete_reservation);
         Button cancelReservationButton = convertView.findViewById(R.id.cancel_reservation);
+        Button acceptReservationButton = convertView.findViewById(R.id.accept_reservation);
+        Button declineReservationButton = convertView.findViewById(R.id.decline_reservation);
+        LinearLayout guestControls = convertView.findViewById(R.id.guest_reservation_controls);
+        LinearLayout hostControls = convertView.findViewById(R.id.host_reservation_controls);
 
         if (reservation != null) {
             String guests = reservation.getGuests() + " guests";
@@ -109,27 +110,46 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationCardDto> {
                 Toast.makeText(context, "Reservation cancelled", Toast.LENGTH_SHORT).show();
             });
 
-            if (Objects.equals(reservation.getStatus(), "PENDING")) {
-                Log.i("ADAPTER", "getView: ID: " + reservation.getId() + " DELETABLE");
-                cancelReservationButton.setVisibility(View.GONE);
-                deleteReservationButton.setVisibility(View.VISIBLE);
-                deleteReservationButton.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                deleteReservationButton.requestLayout();
-            } else if (cancellableReservationIds.contains(reservation.getId())) {
-                Log.i("ADAPTER", "getView: ID: " + reservation.getId() + " CANCELABLE");
-                deleteReservationButton.setVisibility(View.GONE);
-                cancelReservationButton.setVisibility(View.VISIBLE);
-                cancelReservationButton.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                cancelReservationButton.requestLayout();
-            } else {
-                Log.i("ADAPTER", "getView: ID: " + reservation.getId() + " NONE");
-                cancelReservationButton.setVisibility(View.GONE);
-                deleteReservationButton.setVisibility(View.GONE);
+            acceptReservationButton.setOnClickListener(v -> {
+                Toast.makeText(context, "Reservation accepted", Toast.LENGTH_SHORT).show();
+            });
+
+            declineReservationButton.setOnClickListener(v -> {
+                Toast.makeText(context, "Reservation declined", Toast.LENGTH_SHORT).show();
+            });
+
+            if (type == ReservationListType.GUEST) {
+                hostControls.setVisibility(View.GONE);
+                guestControls.setVisibility(View.VISIBLE);
+                if (Objects.equals(reservation.getStatus(), "PENDING")) {
+                    Log.i("ADAPTER", "getView: ID: " + reservation.getId() + " DELETABLE");
+                    cancelReservationButton.setVisibility(View.GONE);
+                    deleteReservationButton.setVisibility(View.VISIBLE);
+                } else if (cancellableReservationIds.contains(reservation.getId())) {
+                    Log.i("ADAPTER", "getView: ID: " + reservation.getId() + " CANCELABLE");
+                    deleteReservationButton.setVisibility(View.GONE);
+                    cancelReservationButton.setVisibility(View.VISIBLE);
+                    cancelReservationButton.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    cancelReservationButton.requestLayout();
+                } else {
+                    Log.i("ADAPTER", "getView: ID: " + reservation.getId() + " NONE");
+                    cancelReservationButton.setVisibility(View.GONE);
+                    deleteReservationButton.setVisibility(View.GONE);
+                }
+            } else if (type == ReservationListType.HOST) {
+                guestControls.setVisibility(View.GONE);
+                hostControls.setVisibility(View.VISIBLE);
+                if (!Objects.equals(reservation.getStatus(), "PENDING")) {
+                    hostControls.setVisibility(View.GONE);
+                }
             }
             notifyDataSetChanged();
 
             reservationCard.setOnClickListener(v -> {
-                Toast.makeText(context, "Clicked accommodation", Toast.LENGTH_SHORT).show();
+                NavController navController = Navigation.findNavController(v);
+                Bundle args = new Bundle();
+                args.putLong("accommodationId", reservation.getAccommodationId());
+                navController.navigate(R.id.action_reservations_to_accommodationDetailsFragment, args);
             });
         }
 
