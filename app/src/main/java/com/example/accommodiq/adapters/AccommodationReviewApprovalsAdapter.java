@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
-import com.example.accommodiq.clients.AccommodationClient;
+import com.example.accommodiq.clients.ReviewClient;
 import com.example.accommodiq.databinding.AccommodationReviewApprovalCardBinding;
 import com.example.accommodiq.dtos.AccommodationReviewApprovalDto;
 import com.example.accommodiq.dtos.AccommodationStatusDto;
@@ -31,11 +31,11 @@ public class AccommodationReviewApprovalsAdapter extends ArrayAdapter<Accommodat
     private final Context context;
     private final ArrayList<AccommodationReviewApprovalDto> reviewsToShow;
     private final ArrayList<AccommodationReviewApprovalDto> allReviews = new ArrayList<>();
-    private final AccommodationClient client;
+    private final ReviewClient client;
 
     public AccommodationReviewApprovalsAdapter(Context context, ArrayList<AccommodationReviewApprovalDto> reviews) {
         super(context, R.layout.fragment_accommodation_review_approval_list, reviews);
-        this.client = RetrofitClientInstance.getRetrofitInstance(context).create(AccommodationClient.class);
+        this.client = RetrofitClientInstance.getRetrofitInstance(context).create(ReviewClient.class);
         this.context = context;
         this.reviewsToShow = reviews;
         fetchReviews("PENDING");
