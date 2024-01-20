@@ -63,7 +63,12 @@
     <fragment
         android:id="@+id/navigation_update_accommodation_availability"
         android:name="com.example.accommodiq.ui.updateAccommodationAvailability.UpdateAccommodationAvailabilityFragment"
-        android:label="Update Accommodation Availability" />
+        android:label="Update Accommodation Availability"
+        tools:layout="@layout/fragment_update_accommodation_availability">
+        <argument
+            android:name="accommodationId"
+            app:argType="long" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_accommodation_review"
@@ -79,6 +84,9 @@
         <action
             android:id="@+id/action_hostAccommodations_to_accommodationsListFragment"
             app:destination="@id/navigation_accommodationListFragment" />
+        <action
+            android:id="@+id/action_navigation_host_accommodations_to_navigation_update_accommodation_availability"
+            app:destination="@id/navigation_update_accommodation_availability" />
     </fragment>
 
     <fragment
