@@ -1,6 +1,8 @@
 package com.example.accommodiq.dtos;
 
-public class LocationDto {
+import java.io.Serializable;
+
+public class LocationDto implements Serializable {
     private String address;
     private Double latitude;
     private Double longitude;

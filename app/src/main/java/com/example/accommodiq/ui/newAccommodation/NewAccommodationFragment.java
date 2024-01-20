@@ -1,19 +1,9 @@
 package com.example.accommodiq.ui.newAccommodation;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +11,25 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.accommodiq.R;
 import com.example.accommodiq.databinding.FragmentNewAccommodationBinding;
-import com.example.accommodiq.dtos.ModifyAccommodationDto;
 import com.example.accommodiq.dtos.AccommodationDetailsDto;
-
-import retrofit2.Callback;
-import retrofit2.Call;
-import retrofit2.Response;
+import com.example.accommodiq.dtos.ModifyAccommodationDto;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class NewAccommodationFragment extends Fragment {
@@ -43,15 +41,9 @@ public class NewAccommodationFragment extends Fragment {
     private final List<Uri> uploadedImageUris = new ArrayList<>();
     private ModifyAccommodationDto accommodationDetailsDto;
 
-    public static NewAccommodationFragment newInstance(ModifyAccommodationDto accommodationDetailsDto) {
-        NewAccommodationFragment fragment = new NewAccommodationFragment();
-        fragment.accommodationDetailsDto = accommodationDetailsDto;
-        return fragment;
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         binding = FragmentNewAccommodationBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -59,6 +51,11 @@ public class NewAccommodationFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Bundle args = getArguments();
+        if (args != null) {
+                accommodationDetailsDto = (ModifyAccommodationDto) args.getSerializable("accommodationToModify");
+        }
 
         newAccommodationViewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
             @NonNull
@@ -100,7 +97,7 @@ public class NewAccommodationFragment extends Fragment {
         binding.buttonUploadImages.setOnClickListener(v ->
                 openGallery());
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
                 R.array.accommodation_types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerAccommodationType.setAdapter(adapter);
@@ -192,7 +189,7 @@ public class NewAccommodationFragment extends Fragment {
     private void createAndSendAccommodationData() {
         newAccommodationViewModel.uploadImages(uploadedImageUris, getContext(), new Callback<List<String>>() {
             @Override
-            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<String> uploadedImageUrls = response.body();
                     ModifyAccommodationDto dto = createAccommodationFromInput();
@@ -200,7 +197,7 @@ public class NewAccommodationFragment extends Fragment {
 
                     newAccommodationViewModel.createNewAccommodation(dto, new Callback<AccommodationDetailsDto>() {
                         @Override
-                        public void onResponse(Call<AccommodationDetailsDto> call, Response<AccommodationDetailsDto> response) {
+                        public void onResponse(@NonNull Call<AccommodationDetailsDto> call, @NonNull Response<AccommodationDetailsDto> response) {
                             if (response.isSuccessful()) {
                                 Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
                                 if (accommodationDetailsDto == null) resetFields();
@@ -210,7 +207,7 @@ public class NewAccommodationFragment extends Fragment {
                         }
 
                         @Override
-                        public void onFailure(Call<AccommodationDetailsDto> call, Throwable t) {
+                        public void onFailure(@NonNull Call<AccommodationDetailsDto> call, @NonNull Throwable t) {
                             // Handle the network or other errors here
                             Toast.makeText(getContext(), "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -222,7 +219,7 @@ public class NewAccommodationFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<String>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
                 // Handle failure in image upload
                 Toast.makeText(getContext(), "Image upload error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }

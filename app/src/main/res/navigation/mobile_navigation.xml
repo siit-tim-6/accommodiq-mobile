@@ -3,13 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_search">
+    app:startDestination="@+id/navigation_accommodationListFragment">
 
     <fragment
         android:id="@+id/navigation_favorites"
         android:name="com.example.accommodiq.ui.favorites.FavoritesFragment"
         android:label="@string/title_favorites"
-        tools:layout="@layout/fragment_favorites" />
+        tools:layout="@layout/fragment_favorites" >
+        <action
+            android:id="@+id/action_navigation_favorites_to_navigation_accommodationDetails"
+            app:destination="@id/navigation_accommodationDetails" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"
@@ -18,26 +22,16 @@
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
-        android:id="@+id/navigation_search"
-        android:name="com.example.accommodiq.ui.search.SearchFragment"
-        android:label="@string/title_search"
-        tools:layout="@layout/fragment_search">
-        <action
-            android:id="@+id/action_navigation_search_to_accommodationsListFragment"
-            app:destination="@id/navigation_accommodationListFragment" />
-    </fragment>
-
-    <fragment
         android:id="@+id/navigation_accommodationListFragment"
         android:name="com.example.accommodiq.fragments.AccommodationsListFragment"
         android:label="AccommodationsListFragment"
         tools:layout="@layout/fragment_accommodations_list">
-        <argument
-            android:name="accommodationListType"
-            app:argType="com.example.accommodiq.enums.AccommodationListType" />
         <action
             android:id="@+id/action_accommodationsListFragment_to_accommodationDetailsFragment"
             app:destination="@id/navigation_accommodationDetails" />
+        <action
+            android:id="@+id/action_navigation_accommodationListFragment_to_navigation_user_reports"
+            app:destination="@id/navigation_user_reports" />
     </fragment>
 
     <fragment
@@ -69,18 +63,20 @@
         android:name="com.example.accommodiq.ui.newAccommodation.NewAccommodationFragment"
         android:label="New Accommodation"
         tools:layout="@layout/fragment_new_accommodation">
+        <argument
+            android:name="accommodationToModify"
+            app:argType="com.example.accommodiq.dtos.ModifyAccommodationDto" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_update_accommodation_availability"
         android:name="com.example.accommodiq.ui.updateAccommodationAvailability.UpdateAccommodationAvailabilityFragment"
-        android:label="Update Accommodation Availability" />
-
-    <fragment
-        android:id="@+id/navigation_accommodation_review"
-        android:name="com.example.accommodiq.ui.accommodationReview.AccommodationReviewFragment"
-        android:label="@string/title_accommodation_review"
-        tools:layout="@layout/fragment_accommodation_review" />
+        android:label="Update Accommodation Availability"
+        tools:layout="@layout/fragment_update_accommodation_availability">
+        <argument
+            android:name="accommodationId"
+            app:argType="long" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_host_accommodations"
@@ -88,8 +84,14 @@
         android:label="@string/title_host_accommodations"
         tools:layout="@layout/fragment_host_accommodations">
         <action
-            android:id="@+id/action_hostAccommodations_to_accommodationsListFragment"
-            app:destination="@id/navigation_accommodationListFragment" />
+            android:id="@+id/action_navigation_host_accommodations_to_navigation_update_accommodation_availability"
+            app:destination="@id/navigation_update_accommodation_availability" />
+        <action
+            android:id="@+id/action_navigation_host_accommodations_to_navigation_new_accommodation"
+            app:destination="@id/navigation_new_accommodation" />
+        <action
+            android:id="@+id/action_navigation_host_accommodations_to_navigation_accommodationDetails"
+            app:destination="@id/navigation_accommodationDetails" />
     </fragment>
 
     <fragment
@@ -133,13 +135,13 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_accommodation_reviews"
+        android:id="@+id/navigation_accommodation_review"
         android:name="com.example.accommodiq.ui.accommodationReview.AccommodationReviewFragment"
         android:label="Accommodation Reviews"
         tools:layout="@layout/fragment_accommodation_review">
         <action
-            android:id="@+id/action_accommodationReview_to_accommodationsListFragment"
-            app:destination="@id/navigation_accommodationListFragment" />
+            android:id="@+id/action_navigation_accommodation_review_to_navigation_accommodationDetails"
+            app:destination="@id/navigation_accommodationDetails" />
     </fragment>
 
     <fragment
@@ -169,4 +171,17 @@
         android:name="com.example.accommodiq.ui.accommodationReviewApproval.AccommodationReviewApprovalListFragment"
         android:label="@string/prompt_review_approval"
         tools:layout="@layout/fragment_accommodation_review_approval_list" />
+
+    <fragment
+        android:id="@+id/navigation_host_review_approval"
+        android:name="com.example.accommodiq.ui.hostReviewApproval.HostReviewApprovalListFragment"
+        android:label="@string/prompt_host_reviews"
+        tools:layout="@layout/fragment_host_review_approval_list" />
+
+    <fragment
+        android:id="@+id/navigation_notification_settings"
+        android:name="com.example.accommodiq.ui.notifications.NotificationSettingsFragment"
+        android:label="@string/title_notification_settings"
+        tools:layout="@layout/fragment_notification_setting_list" />
+
 </navigation>

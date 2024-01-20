@@ -7,16 +7,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.accommodiq.R;
-import com.example.accommodiq.utils.TextUtils;
 import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.databinding.ActivityLoginBinding;
 import com.example.accommodiq.dtos.CredentialsDto;
 import com.example.accommodiq.dtos.LoginResponseDto;
 import com.example.accommodiq.services.interfaces.AccountApiService;
+import com.example.accommodiq.utils.TextUtils;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         Call<LoginResponseDto> call = accountApiService.login(credentials);
         call.enqueue(new Callback<LoginResponseDto>() {
             @Override
-            public void onResponse(Call<LoginResponseDto> call, Response<LoginResponseDto> response) {
+            public void onResponse(@NonNull Call<LoginResponseDto> call, @NonNull Response<LoginResponseDto> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     // Store JWT in SharedPreferences
                     String jwt = response.body().getJwt();
@@ -53,6 +55,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     JwtUtils.saveJwt(getApplicationContext(), jwt);
                     JwtUtils.saveRole(getApplicationContext(), role);
+
+                    FirebaseMessaging.getInstance().subscribeToTopic("user-" + JwtUtils.getLoggedInId(getApplicationContext()));
 
                     // Navigate to MainActivity
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -68,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<LoginResponseDto> call, Throwable t) {
+            public void onFailure(@NonNull Call<LoginResponseDto> call, @NonNull Throwable t) {
                 // Display network error message
                 Toast.makeText(LoginActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }

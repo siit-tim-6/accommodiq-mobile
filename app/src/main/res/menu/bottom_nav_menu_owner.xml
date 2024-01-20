@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_search"
+        android:id="@+id/navigation_accommodationListFragment"
         android:icon="@drawable/icon_search"
         android:menuCategory="secondary"
         android:title="@string/title_search" />
@@ -18,13 +18,6 @@
         android:icon="@drawable/reservations_icon"
         android:menuCategory="secondary"
         android:title="@string/title_reservations" />
-
-
-<!--    <item-->
-<!--        android:id="@+id/navigation_new_accommodation"-->
-<!--        android:icon="@drawable/icon_add_accommodation"-->
-<!--        android:menuCategory="secondary"-->
-<!--        android:title="@string/title_new_accommodation" />-->
 
     <item
         android:id="@+id/navigation_notifications"
