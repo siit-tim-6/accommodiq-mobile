@@ -1,21 +1,19 @@
 package com.example.accommodiq.ui.updateAccommodationAvailability;
 
-import androidx.core.util.Pair;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.util.Pair;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.accommodiq.adapters.AvailabilityRangeListAdapter;
 import com.example.accommodiq.databinding.FragmentUpdateAccommodationAvailabilityBinding;
@@ -40,7 +38,7 @@ import retrofit2.Response;
 public class UpdateAccommodationAvailabilityFragment extends Fragment implements AvailabilityActionsListener {
 
     // Assuming accommodationId is obtained somehow (e.g., passed via Bundle or ViewModel)
-    Long accommodationId=4L; // Replace with actual accommodation ID
+    Long accommodationId=9L; // Replace with actual accommodation ID
     private UpdateAccommodationAvailabilityViewModel mViewModel;
     private AvailabilityRangeListAdapter adapter;
     private FragmentUpdateAccommodationAvailabilityBinding binding; // Binding object
@@ -48,16 +46,10 @@ public class UpdateAccommodationAvailabilityFragment extends Fragment implements
     private Long selectedToDate;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentUpdateAccommodationAvailabilityBinding.inflate(inflater, container, false);
         return binding.getRoot();
-    }
-
-    public static UpdateAccommodationAvailabilityFragment newInstance(Long accommodationId) {
-        UpdateAccommodationAvailabilityFragment fragment = new UpdateAccommodationAvailabilityFragment();
-        fragment.accommodationId = accommodationId;
-        return fragment;
     }
 
     @Override
@@ -92,7 +84,7 @@ public class UpdateAccommodationAvailabilityFragment extends Fragment implements
 
         mViewModel.getAccommodationBookingDetails(accommodationId, new Callback<AccommodationBookingDetailFormDto>() {
             @Override
-            public void onResponse(Call<AccommodationBookingDetailFormDto> call, Response<AccommodationBookingDetailFormDto> response) {
+            public void onResponse(@NonNull Call<AccommodationBookingDetailFormDto> call, @NonNull Response<AccommodationBookingDetailFormDto> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     AccommodationBookingDetailFormDto bookingDetails = response.body();
                     populateBookingDetailsFields(bookingDetails);
@@ -102,7 +94,7 @@ public class UpdateAccommodationAvailabilityFragment extends Fragment implements
             }
 
             @Override
-            public void onFailure(Call<AccommodationBookingDetailFormDto> call, Throwable t) {
+            public void onFailure(@NonNull Call<AccommodationBookingDetailFormDto> call, @NonNull Throwable t) {
                 Toast.makeText(getContext(), "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -123,12 +115,11 @@ public class UpdateAccommodationAvailabilityFragment extends Fragment implements
         final MaterialDatePicker<Pair<Long, Long>> picker = builder.build();
 
         picker.addOnPositiveButtonClickListener(selection -> {
-            Pair<Long, Long> dateRange = selection;
-            if (dateRange.first != null && dateRange.second != null) {
-                selectedFromDate = dateRange.first;
-                selectedToDate = dateRange.second;
-                String fromDate = formatDate(dateRange.first);
-                String toDate = formatDate(dateRange.second);
+            if (selection.first != null && selection.second != null) {
+                selectedFromDate = selection.first;
+                selectedToDate = selection.second;
+                String fromDate = formatDate(selection.first);
+                String toDate = formatDate(selection.second);
                 binding.editTextSelectRange.setText(String.format("%s - %s", fromDate, toDate));
             }
         });
@@ -151,7 +142,7 @@ public class UpdateAccommodationAvailabilityFragment extends Fragment implements
                 Availability newAvailability = new Availability(-1L, selectedFromDate, selectedToDate, price);
                 mViewModel.addAccommodationAvailability(accommodationId, new AvailabilityDto(newAvailability), new Callback<List<Availability>>() {
                     @Override
-                    public void onResponse(Call<List<Availability>> call, Response<List<Availability>> response) {
+                    public void onResponse(@NonNull Call<List<Availability>> call, @NonNull Response<List<Availability>> response) {
                         if (response.isSuccessful()) {
                             adapter.setAvailabilityRangeList(response.body());
                             Toast.makeText(getContext(), "Availability added successfully", Toast.LENGTH_SHORT).show();
@@ -161,7 +152,7 @@ public class UpdateAccommodationAvailabilityFragment extends Fragment implements
                     }
 
                     @Override
-                    public void onFailure(Call<List<Availability>> call, Throwable t) {
+                    public void onFailure(@NonNull Call<List<Availability>> call, @NonNull Throwable t) {
                         Toast.makeText(getContext(), "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -184,7 +175,7 @@ public class UpdateAccommodationAvailabilityFragment extends Fragment implements
 
             mViewModel.updateAccommodationBookingDetails(accommodationId, dto, new Callback<AccommodationDetailsDto>() {
                 @Override
-                public void onResponse(Call<AccommodationDetailsDto> call, Response<AccommodationDetailsDto> response) {
+                public void onResponse(@NonNull Call<AccommodationDetailsDto> call, @NonNull Response<AccommodationDetailsDto> response) {
                     if (response.isSuccessful()) {
                         Toast.makeText(getContext(), "Booking details updated successfully", Toast.LENGTH_SHORT).show();
                     } else {
@@ -193,7 +184,7 @@ public class UpdateAccommodationAvailabilityFragment extends Fragment implements
                 }
 
                 @Override
-                public void onFailure(Call<AccommodationDetailsDto> call, Throwable t) {
+                public void onFailure(@NonNull Call<AccommodationDetailsDto> call, @NonNull Throwable t) {
                     Toast.makeText(getContext(), "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
@@ -215,7 +206,7 @@ public class UpdateAccommodationAvailabilityFragment extends Fragment implements
     public void onRemoveAvailability(Availability availability) {
         mViewModel.removeAccommodationAvailability(accommodationId, availability.getId(), new Callback<MessageDto>() {
             @Override
-            public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
+            public void onResponse(@NonNull Call<MessageDto> call, @NonNull Response<MessageDto> response) {
                 if (response.isSuccessful()) {
                     adapter.removeItemByAvailabilityId(availability.getId());
                     mViewModel.removeAvailabilityFromList(availability.getId());
@@ -226,7 +217,7 @@ public class UpdateAccommodationAvailabilityFragment extends Fragment implements
             }
 
             @Override
-            public void onFailure(Call<MessageDto> call, Throwable t) {
+            public void onFailure(@NonNull Call<MessageDto> call, @NonNull Throwable t) {
                 Toast.makeText(getContext(), "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

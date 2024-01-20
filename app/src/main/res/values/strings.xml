@@ -106,4 +106,8 @@
     <string name="prompt_settings">Settings</string>
     <string name="title_notification_settings">Notification Settings\t</string>
     <string name="notification_settings_heading">Notification Settings</string>
+    <string name="prompt_favorites">Favorite Accommodations</string>
+    <string name="prompt_host_accommodations">Host Accommodations</string>
+    <string name="prompt_accommodation_review">Accommodation Review</string>
+    <string name="prompt_new_accommodation">New Accommodation</string>
 </resources>

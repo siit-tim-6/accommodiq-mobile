@@ -1,6 +1,5 @@
 package com.example.accommodiq.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.fragment.app.ListFragment;
+import androidx.navigation.Navigation;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.adapters.AccommodationListAdapter;
+import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.clients.AccommodationClient;
 import com.example.accommodiq.dialogs.MoreFiltersDialog;
@@ -37,92 +38,34 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AccommodationsListFragment extends ListFragment {
+    private final MoreFiltersDto moreFiltersDto = new MoreFiltersDto();
     private AccommodationListAdapter adapter;
     private AccommodationClient accommodationClient;
     private List<AccommodationListDto> accommodations;
-    private AccommodationListType type;
     private Long dateFrom = null;
     private Long dateTo = null;
-    private final Double priceFrom = null;
-    private final Double priceTo = null;
-    private final String selectedType = null;
-    private final List<String> selectedBenefits = new ArrayList<>();
-    private final MoreFiltersDto moreFiltersDto = new MoreFiltersDto();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceBundle) {
+        searchAccommodations();
+
         return inflater.inflate(R.layout.fragment_accommodations_list, container, false);
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         accommodationClient = RetrofitClientInstance.getRetrofitInstance(getContext()).create(AccommodationClient.class);
-        if (getArguments() != null) {
-            type = (AccommodationListType) getArguments().getSerializable("accommodationListType");
-        }
-        if (type == null) {
-            type = AccommodationListType.SEARCH; // Handling NULL type
-        }
-        switch (type) {
-            case SEARCH:
-                searchAccommodations(null, null, null, null, null, null, null, null, null);
-                break;
-            case ADMIN_REVIEW_PENDING_ACCOMMODATIONS:
-                fetchPendingAccommodations();
-                break;
-            case HOST_ACCOMMODATIONS:
-                fetchHostAccommodations();
-                break;
-        }
-    }
-
-    private void fetchHostAccommodations() {
-        Call<List<AccommodationListDto>> hostAccommodationsCall = accommodationClient.getHostAccommodations();
-        hostAccommodationsCall.enqueue(new Callback<List<AccommodationListDto>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<AccommodationListDto>> call, @NonNull Response<List<AccommodationListDto>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    accommodations = (ArrayList<AccommodationListDto>) response.body();
-                    adapter = new AccommodationListAdapter(getActivity(), (ArrayList<AccommodationListDto>) accommodations, type);
-                    setListAdapter(adapter);
-                } else {
-                    Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<AccommodationListDto>> call, @NonNull Throwable t) {
-                Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void fetchPendingAccommodations() {
-        Call<List<AccommodationListDto>> pendingAccommodationsCall = accommodationClient.getPendingAccommodations();
-        pendingAccommodationsCall.enqueue(new Callback<List<AccommodationListDto>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<AccommodationListDto>> call, @NonNull Response<List<AccommodationListDto>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    accommodations = (ArrayList<AccommodationListDto>) response.body();
-                    adapter = new AccommodationListAdapter(getActivity(), (ArrayList<AccommodationListDto>) accommodations, type);
-                    setListAdapter(adapter);
-                } else {
-                    Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<AccommodationListDto>> call, @NonNull Throwable t) {
-                Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (JwtUtils.getRole(requireContext()).equals("ADMIN")) {
+            Navigation.findNavController(requireView()).navigate(R.id.navigation_user_reports);
+        }
 
         EditText titleSearch = view.findViewById(R.id.title_search);
         EditText guestsSearch = view.findViewById(R.id.guests_search);
@@ -133,10 +76,7 @@ public class AccommodationsListFragment extends ListFragment {
         Button clearBtn = view.findViewById(R.id.clear_search);
         CalendarConstraints dateValidator = (new CalendarConstraints.Builder()).setValidator(DateValidatorPointForward.now()).build();
 
-        MaterialDatePicker<Pair<Long, Long>> dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
-                .setCalendarConstraints(dateValidator)
-                .setTheme(R.style.ThemeMaterialCalendar)
-                .setTitleText("Select check-in and check-out date").setSelection(new Pair<>(null, null)).build();
+        MaterialDatePicker<Pair<Long, Long>> dateRangePicker = MaterialDatePicker.Builder.dateRangePicker().setCalendarConstraints(dateValidator).setTheme(R.style.ThemeMaterialCalendar).setTitleText("Select check-in and check-out date").setSelection(new Pair<>(null, null)).build();
 
         dateRangeSearch.setOnClickListener(v -> {
             if (!dateRangePicker.isAdded())
@@ -169,7 +109,7 @@ public class AccommodationsListFragment extends ListFragment {
             dateTo = null;
             dateRangeSearch.setText(R.string.date_range_hint);
 
-            searchAccommodations(null, null, null, null, null, null, null, null, null);
+            searchAccommodations();
         });
 
         moreFiltersBtn.setOnClickListener(v -> {
@@ -179,17 +119,15 @@ public class AccommodationsListFragment extends ListFragment {
         });
     }
 
-    private void searchAccommodations(String title, String location, Long availableFrom, Long availableTo,
-                                      Integer priceFrom, Integer priceTo, Integer guests, String accommodationType, String benefits) {
-        Call<List<AccommodationListDto>> accommodationsCall = accommodationClient.getAccommodations(title, location, availableFrom, availableTo, priceFrom,
-                priceTo, guests, accommodationType, benefits);
+    private void searchAccommodations(String title, String location, Long availableFrom, Long availableTo, Integer priceFrom, Integer priceTo, Integer guests, String accommodationType, String benefits) {
+        Call<List<AccommodationListDto>> accommodationsCall = accommodationClient.getAccommodations(title, location, availableFrom, availableTo, priceFrom, priceTo, guests, accommodationType, benefits);
 
         accommodationsCall.enqueue(new Callback<List<AccommodationListDto>>() {
             @Override
             public void onResponse(@NonNull Call<List<AccommodationListDto>> call, @NonNull Response<List<AccommodationListDto>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     accommodations = (ArrayList<AccommodationListDto>) response.body();
-                    adapter = new AccommodationListAdapter(getActivity(), (ArrayList<AccommodationListDto>) accommodations, type);
+                    adapter = new AccommodationListAdapter(getActivity(), (ArrayList<AccommodationListDto>) accommodations, AccommodationListType.SEARCH);
                     setListAdapter(adapter);
                 } else {
                     Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
@@ -204,12 +142,11 @@ public class AccommodationsListFragment extends ListFragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
-    @Override
     public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+    }
+
+    private void searchAccommodations() {
+        searchAccommodations(null, null, null, null, null, null, null, null, null);
     }
 }

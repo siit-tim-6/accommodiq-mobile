@@ -1,8 +1,9 @@
 package com.example.accommodiq.dtos;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ModifyAccommodationDto {
+public class ModifyAccommodationDto implements Serializable {
     private Long id;
     private String title;
     private String description;

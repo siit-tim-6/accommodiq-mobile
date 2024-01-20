@@ -15,24 +15,23 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.accommodiq.R;
+import com.example.accommodiq.apiConfig.JwtUtils;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.clients.AccommodationClient;
 import com.example.accommodiq.dtos.AccommodationListDto;
 import com.example.accommodiq.dtos.AccommodationStatusDto;
+import com.example.accommodiq.dtos.GuestFavoriteDto;
 import com.example.accommodiq.dtos.ModifyAccommodationDto;
 import com.example.accommodiq.enums.AccommodationListType;
-import com.example.accommodiq.fragments.AccommodationDetailsFragment;
-import com.example.accommodiq.fragments.FragmentTransition;
-import com.example.accommodiq.ui.newAccommodation.NewAccommodationFragment;
-import com.example.accommodiq.ui.updateAccommodationAvailability.UpdateAccommodationAvailabilityFragment;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import retrofit2.Call;
@@ -43,24 +42,42 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
     private final ArrayList<AccommodationListDto> accommodations;
     private final Context context;
     private final AccommodationListType type;
-    private int layoutViewId;
+    private final List<Long> favoriteIds = new ArrayList<>();
+    private final List<ImageButton> favoriteButtons = new ArrayList<>();
 
     public AccommodationListAdapter(Context context, ArrayList<AccommodationListDto> accommodations, AccommodationListType type) {
         super(context, R.layout.accommodation_card, accommodations);
         this.accommodations = accommodations;
         this.context = context;
         this.type = type;
-        switch (type) {
-            case ADMIN_REVIEW_PENDING_ACCOMMODATIONS:
-                layoutViewId = R.id.admin_accommodation_review_fragment;
-                break;
-            case SEARCH:
-                layoutViewId = R.id.accommodations_fragment;
-                break;
-            case HOST_ACCOMMODATIONS:
-                layoutViewId = R.id.host_accommodations_fragment;
-                break;
+        fetchFavoriteIds();
+    }
+
+    private void fetchFavoriteIds() {
+        if (!JwtUtils.getRole(context).equals("GUEST")) {
+            return;
         }
+        AccommodationClient accommodationClient = RetrofitClientInstance.getRetrofitInstance(context).create(AccommodationClient.class);
+        Call<List<AccommodationListDto>> call = accommodationClient.getFavorites();
+        call.enqueue(new Callback<List<AccommodationListDto>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<AccommodationListDto>> call, @NonNull Response<List<AccommodationListDto>> response) {
+                if (response.isSuccessful()) {
+                    assert response.body() != null;
+                    favoriteIds.clear();
+                    List<AccommodationListDto> accommodations = response.body();
+                    accommodations.forEach(a -> favoriteIds.add(a.getId()));
+                }
+                favoriteButtons.forEach(b -> {
+                    AccommodationListDto accommodation = (AccommodationListDto) b.getTag();
+                    refreshFavoriteIcon(accommodation, b);
+                });
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<AccommodationListDto>> call, @NonNull Throwable t) {
+            }
+        });
     }
 
     @Override
@@ -125,12 +142,45 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
             guestsTextView.setText(guests);
             pricePerNightTextView.setText(pricePerNight);
             totalPriceTextView.setText(totalPrice);
-            favoriteButton.setOnClickListener(v -> Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show());
+
+            favoriteButton.setTag(accommodation);
+            favoriteButtons.add(favoriteButton);
+
+            favoriteButton.setOnClickListener(v -> {
+                Call<Void> call = favoriteIds.contains(accommodation.getId()) ? accommodationClient.deleteFavorite(accommodation.getId()) : accommodationClient.addFavorite(new GuestFavoriteDto(accommodation.getId()));
+                call.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                        fetchFavoriteIds();
+                        refreshFavoriteIcon(accommodation, favoriteButton);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                    }
+                });
+            });
+
             accommodationCard.setOnClickListener(v -> {
                 NavController navController = Navigation.findNavController(v);
                 Bundle args = new Bundle();
                 args.putLong("accommodationId", accommodation.getId());
-                navController.navigate(R.id.action_accommodationsListFragment_to_accommodationDetailsFragment, args);
+                int actionId = -1;
+                switch (type) {
+                    case ADMIN_REVIEW_PENDING_ACCOMMODATIONS:
+                        actionId = R.id.action_navigation_accommodation_review_to_navigation_accommodationDetails;
+                        break;
+                    case SEARCH:
+                        actionId = R.id.action_accommodationsListFragment_to_accommodationDetailsFragment;
+                        break;
+                    case HOST_ACCOMMODATIONS:
+                        actionId = R.id.action_navigation_host_accommodations_to_navigation_accommodationDetails;
+                        break;
+                    case FAVORITES:
+                        actionId = R.id.action_navigation_favorites_to_navigation_accommodationDetails;
+                        break;
+                }
+                navController.navigate(actionId, args);
             });
 
             acceptButton.setOnClickListener(v -> {
@@ -148,8 +198,9 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
                 public void onResponse(@NonNull Call<ModifyAccommodationDto> call, @NonNull Response<ModifyAccommodationDto> response) {
                     if (response.isSuccessful()) {
                         ModifyAccommodationDto accommodationDetailsDto = response.body();
-
-                        FragmentTransition.to(NewAccommodationFragment.newInstance(accommodationDetailsDto), (FragmentActivity) context, true, R.id.host_accommodations_fragment);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("accommodationToModify", (Serializable) accommodationDetailsDto);
+                        Navigation.findNavController(v).navigate(R.id.action_navigation_host_accommodations_to_navigation_new_accommodation, bundle);
                     }
                 }
 
@@ -158,7 +209,11 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
                 }
             }));
 
-            editAvailabilityButton.setOnClickListener(v -> FragmentTransition.to(UpdateAccommodationAvailabilityFragment.newInstance(accommodation.getId()), (FragmentActivity) context, true, R.id.host_accommodations_fragment));
+            editAvailabilityButton.setOnClickListener(v -> {
+                Bundle bundle = new Bundle();
+                bundle.putLong("accommodationId", accommodation.getId());
+                Navigation.findNavController(v).navigate(R.id.action_navigation_host_accommodations_to_navigation_update_accommodation_availability, bundle);
+            });
 
             switch (type) {
                 case ADMIN_REVIEW_PENDING_ACCOMMODATIONS:
@@ -174,7 +229,10 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
                     denyButton.setVisibility(View.VISIBLE);
                     break;
                 case SEARCH:
-                    favoriteButton.setVisibility(View.VISIBLE); // check role
+                    if (JwtUtils.getRole(context).equals("GUEST"))
+                        favoriteButton.setVisibility(View.VISIBLE);
+                    else
+                        favoriteButton.setVisibility(View.GONE);
 
                     editButton.setVisibility(View.GONE);
                     editAvailabilityButton.setVisibility(View.GONE);
@@ -197,10 +255,30 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
                     acceptButton.setVisibility(View.GONE);
                     denyButton.setVisibility(View.GONE);
                     break;
+                case FAVORITES:
+                    favoriteButton.setVisibility(View.VISIBLE);
+
+                    editButton.setVisibility(View.GONE);
+                    editAvailabilityButton.setVisibility(View.GONE);
+
+                    statusTextView.setVisibility(View.GONE);
+                    totalPriceTextView.setVisibility(View.GONE);
+
+                    acceptButton.setVisibility(View.GONE);
+                    denyButton.setVisibility(View.GONE);
+                    break;
             }
         }
 
         return convertView;
+    }
+
+    private void refreshFavoriteIcon(AccommodationListDto accommodation, ImageButton favoriteButton) {
+        if (favoriteIds.contains(accommodation.getId())) {
+            favoriteButton.setImageResource(R.drawable.icon_heart_fill);
+        } else {
+            favoriteButton.setImageResource(R.drawable.heart_icon);
+        }
     }
 
     @Override
