@@ -21,7 +21,9 @@ import androidx.navigation.Navigation;
 import com.example.accommodiq.R;
 import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.clients.ReservationClient;
+import com.example.accommodiq.dtos.MessageDto;
 import com.example.accommodiq.dtos.ReservationCardDto;
+import com.example.accommodiq.dtos.ReservationStatusDto;
 import com.example.accommodiq.enums.ReservationListType;
 import com.example.accommodiq.utils.DateUtils;
 import com.squareup.picasso.Picasso;
@@ -29,6 +31,10 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ReservationListAdapter extends ArrayAdapter<ReservationCardDto> {
     private final ArrayList<ReservationCardDto> reservations;
@@ -103,19 +109,37 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationCardDto> {
             totalPriceTextView.setText(totalPrice);
 
             deleteReservationButton.setOnClickListener(v -> {
-                Toast.makeText(context, "Reservation deleted", Toast.LENGTH_SHORT).show();
+                Call<MessageDto> deleteReservationCall = reservationClient.delete(reservation.getId());
+
+                deleteReservationCall.enqueue(new Callback<MessageDto>() {
+                    @Override
+                    public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            Toast.makeText(context, "Reservation deleted successfully!", Toast.LENGTH_SHORT).show();
+                            reservations.remove(reservation);
+                            notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(context, "Error while deleting reservation.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<MessageDto> call, Throwable t) {
+                        Toast.makeText(context, "Error while deleting reservation.", Toast.LENGTH_SHORT).show();
+                    }
+                });
             });
 
             cancelReservationButton.setOnClickListener(v -> {
-                Toast.makeText(context, "Reservation cancelled", Toast.LENGTH_SHORT).show();
+                changeReservationStatus("CANCELLED", reservationClient, reservation);
             });
 
             acceptReservationButton.setOnClickListener(v -> {
-                Toast.makeText(context, "Reservation accepted", Toast.LENGTH_SHORT).show();
+                changeReservationStatus("ACCEPTED", reservationClient, reservation);
             });
 
             declineReservationButton.setOnClickListener(v -> {
-                Toast.makeText(context, "Reservation declined", Toast.LENGTH_SHORT).show();
+                changeReservationStatus("DECLINED", reservationClient, reservation);
             });
 
             if (type == ReservationListType.GUEST) {
@@ -154,5 +178,31 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationCardDto> {
         }
 
         return convertView;
+    }
+
+    private void changeReservationStatus(String status, ReservationClient reservationClient, ReservationCardDto reservation) {
+        Call<ReservationCardDto> changeReservationStatusCall = reservationClient.changeStatus(reservation.getId(), new ReservationStatusDto(status));
+
+        changeReservationStatusCall.enqueue(new Callback<ReservationCardDto>() {
+            @Override
+            public void onResponse(Call<ReservationCardDto> call, Response<ReservationCardDto> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Toast.makeText(context, "Reservation " + status + " successfully!", Toast.LENGTH_SHORT).show();
+                    reservations.remove(reservation);
+                    reservations.add(response.body());
+                    if (Objects.equals(status, "CANCELLED")) {
+                        cancellableReservationIds.remove(reservation.getId());
+                    }
+                    notifyDataSetChanged();
+                } else {
+                    Toast.makeText(context, "Error while changing reservation status", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ReservationCardDto> call, Throwable t) {
+                Toast.makeText(context, "Error while changing reservation status", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
