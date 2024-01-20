@@ -50,7 +50,6 @@ public class ProfileFragment extends Fragment {
     private TextView ratingText;
     private Button buttonEditProfile;
     private Button buttonReport;
-    private Button buttonFinancialReport;
     private ListView reviewsList;
     private Long accountId;
     private Button buttonSignOut;
@@ -91,7 +90,6 @@ public class ProfileFragment extends Fragment {
         ratingText = view.findViewById(R.id.ratingText);
         buttonEditProfile = view.findViewById(R.id.buttonEditProfile);
         buttonReport = view.findViewById(R.id.buttonReport);
-        buttonFinancialReport = view.findViewById(R.id.buttonFinancialReport);
         reviewsList = view.findViewById(R.id.reviews_list);
         buttonSignOut = view.findViewById(R.id.signOutBtn);
         buttonEditProfile.setOnClickListener(v -> {
@@ -101,9 +99,6 @@ public class ProfileFragment extends Fragment {
             Bundle bundle = new Bundle();
             bundle.putLong("accountId", accountId);
             Navigation.findNavController(requireView()).navigate(R.id.action_profileFragment_to_reportUserFragment, bundle);
-        });
-        buttonFinancialReport.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
         });
         buttonSignOut.setOnClickListener(v -> {
             Activity mainActivity = getActivity();
@@ -188,7 +183,6 @@ public class ProfileFragment extends Fragment {
     private void updateUIButtonsVisibility() {
         if(JwtUtils.getLoggedInId(getContext()) != accountId) {
             buttonEditProfile.setVisibility(View.GONE);
-            buttonFinancialReport.setVisibility(View.GONE);
             buttonSignOut.setVisibility(View.GONE);
             if(isAbleToReport()) {
                 buttonReport.setVisibility(View.VISIBLE);
@@ -205,11 +199,6 @@ public class ProfileFragment extends Fragment {
             buttonReport.setVisibility(View.GONE);
             buttonEditProfile.setVisibility(View.VISIBLE);
             buttonSignOut.setVisibility(View.VISIBLE);
-            if(accountDetails.getRole().equals(AccountRole.HOST)) {
-                buttonFinancialReport.setVisibility(View.VISIBLE);
-            }else {
-                buttonFinancialReport.setVisibility(View.GONE);
-            }
         }
     }
 

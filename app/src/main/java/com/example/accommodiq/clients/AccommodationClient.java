@@ -3,10 +3,8 @@ package com.example.accommodiq.clients;
 import com.example.accommodiq.dtos.AccommodationDetailsDto;
 import com.example.accommodiq.dtos.AccommodationListDto;
 import com.example.accommodiq.dtos.AccommodationPriceDto;
-import com.example.accommodiq.dtos.AccommodationReviewDto;
 import com.example.accommodiq.dtos.AccommodationStatusDto;
 import com.example.accommodiq.dtos.ModifyAccommodationDto;
-import com.example.accommodiq.models.Accommodation;
 
 import java.util.List;
 
@@ -15,7 +13,6 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.PUT;
-import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
