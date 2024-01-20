@@ -217,7 +217,8 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
                     denyButton.setVisibility(View.VISIBLE);
                     break;
                 case SEARCH:
-                    favoriteButton.setVisibility(View.VISIBLE); // check role
+                    if (JwtUtils.getRole(context).equals("GUEST"))
+                        favoriteButton.setVisibility(View.VISIBLE);
 
                     editButton.setVisibility(View.GONE);
                     editAvailabilityButton.setVisibility(View.GONE);
