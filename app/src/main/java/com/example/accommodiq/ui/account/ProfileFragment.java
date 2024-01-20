@@ -34,6 +34,7 @@ import com.example.accommodiq.enums.AccountRole;
 import com.example.accommodiq.fragments.FragmentTransition;
 import com.example.accommodiq.ui.report.ReportFragment;
 import com.example.accommodiq.ui.updateAccommodationAvailability.UpdateAccommodationAvailabilityViewModel;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,6 +106,7 @@ public class ProfileFragment extends Fragment {
             if (mainActivity != null) {
                 startActivity(new Intent(mainActivity, LoginActivity.class));
                 mainActivity.finish();
+                FirebaseMessaging.getInstance().unsubscribeFromTopic("user-" + JwtUtils.getLoggedInId(requireContext()));
                 JwtUtils.clearJwtAndRole(requireContext());
 
                 Intent intent = new Intent(getContext(), LoginActivity.class);
