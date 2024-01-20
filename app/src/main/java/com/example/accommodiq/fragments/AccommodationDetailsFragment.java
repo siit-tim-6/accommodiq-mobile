@@ -138,8 +138,8 @@ public class AccommodationDetailsFragment extends Fragment {
 
             dateRangePicker.addOnPositiveButtonClickListener(selection -> {
                 dateRangeTextView.setText(String.format("%s - %s", DateUtils.convertTimeToDate(selection.first), DateUtils.convertTimeToDate(selection.second)));
-                dateFrom = selection.first / 1000;
-                dateTo = selection.second / 1000;
+                dateFrom = selection.first;
+                dateTo = selection.second;
 
                 if (accommodation != null && dateFrom != null && dateTo != null) {
                     int guestsInput;

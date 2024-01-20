@@ -5,6 +5,7 @@
     <string name="rating">4.92</string>
     <string name="review_count">(390)</string>
     <string name="guests">2–4 guests</string>
+    <string name="reservation_guests">2 guests</string>
     <string name="price_per_night">From 45€ / night</string>
     <string name="total_price">*€ total</string>
     <string name="favorite_button">Favorite button</string>
@@ -79,6 +80,14 @@
         <item>Beachfront Villa</item>
     </string-array>
 
+    <string-array name="reservation_statuses">
+        <item>ALL</item>
+        <item>PENDING</item>
+        <item>ACCEPTED</item>
+        <item>DECLINED</item>
+        <item>CANCELLED</item>
+    </string-array>
+
     <string name="apply">Apply</string>
     <string name="title_accommodation_review">Review</string>
     <string name="host_accommodations">Your accommodations</string>
@@ -96,4 +105,7 @@
     <string name="prompt_review_approval">Review Approval</string>
     <string name="prompt_accommodation_reviews">Accommodation Reviews</string>
     <string name="prompt_show_reported_reviews">Show reported reviews</string>
+    <string name="reservation_status">ACCEPTED</string>
+    <string name="delete_reservation">DELETE</string>
+    <string name="cancel_reservation">CANCEL</string>
 </resources>

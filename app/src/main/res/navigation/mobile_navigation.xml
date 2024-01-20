@@ -6,12 +6,6 @@
     app:startDestination="@+id/navigation_search">
 
     <fragment
-        android:id="@+id/navigation_reservations"
-        android:name="com.example.accommodiq.ui.reservations.ReservationsFragment"
-        android:label="@string/title_reservations"
-        tools:layout="@layout/fragment_reservations" />
-
-    <fragment
         android:id="@+id/navigation_favorites"
         android:name="com.example.accommodiq.ui.favorites.FavoritesFragment"
         android:label="@string/title_favorites"
@@ -44,6 +38,13 @@
         <action
             android:id="@+id/action_accommodationsListFragment_to_accommodationDetailsFragment"
             app:destination="@id/navigation_accommodationDetails" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_reservations"
+        android:name="com.example.accommodiq.fragments.reservation.ReservationsListFragment"
+        android:label="ReservationsListFragment"
+        tools:layout="@layout/fragment_reservations_list">
     </fragment>
 
     <fragment

@@ -147,8 +147,8 @@ public class AccommodationsListFragment extends ListFragment {
             });
 
             dateRangePicker.addOnPositiveButtonClickListener(selection -> {
-                dateFrom = selection.first / 1000;
-                dateTo = selection.second / 1000;
+                dateFrom = selection.first;
+                dateTo = selection.second;
                 dateRangeSearch.setText(String.format("%s - %s", DateUtils.convertTimeToDate(selection.first), DateUtils.convertTimeToDate(selection.second)));
             });
         });
