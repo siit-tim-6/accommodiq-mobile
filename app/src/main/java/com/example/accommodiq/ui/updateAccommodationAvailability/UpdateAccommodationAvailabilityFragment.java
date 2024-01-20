@@ -49,7 +49,6 @@ public class UpdateAccommodationAvailabilityFragment extends Fragment implements
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentUpdateAccommodationAvailabilityBinding.inflate(inflater, container, false);
-        accommodationId = savedInstanceState != null ? savedInstanceState.getLong("accommodationId") : accommodationId;
         return binding.getRoot();
     }
 

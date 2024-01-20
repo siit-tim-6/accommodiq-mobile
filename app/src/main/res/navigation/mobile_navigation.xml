@@ -58,6 +58,9 @@
         android:name="com.example.accommodiq.ui.newAccommodation.NewAccommodationFragment"
         android:label="New Accommodation"
         tools:layout="@layout/fragment_new_accommodation">
+        <argument
+            android:name="accommodationToModify"
+            app:argType="com.example.accommodiq.dtos.ModifyAccommodationDto" />
     </fragment>
 
     <fragment
@@ -87,6 +90,9 @@
         <action
             android:id="@+id/action_navigation_host_accommodations_to_navigation_update_accommodation_availability"
             app:destination="@id/navigation_update_accommodation_availability" />
+        <action
+            android:id="@+id/action_navigation_host_accommodations_to_navigation_new_accommodation"
+            app:destination="@id/navigation_new_accommodation" />
     </fragment>
 
     <fragment

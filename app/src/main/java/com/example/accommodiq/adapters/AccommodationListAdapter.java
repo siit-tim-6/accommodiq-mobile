@@ -29,6 +29,7 @@ import com.example.accommodiq.dtos.ModifyAccommodationDto;
 import com.example.accommodiq.enums.AccommodationListType;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -185,8 +186,9 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
                 public void onResponse(@NonNull Call<ModifyAccommodationDto> call, @NonNull Response<ModifyAccommodationDto> response) {
                     if (response.isSuccessful()) {
                         ModifyAccommodationDto accommodationDetailsDto = response.body();
-
-                        // FragmentTransition.to(NewAccommodationFragment.newInstance(accommodationDetailsDto), (FragmentActivity) context, true, R.id.host_accommodations_fragment);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("accommodationToModify", (Serializable) accommodationDetailsDto);
+                        Navigation.findNavController(v).navigate(R.id.action_navigation_host_accommodations_to_navigation_new_accommodation, bundle);
                     }
                 }
 
@@ -195,9 +197,11 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
                 }
             }));
 
-            editAvailabilityButton.setOnClickListener(v -> {}
-                    // FragmentTransition.to(UpdateAccommodationAvailabilityFragment.newInstance(accommodation.getId()), (FragmentActivity) context, true, R.id.host_accommodations_fragment)
-            );
+            editAvailabilityButton.setOnClickListener(v -> {
+                Bundle bundle = new Bundle();
+                bundle.putLong("accommodationId", accommodation.getId());
+                Navigation.findNavController(v).navigate(R.id.action_navigation_host_accommodations_to_navigation_update_accommodation_availability, bundle);
+            });
 
             switch (type) {
                 case ADMIN_REVIEW_PENDING_ACCOMMODATIONS:
