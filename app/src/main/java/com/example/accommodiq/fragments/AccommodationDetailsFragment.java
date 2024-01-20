@@ -78,6 +78,7 @@ public class AccommodationDetailsFragment extends Fragment {
         if (getArguments() != null && getArguments().containsKey("accommodationId") && accommodationClient == null ) {
             accommodationId = getArguments().getLong("accommodationId");
             accommodationClient = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(AccommodationClient.class);
+            guestClient = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(GuestClient.class);
         }
     }
 
@@ -305,7 +306,7 @@ public class AccommodationDetailsFragment extends Fragment {
             }
 
             ReservationRequestDto requestDto = new ReservationRequestDto(dateFrom, dateTo, guestsValue, accommodationId);
-            Call<ReservationRequestDto> createReservationCall = guestClient.createReservation(loggedInId, requestDto);
+            Call<ReservationRequestDto> createReservationCall = guestClient.createReservation(requestDto);
             createReservationCall.enqueue(new Callback<ReservationRequestDto>() {
                 @Override
                 public void onResponse(Call<ReservationRequestDto> call, Response<ReservationRequestDto> response) {
