@@ -3,8 +3,10 @@ package com.example.accommodiq.services.interfaces;
 import com.example.accommodiq.dtos.AccountDetailsDto;
 import com.example.accommodiq.dtos.CredentialsDto;
 import com.example.accommodiq.dtos.LoginResponseDto;
+import com.example.accommodiq.dtos.MessageDto;
 import com.example.accommodiq.dtos.PasswordDto;
 import com.example.accommodiq.dtos.RegisterDto;
+import com.example.accommodiq.dtos.ReportRequestDto;
 import com.example.accommodiq.models.Account;
 
 import retrofit2.Call;
@@ -53,4 +55,7 @@ public interface AccountApiService {
 
     @GET("users/{accountId}/profile")
     Call<AccountDetailsDto> getAccountDetailsById(@Path("accountId") Long accountId);
+
+    @POST("users/{accountId}/reports")
+    Call<MessageDto> reportAccount(@Path("accountId") Long accountId,@Body ReportRequestDto reportRequest);
 }

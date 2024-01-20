@@ -178,4 +178,5 @@
         android:name="com.example.accommodiq.ui.notifications.NotificationSettingsFragment"
         android:label="@string/title_notification_settings"
         tools:layout="@layout/fragment_notification_setting_list" />
+
 </navigation>

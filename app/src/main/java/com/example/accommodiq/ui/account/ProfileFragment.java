@@ -55,6 +55,8 @@ public class ProfileFragment extends Fragment {
     private EditText editTextReview;
     private RatingBar ratingBarReview;
     private Button buttonSendReview;
+    private View ratingLayout;
+    private TextView reviewsTextView;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -99,9 +101,7 @@ public class ProfileFragment extends Fragment {
             if (mainActivity != null) {
                 startActivity(new Intent(mainActivity, LoginActivity.class));
                 mainActivity.finish();
-
                 FirebaseMessaging.getInstance().unsubscribeFromTopic("user-" + JwtUtils.getLoggedInId(requireContext()));
-
                 JwtUtils.clearJwtAndRole(requireContext());
 
                 Intent intent = new Intent(getContext(), LoginActivity.class);
@@ -113,6 +113,8 @@ public class ProfileFragment extends Fragment {
         editTextReview = view.findViewById(R.id.editTextReview);
         ratingBarReview = view.findViewById(R.id.ratingBarReview);
         buttonSendReview = view.findViewById(R.id.buttonSendReview);
+        ratingLayout = view.findViewById(R.id.rating_layout);
+        reviewsTextView = view.findViewById(R.id.reviews_text_view);
 
         return view;
     }
@@ -157,6 +159,14 @@ public class ProfileFragment extends Fragment {
         buttonSendReview.setOnClickListener( v ->  {
             String reviewComment = editTextReview.getText().toString();
             int starRating = (int) ratingBarReview.getRating();
+            if(reviewComment.length()<3) {
+                Toast.makeText(getContext(), "Review must be at least 3 characters long", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(starRating == 0) {
+                Toast.makeText(getContext(), "Please select a rating", Toast.LENGTH_SHORT).show();
+                return;
+            }
             profileViewModel.sendReview(new ReviewRequestDto(starRating, reviewComment), accountId);
             editTextReview.setText("");
             ratingBarReview.setRating(0);
@@ -176,7 +186,7 @@ public class ProfileFragment extends Fragment {
             } else {
                 buttonReport.setVisibility(View.GONE);
             }
-            if(JwtUtils.getRole(getContext()) != null && JwtUtils.getRole(getContext()).equals("GUEST")) {
+            if(JwtUtils.getRole(getContext()) != null && JwtUtils.getRole(getContext()).equals("GUEST") && accountDetails.getRole().equals(AccountRole.HOST)) {
                 addReviewLayout.setVisibility(View.VISIBLE);
             } else {
                 addReviewLayout.setVisibility(View.GONE);
@@ -212,12 +222,35 @@ public class ProfileFragment extends Fragment {
         if (accountDetails.getRole().equals(AccountRole.HOST)) {
             profileViewModel.loadHostReviews(accountId);
         }
+        if(accountDetails.getRole().equals(AccountRole.GUEST)) {
+            ratingLayout.setVisibility(View.GONE);
+            addReviewLayout.setVisibility(View.GONE);
+            reviewsTextView.setVisibility(View.GONE);
+        }
     }
 
     private void updateReviewsList(List<ReviewDto> reviews) {
         reviewsAdapter.clear();
         reviewsAdapter.addAll(reviews);
         reviewsAdapter.notifyDataSetChanged();
+        calculateRating(reviews);
+    }
+
+    private void calculateRating(List<ReviewDto> reviews) {
+        if (reviews == null || reviews.isEmpty()) {
+            ratingBar.setRating(0);
+            ratingText.setText("0");
+            return;
+        }
+
+        float sum = 0;
+        for (ReviewDto review : reviews) {
+            sum += review.getRating();
+        }
+
+        float rating = sum / reviews.size();
+        ratingBar.setRating(rating);
+        ratingText.setText(String.format("%.2f", rating)+" "+reviews.size());
     }
 
     private void onReportReview(long reviewId) {

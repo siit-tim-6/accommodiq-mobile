@@ -47,3 +47,5 @@ replay_pid*
 
 # config propertis (local ips and api keys)
 /app/src/main/assets/config.properties
+
+/app/accommodiq-fb013-firebase-adminsdk-q8nv4-56e8319174.json

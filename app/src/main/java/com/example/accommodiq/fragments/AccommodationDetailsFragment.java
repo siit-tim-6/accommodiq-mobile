@@ -34,16 +34,22 @@ import com.example.accommodiq.dtos.AccommodationDetailsDto;
 import com.example.accommodiq.dtos.AccommodationDetailsReviewDto;
 import com.example.accommodiq.dtos.AccommodationListDto;
 import com.example.accommodiq.dtos.AccommodationPriceDto;
+import com.example.accommodiq.dtos.ErrorResponseDto;
+import com.example.accommodiq.dtos.MessageDto;
 import com.example.accommodiq.dtos.ReservationRequestDto;
+import com.example.accommodiq.dtos.ReviewDto;
+import com.example.accommodiq.dtos.ReviewRequestDto;
 import com.example.accommodiq.listener.OnDeleteClickListener;
 import com.example.accommodiq.listener.OnReportClickListener;
 import com.example.accommodiq.listener.OnUserNameClickListener;
 import com.example.accommodiq.models.Review;
+import com.example.accommodiq.services.interfaces.ReviewApiService;
 import com.example.accommodiq.ui.account.ProfileFragment;
 import com.example.accommodiq.utils.DateUtils;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -59,6 +65,7 @@ public class AccommodationDetailsFragment extends Fragment {
     private GuestClient guestClient;
     private Long dateFrom = null;
     private Long dateTo = null;
+    private ReviewApiService reviewApiService;
 
     public AccommodationDetailsFragment() { }
 
@@ -66,6 +73,7 @@ public class AccommodationDetailsFragment extends Fragment {
         this.accommodationId = accommodationId;
         this.accommodationClient = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(AccommodationClient.class);
         this.guestClient = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(GuestClient.class);
+        this.reviewApiService = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(ReviewApiService.class);
     }
 
     public static AccommodationDetailsFragment newInstance(long accommodationId) {
@@ -78,6 +86,7 @@ public class AccommodationDetailsFragment extends Fragment {
         if (getArguments() != null && getArguments().containsKey("accommodationId") && accommodationClient == null ) {
             accommodationId = getArguments().getLong("accommodationId");
             accommodationClient = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(AccommodationClient.class);
+            reviewApiService = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(ReviewApiService.class);
         }
     }
 
@@ -112,6 +121,14 @@ public class AccommodationDetailsFragment extends Fragment {
         TextView totalPriceTextView = view.findViewById(R.id.accommodation_details_total_price);
         EditText guestsField = view.findViewById(R.id.accommodation_details_guests_field);
         Button reserveButton = view.findViewById(R.id.accommodation_details_reserve);
+        View addReviewLayout = view.findViewById(R.id.include_add_review);
+        EditText editTextReview = view.findViewById(R.id.editTextReview);
+        RatingBar ratingBarReview = view.findViewById(R.id.ratingBarReview);
+        Button buttonSendReview = view.findViewById(R.id.buttonSendReview);
+
+        if (JwtUtils.getRole(getActivity()) == null || !JwtUtils.getRole(getActivity()).equals("GUEST")) {
+            addReviewLayout.setVisibility(View.GONE);
+        }
 
         hostNameTextView.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
@@ -179,6 +196,22 @@ public class AccommodationDetailsFragment extends Fragment {
                     });
                 }
             });
+        });
+
+        buttonSendReview.setOnClickListener( v ->  {
+            String reviewComment = editTextReview.getText().toString();
+            int starRating = (int) ratingBarReview.getRating();
+            if(reviewComment.length()<3){
+                Toast.makeText(getContext(), "Review must be at least 3 characters long", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(starRating==0){
+                Toast.makeText(getContext(), "Please select a rating", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            sendReview(new ReviewRequestDto(starRating, reviewComment), accommodation.getId());
+            editTextReview.setText("");
+            ratingBarReview.setRating(0);
         });
 
         Call<AccommodationDetailsDto> accommodationDetailsCall = accommodationClient.getAccommodationDetails(accommodationId);
@@ -324,12 +357,74 @@ public class AccommodationDetailsFragment extends Fragment {
         });
     }
 
+    private void sendReview(ReviewRequestDto reviewRequestDto, long accommodationId) {
+        reviewApiService.addAccommodationReview(accommodationId, reviewRequestDto).enqueue(new Callback<ReviewDto>() {
+            @Override
+            public void onResponse(Call<ReviewDto> call, Response<ReviewDto> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(getContext(), "Review added successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    String errorMessage = "";
+                    if (response.errorBody() != null) {
+                        try {
+                            ErrorResponseDto errorResponse = new Gson().fromJson(response.errorBody().charStream(), ErrorResponseDto.class);
+                            errorMessage += ": " + errorResponse.getMessage();
+                        } catch (Exception e) {
+                            errorMessage += "Error parsing error message";
+                        }
+                    }
+                    Log.d("Review", errorMessage);
+                    Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ReviewDto> call, Throwable t) {
+                Toast.makeText(getContext(), "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private OnReportClickListener reportClickListener = reviewId -> {
-        // Implement reporting logic here
+        reviewApiService.reportReview(reviewId).enqueue(new Callback<MessageDto>() {
+            @Override
+            public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
+                Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<MessageDto> call, Throwable t) {
+                Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
+            }
+        });
     };
 
     private OnDeleteClickListener deleteClickListener = reviewId -> {
-        // Implement delete logic here
+        reviewApiService.deleteReview(reviewId).enqueue(new Callback<MessageDto>() {
+            @Override
+            public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
+                accommodation.getReviews().removeIf(review -> review.getId() == reviewId);
+                ((ReviewsAdapter) ((ListView) getView().findViewById(R.id.reviews_list)).getAdapter()).notifyDataSetChanged();
+                calculateRating();
+                Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            private void calculateRating() {
+                float rating = 0;
+                for ( ReviewDto review : accommodation.getReviews()) {
+                    rating += review.getRating();
+                }
+                rating /= accommodation.getReviews().size();
+                accommodation.setRating(rating);
+                ((TextView) getView().findViewById(R.id.accommodation_details_rating)).setText(String.valueOf(rating));
+                ((RatingBar) getView().findViewById(R.id.accommodation_details_rating_stars)).setRating(rating);
+            }
+
+            @Override
+            public void onFailure(Call<MessageDto> call, Throwable t) {
+                Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
+            }
+        });
     };
 
     private OnUserNameClickListener userNameClickListener = accountId -> {
