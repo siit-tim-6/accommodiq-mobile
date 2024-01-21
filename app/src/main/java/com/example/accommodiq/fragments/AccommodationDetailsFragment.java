@@ -133,7 +133,6 @@ public class AccommodationDetailsFragment extends Fragment implements OnMapReady
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ImageButton favoriteImageButton = view.findViewById(R.id.favorite_button);
         TextView dateRangeTextView = view.findViewById(R.id.date_range_text);
         Button dateRangePickerButton = view.findViewById(R.id.date_range_picker_button);
         ListView reviewsListView = view.findViewById(R.id.reviews_list);
@@ -167,10 +166,6 @@ public class AccommodationDetailsFragment extends Fragment implements OnMapReady
             Bundle bundle = new Bundle();
             bundle.putLong("accountId", accommodation.getHost().getId());
             Navigation.findNavController(getView()).navigate(R.id.action_accommodationDetailsFragment_to_profileFragment, bundle);
-        });
-
-        favoriteImageButton.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Added to favorites!", Toast.LENGTH_SHORT).show();
         });
 
         dateRangePickerButton.setOnClickListener(v -> {
