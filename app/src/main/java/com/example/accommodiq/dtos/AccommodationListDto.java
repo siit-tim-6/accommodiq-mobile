@@ -12,6 +12,7 @@ public class AccommodationListDto {
     private int maxGuests;
     private double totalPrice;
     private String pricingType;
+    private String status;
 
     public AccommodationListDto() {
     }
@@ -102,5 +103,13 @@ public class AccommodationListDto {
 
     public void setLocation(LocationDto location) {
         this.location = location;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

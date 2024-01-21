@@ -14,6 +14,12 @@
         android:title="@string/host_accommodations" />
 
     <item
+        android:id="@+id/navigation_reservations"
+        android:icon="@drawable/reservations_icon"
+        android:menuCategory="secondary"
+        android:title="@string/title_reservations" />
+
+    <item
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/icon_notifications"
         android:menuCategory="secondary"

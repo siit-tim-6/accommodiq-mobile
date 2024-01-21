@@ -6,12 +6,6 @@
     app:startDestination="@+id/navigation_accommodationListFragment">
 
     <fragment
-        android:id="@+id/navigation_reservations"
-        android:name="com.example.accommodiq.ui.reservations.ReservationsFragment"
-        android:label="@string/title_reservations"
-        tools:layout="@layout/fragment_reservations" />
-
-    <fragment
         android:id="@+id/navigation_favorites"
         android:name="com.example.accommodiq.ui.favorites.FavoritesFragment"
         android:label="@string/title_favorites"
@@ -38,6 +32,17 @@
         <action
             android:id="@+id/action_navigation_accommodationListFragment_to_navigation_user_reports"
             app:destination="@id/navigation_user_reports" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_reservations"
+        android:name="com.example.accommodiq.fragments.reservation.ReservationsListFragment"
+        android:label="ReservationsListFragment"
+        tools:layout="@layout/fragment_reservations_list">
+        <action
+            android:id="@+id/action_reservations_to_accommodationDetailsFragment"
+            app:destination="@id/navigation_accommodationDetails" />
+
     </fragment>
 
     <fragment

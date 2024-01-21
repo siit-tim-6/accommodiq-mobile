@@ -13,6 +13,6 @@ public interface GuestClient {
             "User-Agent: Mobile-Android",
             "Content-Type: application/json"
     })
-    @POST("guests/{guestId}/reservations")
-    Call<ReservationRequestDto> createReservation(@Path("guestId") long guestId, @Body ReservationRequestDto body);
+    @POST("guests/reservations")
+    Call<ReservationRequestDto> createReservation(@Body ReservationRequestDto body);
 }

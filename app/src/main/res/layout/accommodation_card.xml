@@ -81,7 +81,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
@@ -172,6 +172,8 @@
             android:id="@+id/accommodation_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp" />
+            android:text="@string/prompt_status"
+            android:layout_margin="5dp"
+            app:drawableStartCompat="@drawable/status_icon" />
     </LinearLayout>
 </LinearLayout>

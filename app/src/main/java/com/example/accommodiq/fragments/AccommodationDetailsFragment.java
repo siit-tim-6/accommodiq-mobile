@@ -86,6 +86,7 @@ public class AccommodationDetailsFragment extends Fragment {
         if (getArguments() != null && getArguments().containsKey("accommodationId") && accommodationClient == null ) {
             accommodationId = getArguments().getLong("accommodationId");
             accommodationClient = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(AccommodationClient.class);
+            guestClient = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(GuestClient.class);
             reviewApiService = RetrofitClientInstance.getRetrofitInstance(getActivity()).create(ReviewApiService.class);
         }
     }
@@ -155,8 +156,8 @@ public class AccommodationDetailsFragment extends Fragment {
 
             dateRangePicker.addOnPositiveButtonClickListener(selection -> {
                 dateRangeTextView.setText(String.format("%s - %s", DateUtils.convertTimeToDate(selection.first), DateUtils.convertTimeToDate(selection.second)));
-                dateFrom = selection.first / 1000;
-                dateTo = selection.second / 1000;
+                dateFrom = selection.first;
+                dateTo = selection.second;
 
                 if (accommodation != null && dateFrom != null && dateTo != null) {
                     int guestsInput;
@@ -338,7 +339,7 @@ public class AccommodationDetailsFragment extends Fragment {
             }
 
             ReservationRequestDto requestDto = new ReservationRequestDto(dateFrom, dateTo, guestsValue, accommodationId);
-            Call<ReservationRequestDto> createReservationCall = guestClient.createReservation(loggedInId, requestDto);
+            Call<ReservationRequestDto> createReservationCall = guestClient.createReservation(requestDto);
             createReservationCall.enqueue(new Callback<ReservationRequestDto>() {
                 @Override
                 public void onResponse(Call<ReservationRequestDto> call, Response<ReservationRequestDto> response) {
