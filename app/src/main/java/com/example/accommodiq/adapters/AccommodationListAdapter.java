@@ -138,7 +138,8 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
             ratingBar.setRating(accommodation.getRating().floatValue());
             ratingTextView.setText(String.valueOf(accommodation.getRating()));
             reviewCountTextView.setText(reviewCount);
-            locationTextView.setText(accommodation.getLocation().getAddress());
+            if (accommodation.getLocation() != null)
+                locationTextView.setText(accommodation.getLocation().getAddress());
             guestsTextView.setText(guests);
             pricePerNightTextView.setText(pricePerNight);
             totalPriceTextView.setText(totalPrice);
