@@ -40,4 +40,11 @@ public interface NotificationsClient {
     })
     @PUT("users/notification-settings")
     Call<Void> updateNotificationSettings(@Body List<NotificationSettingDto> notificationSettings);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json"
+    })
+    @PUT("users/notifications/seen")
+    Call<Void> seenAllNotifications();
 }

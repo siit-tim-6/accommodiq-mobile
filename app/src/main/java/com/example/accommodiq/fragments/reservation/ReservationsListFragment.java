@@ -1,15 +1,11 @@
 package com.example.accommodiq.fragments.reservation;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.util.Pair;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.ListFragment;
-import androidx.versionedparcelable.ParcelImpl;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +14,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.util.Pair;
+import androidx.fragment.app.ListFragment;
 
 import com.example.accommodiq.R;
 import com.example.accommodiq.adapters.ReservationListAdapter;
@@ -37,7 +38,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ReservationsListFragment extends ListFragment {
+public class ReservationsListFragment extends ListFragment implements SensorEventListener {
     private ReservationListAdapter adapter;
     private ReservationClient reservationClient;
     private List<ReservationCardDto> reservations = null;
@@ -45,6 +46,14 @@ public class ReservationsListFragment extends ListFragment {
     private ReservationListType type;
     private Long dateFrom = null;
     private Long dateTo = null;
+
+    private SensorManager sensorManager;
+    private static final int SHAKE_THRESHOLD = 800;
+    private long lastUpdate;
+    private long lastSort;
+    private float last_x;
+    private float last_y;
+    private float last_z;
 
     public ReservationsListFragment() {
         // Required empty public constructor
@@ -60,7 +69,7 @@ public class ReservationsListFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         reservationClient = RetrofitClientInstance.getRetrofitInstance(getContext()).create(ReservationClient.class);
 
-        String role = JwtUtils.getRole(getContext());
+        String role = JwtUtils.getRole(requireContext());
         if (Objects.equals(role, "GUEST")) {
             type = ReservationListType.GUEST;
         } else {
@@ -80,7 +89,7 @@ public class ReservationsListFragment extends ListFragment {
 
         reservationsCall.enqueue(new Callback<List<ReservationCardDto>>() {
             @Override
-            public void onResponse(Call<List<ReservationCardDto>> call, Response<List<ReservationCardDto>> response) {
+            public void onResponse(@NonNull Call<List<ReservationCardDto>> call, @NonNull Response<List<ReservationCardDto>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     reservations = response.body();
 
@@ -94,7 +103,7 @@ public class ReservationsListFragment extends ListFragment {
             }
 
             @Override
-            public void onFailure(Call<List<ReservationCardDto>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<ReservationCardDto>> call, @NonNull Throwable t) {
                 Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
             }
         });
@@ -105,7 +114,7 @@ public class ReservationsListFragment extends ListFragment {
 
         reservationsCall.enqueue(new Callback<List<Long>>() {
             @Override
-            public void onResponse(Call<List<Long>> call, Response<List<Long>> response) {
+            public void onResponse(@NonNull Call<List<Long>> call, @NonNull Response<List<Long>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     cancellableReservationIds = response.body();
 
@@ -119,7 +128,7 @@ public class ReservationsListFragment extends ListFragment {
             }
 
             @Override
-            public void onFailure(Call<List<Long>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Long>> call, @NonNull Throwable t) {
                 Toast.makeText(getContext(), "Error happened", Toast.LENGTH_SHORT).show();
             }
         });
@@ -143,9 +152,7 @@ public class ReservationsListFragment extends ListFragment {
             if (!dateRangePicker.isAdded())
                 dateRangePicker.show(this.getParentFragmentManager(), "AccommodIQ");
 
-            dateRangePicker.addOnNegativeButtonClickListener(v1 -> {
-                dateRangePicker.dismiss();
-            });
+            dateRangePicker.addOnNegativeButtonClickListener(v1 -> dateRangePicker.dismiss());
 
             dateRangePicker.addOnPositiveButtonClickListener(selection -> {
                 dateFrom = selection.first;
@@ -171,5 +178,60 @@ public class ReservationsListFragment extends ListFragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
+        sensorManager.registerListener(this,
+                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        sensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+
+            long curTime = System.currentTimeMillis();
+            // only allow one update every 100ms.
+            if ((curTime - lastUpdate) > 100) {
+                long diffTime = (curTime - lastUpdate);
+                lastUpdate = curTime;
+
+                float[] values = sensorEvent.values;
+                float x = values[0];
+                float y = values[1];
+                float z = values[2];
+
+                float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
+
+                if (speed > SHAKE_THRESHOLD) {
+                    if (lastSort == 0 || (curTime - lastSort) > 5000){
+                        lastSort = curTime;
+                        adapter.sortReservationsByDate();
+                        Toast.makeText(getContext(), "Sorted", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                last_x = x;
+                last_y = y;
+                last_z = z;
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
 }

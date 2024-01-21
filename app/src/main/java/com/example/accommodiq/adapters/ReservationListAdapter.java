@@ -29,8 +29,9 @@ import com.example.accommodiq.utils.DateUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Comparator;
 import java.util.Objects;
+import java.util.stream.IntStream;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,7 +41,7 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationCardDto> {
     private final ArrayList<ReservationCardDto> reservations;
     private final Context context;
     private final ReservationListType type;
-    private ArrayList<Long> cancellableReservationIds;
+    private final ArrayList<Long> cancellableReservationIds;
 
     public ReservationListAdapter(Context context, ArrayList<ReservationCardDto> reservations, ReservationListType type, ArrayList<Long> cancellableReservationIds) {
         super(context, R.layout.reservation_card, reservations);
@@ -114,7 +115,7 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationCardDto> {
 
                 deleteReservationCall.enqueue(new Callback<MessageDto>() {
                     @Override
-                    public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
+                    public void onResponse(@NonNull Call<MessageDto> call, @NonNull Response<MessageDto> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             Toast.makeText(context, "Reservation deleted successfully!", Toast.LENGTH_SHORT).show();
                             reservations.remove(reservation);
@@ -125,23 +126,17 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationCardDto> {
                     }
 
                     @Override
-                    public void onFailure(Call<MessageDto> call, Throwable t) {
+                    public void onFailure(@NonNull Call<MessageDto> call, @NonNull Throwable t) {
                         Toast.makeText(context, "Error while deleting reservation.", Toast.LENGTH_SHORT).show();
                     }
                 });
             });
 
-            cancelReservationButton.setOnClickListener(v -> {
-                changeReservationStatus("CANCELLED", reservationClient, reservation);
-            });
+            cancelReservationButton.setOnClickListener(v -> changeReservationStatus("CANCELLED", reservationClient, reservation));
 
-            acceptReservationButton.setOnClickListener(v -> {
-                changeReservationStatus("ACCEPTED", reservationClient, reservation);
-            });
+            acceptReservationButton.setOnClickListener(v -> changeReservationStatus("ACCEPTED", reservationClient, reservation));
 
-            declineReservationButton.setOnClickListener(v -> {
-                changeReservationStatus("DECLINED", reservationClient, reservation);
-            });
+            declineReservationButton.setOnClickListener(v -> changeReservationStatus("DECLINED", reservationClient, reservation));
 
             if (type == ReservationListType.GUEST) {
                 guestInfoTextView.setVisibility(View.GONE);
@@ -190,7 +185,7 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationCardDto> {
 
         changeReservationStatusCall.enqueue(new Callback<ReservationCardDto>() {
             @Override
-            public void onResponse(Call<ReservationCardDto> call, Response<ReservationCardDto> response) {
+            public void onResponse(@NonNull Call<ReservationCardDto> call, @NonNull Response<ReservationCardDto> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(context, "Reservation " + status + " successfully!", Toast.LENGTH_SHORT).show();
                     reservations.remove(reservation);
@@ -205,9 +200,26 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationCardDto> {
             }
 
             @Override
-            public void onFailure(Call<ReservationCardDto> call, Throwable t) {
+            public void onFailure(@NonNull Call<ReservationCardDto> call, @NonNull Throwable t) {
                 Toast.makeText(context, "Error while changing reservation status", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+    public void sortReservationsByDate() {
+        if (reservations.isEmpty()) {
+            return;
+        }
+
+        boolean isAscending = IntStream.range(1, reservations.size())
+                .allMatch(i -> reservations.get(i - 1).getStartDate() <= reservations.get(i).getStartDate());
+
+
+        reservations.sort(isAscending
+                ? Comparator.comparingLong(ReservationCardDto::getStartDate).reversed()
+                : Comparator.comparingLong(ReservationCardDto::getStartDate));
+
+        notifyDataSetChanged();
+    }
+
 }
