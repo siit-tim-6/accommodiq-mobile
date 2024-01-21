@@ -33,4 +33,10 @@ public class LocationDto implements Serializable {
 
     public LocationDto() {
     }
+
+    public LocationDto(String address, Double latitude, Double longitude) {
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }
