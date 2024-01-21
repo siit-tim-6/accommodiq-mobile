@@ -69,6 +69,7 @@ public class FinancialReportMonthlyFragment extends ListFragment {
         Spinner accommodationSelect = view.findViewById(R.id.financial_report_monthly_accommodation);
         EditText yearInput = view.findViewById(R.id.financial_report_monthly_year);
         TextView totalRevenue = view.findViewById(R.id.financial_report_total_revenue_monthly);
+        TextView totalReservations = view.findViewById(R.id.financial_report_total_reservations_monthly);
         PieChart chart = view.findViewById(R.id.monthly_reports_pie_chart);
 
         Call<List<AccommodationTitleDto>> titlesCall = financialReportClient.getAccommodationTitles();
@@ -99,19 +100,21 @@ public class FinancialReportMonthlyFragment extends ListFragment {
             try {
                 selectedYear = Integer.parseInt(yearInput.getText().toString());
             } catch (NumberFormatException ex) {
+                Toast.makeText(getContext(), "Invalid year!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (accommodationSelect.getSelectedItem() == null) {
+                Toast.makeText(getContext(), "Invalid accommodation!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             Long selectedAccommodationId = (((AccommodationTitleDto) accommodationSelect.getSelectedItem()).getId());
-            searchEntries(selectedAccommodationId, selectedYear, chart, totalRevenue);
+            searchEntries(selectedAccommodationId, selectedYear, chart, totalRevenue, totalReservations);
         });
     }
 
-    private void searchEntries(Long accommodationId, int year, PieChart chart, TextView totalRevenue) {
+    private void searchEntries(Long accommodationId, int year, PieChart chart, TextView totalRevenue, TextView totalReservations) {
         Call<List<FinancialReportMonthlyEntryDto>> entriesCall = financialReportClient.getAccommodationFinancialReport(accommodationId, year);
 
         entriesCall.enqueue(new Callback<List<FinancialReportMonthlyEntryDto>>() {
@@ -119,6 +122,8 @@ public class FinancialReportMonthlyFragment extends ListFragment {
             public void onResponse(Call<List<FinancialReportMonthlyEntryDto>> call, Response<List<FinancialReportMonthlyEntryDto>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     entries = response.body();
+                    chart.clearChart();
+                    colors.clear();
                     for (FinancialReportMonthlyEntryDto entry : entries) {
                         String color = getRandomHexColor();
                         chart.addPieSlice(new PieModel(
@@ -127,7 +132,8 @@ public class FinancialReportMonthlyFragment extends ListFragment {
                                 Color.parseColor(color)
                         ));
                         colors.add(color);
-                        totalRevenue.setText(String.format("Total Revenue %d€", entries.stream().mapToInt(entryDto -> ((int) entryDto.getRevenue())).sum()));
+                        totalRevenue.setText(String.format("Total Revenue %.2f€", entries.stream().mapToDouble(FinancialReportMonthlyEntryDto::getRevenue).sum()));
+                        totalReservations.setText(String.format("Total Reservations %d", entries.stream().mapToInt(FinancialReportMonthlyEntryDto::getReservationCount).sum()));
                     }
                     FinancialReportMonthlyAdapter adapter = new FinancialReportMonthlyAdapter(getContext(), (ArrayList<FinancialReportMonthlyEntryDto>) entries, colors);
                     setListAdapter(adapter);

@@ -41,8 +41,8 @@ import retrofit2.Response;
 public class FinancialReportFragment extends ListFragment {
     private List<FinancialReportEntryDto> entries;
     private FinancialReportClient financialReportClient;
-    private Long dateFrom;
-    private Long dateTo;
+    private Long dateFrom = null;
+    private Long dateTo = null;
     private ArrayList<String> colors = new ArrayList<>();
 
     public FinancialReportFragment() {
@@ -71,9 +71,15 @@ public class FinancialReportFragment extends ListFragment {
         Button accommodationReportsBtn = view.findViewById(R.id.accommodation_reports_btn);
         TextView dateRangeSearch = view.findViewById(R.id.financial_report_date_range_search);
         TextView totalRevenue = view.findViewById(R.id.financial_report_total_revenue);
+        TextView totalReservations = view.findViewById(R.id.financial_report_total_reservations);
         PieChart chart = view.findViewById(R.id.reports_pie_chart);
         CalendarConstraints dateValidator = (new CalendarConstraints.Builder()).setValidator(DateValidatorPointBackward.now()).build();
         MaterialDatePicker<Pair<Long, Long>> dateRangePicker = MaterialDatePicker.Builder.dateRangePicker().setCalendarConstraints(dateValidator).setTheme(R.style.ThemeMaterialCalendar).setTitleText("Select check-in and check-out date").setSelection(new Pair<>(null, null)).build();
+
+        if (dateFrom != null && dateTo != null) {
+            dateRangeSearch.setText(String.format("%s - %s", DateUtils.convertTimeToDate(dateFrom), DateUtils.convertTimeToDate(dateTo)));
+            searchEntries(chart, totalRevenue, totalReservations);
+        }
 
         dateRangeSearch.setOnClickListener(v -> {
             if (!dateRangePicker.isAdded())
@@ -91,7 +97,7 @@ public class FinancialReportFragment extends ListFragment {
         });
 
         btnSearch.setOnClickListener(v -> {
-            searchEntries(chart, totalRevenue);
+            searchEntries(chart, totalRevenue, totalReservations);
         });
 
         accommodationReportsBtn.setOnClickListener(v -> {
@@ -99,7 +105,7 @@ public class FinancialReportFragment extends ListFragment {
         });
     }
 
-    private void searchEntries(PieChart chart, TextView totalRevenue) {
+    private void searchEntries(PieChart chart, TextView totalRevenue, TextView totalReservations) {
         Call<List<FinancialReportEntryDto>> entriesCall = financialReportClient.getFinancialReport(dateFrom, dateTo);
 
         entriesCall.enqueue(new Callback<List<FinancialReportEntryDto>>() {
@@ -107,6 +113,8 @@ public class FinancialReportFragment extends ListFragment {
             public void onResponse(Call<List<FinancialReportEntryDto>> call, Response<List<FinancialReportEntryDto>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     entries = response.body();
+                    chart.clearChart();
+                    colors.clear();
                     for (FinancialReportEntryDto entry : entries) {
                         String color = getRandomHexColor();
                         chart.addPieSlice(new PieModel(
@@ -115,7 +123,8 @@ public class FinancialReportFragment extends ListFragment {
                                 Color.parseColor(color)
                         ));
                         colors.add(color);
-                        totalRevenue.setText(String.format("Total Revenue %d€", entries.stream().mapToInt(entryDto -> ((int) entryDto.getRevenue())).sum()));
+                        totalRevenue.setText(String.format("Total Revenue %.2f€", entries.stream().mapToDouble(FinancialReportEntryDto::getRevenue).sum()));
+                        totalReservations.setText(String.format("Total Reservations %d", entries.stream().mapToInt(FinancialReportEntryDto::getReservationCount).sum()));
                     }
                     FinancialReportAdapter adapter = new FinancialReportAdapter(getActivity(), (ArrayList<FinancialReportEntryDto>) entries, colors);
                     setListAdapter(adapter);

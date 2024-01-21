@@ -57,6 +57,14 @@
         android:textSize="20sp"
         android:textStyle="bold"/>
 
+    <TextView
+        android:layout_margin="5dp"
+        android:id="@+id/financial_report_total_reservations_monthly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
     <org.eazegraph.lib.charts.PieChart
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/monthly_reports_pie_chart"
