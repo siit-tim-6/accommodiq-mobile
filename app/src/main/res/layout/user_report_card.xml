@@ -17,7 +17,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/user_report_card"
             app:layout_constraintEnd_toStartOf="@id/button_layout"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,12 +35,22 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/reported_user_role"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@={observable.reportedUser.role}"
+                app:drawableLeftCompat="@drawable/icon_my_profile"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/reported_user"
+                />
+
             <LinearLayout
                 android:id="@+id/users_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/reported_user">
+                app:layout_constraintTop_toBottomOf="@+id/reported_user_role">
 
                 <TextView
                     android:layout_width="wrap_content"
