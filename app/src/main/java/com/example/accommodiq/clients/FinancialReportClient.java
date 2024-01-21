@@ -1,6 +1,7 @@
 package com.example.accommodiq.clients;
 
 import com.example.accommodiq.dtos.AccommodationListDto;
+import com.example.accommodiq.dtos.AccommodationTitleDto;
 import com.example.accommodiq.dtos.FinancialReportEntryDto;
 import com.example.accommodiq.dtos.FinancialReportMonthlyEntryDto;
 
@@ -26,4 +27,11 @@ public interface FinancialReportClient {
     })
     @GET("accommodations/{accommodationId}/financial-report")
     Call<List<FinancialReportMonthlyEntryDto>> getAccommodationFinancialReport(@Path("accommodationId") Long accommodationId, @Query("year") int year);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json"
+    })
+    @GET("hosts/accommodation-titles")
+    Call<List<AccommodationTitleDto>> getAccommodationTitles();
 }

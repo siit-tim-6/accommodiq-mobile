@@ -13,19 +13,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.accommodiq.R;
-import com.example.accommodiq.dtos.FinancialReportEntryDto;
+import com.example.accommodiq.dtos.FinancialReportMonthlyEntryDto;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class FinancialReportAdapter extends ArrayAdapter<FinancialReportEntryDto> {
-    private final ArrayList<FinancialReportEntryDto> entries;
-    private final Context context;
+public class FinancialReportMonthlyAdapter extends ArrayAdapter<FinancialReportMonthlyEntryDto> {
+    private final ArrayList<FinancialReportMonthlyEntryDto> entries;
     private final ArrayList<String> colors;
 
-    public FinancialReportAdapter(Context context, ArrayList<FinancialReportEntryDto> entries, ArrayList<String> colors) {
+    public FinancialReportMonthlyAdapter(Context context, ArrayList<FinancialReportMonthlyEntryDto> entries, ArrayList<String> colors) {
         super(context, R.layout.financial_report_card, entries);
-        this.context = context;
         this.entries = entries;
         this.colors = colors;
     }
@@ -35,15 +32,15 @@ public class FinancialReportAdapter extends ArrayAdapter<FinancialReportEntryDto
         return entries.size();
     }
 
-    @Nullable
-    @Override
-    public FinancialReportEntryDto getItem(int position) {
-        return entries.get(position);
-    }
-
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    @Nullable
+    @Override
+    public FinancialReportMonthlyEntryDto getItem(int position) {
+        return entries.get(position);
     }
 
     @NonNull
@@ -53,7 +50,7 @@ public class FinancialReportAdapter extends ArrayAdapter<FinancialReportEntryDto
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.financial_report_card, parent, false);
         }
 
-        FinancialReportEntryDto entry = getItem(position);
+        FinancialReportMonthlyEntryDto entry = getItem(position);
 
         TextView title = convertView.findViewById(R.id.financial_report_title);
         TextView profit = convertView.findViewById(R.id.financial_report_profit);
@@ -64,7 +61,7 @@ public class FinancialReportAdapter extends ArrayAdapter<FinancialReportEntryDto
             String profitString = entry.getRevenue() + "€";
             String reservationCountString = entry.getReservationCount() + " reservations";
 
-            title.setText(entry.getAccommodationTitle());
+            title.setText(entry.getMonth());
             profit.setText(profitString);
             reservationCount.setText(reservationCountString);
             colorBtn.setBackgroundColor(Color.parseColor(colors.get(position)));

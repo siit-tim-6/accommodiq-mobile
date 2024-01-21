@@ -53,7 +53,7 @@
         android:id="@+id/financial_report_total_revenue_monthly"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/total_revenue"
+        android:text="@string/total_revenue_monthly"
         android:textSize="20sp"
         android:textStyle="bold"/>
 
