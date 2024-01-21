@@ -57,6 +57,7 @@ public class ProfileFragment extends Fragment {
     private Button buttonSendReview;
     private View ratingLayout;
     private TextView reviewsTextView;
+    private Button buttonFinancialReports;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -88,6 +89,10 @@ public class ProfileFragment extends Fragment {
         buttonReport = view.findViewById(R.id.buttonReport);
         reviewsList = view.findViewById(R.id.reviews_list);
         buttonSignOut = view.findViewById(R.id.signOutBtn);
+        buttonFinancialReports = view.findViewById(R.id.financialReportsBtn);
+        buttonFinancialReports.setOnClickListener(v -> {
+            Navigation.findNavController(requireView()).navigate(R.id.action_profileFragment_to_financialReportsFragment);
+        });
         buttonEditProfile.setOnClickListener(v -> {
             Navigation.findNavController(requireView()).navigate(R.id.action_profileFragment_to_authorizedProfileFragment);
         });
@@ -186,16 +191,20 @@ public class ProfileFragment extends Fragment {
             } else {
                 buttonReport.setVisibility(View.GONE);
             }
-            if(JwtUtils.getRole(getContext()) != null && JwtUtils.getRole(getContext()).equals("GUEST") && accountDetails.getRole().equals(AccountRole.HOST)) {
+            if (JwtUtils.getRole(getContext()) != null && JwtUtils.getRole(getContext()).equals("GUEST") && accountDetails.getRole().equals(AccountRole.HOST)) {
                 addReviewLayout.setVisibility(View.VISIBLE);
             } else {
                 addReviewLayout.setVisibility(View.GONE);
             }
-        }else {
+        } else {
             addReviewLayout.setVisibility(View.GONE);
             buttonReport.setVisibility(View.GONE);
             buttonEditProfile.setVisibility(View.VISIBLE);
             buttonSignOut.setVisibility(View.VISIBLE);
+
+            if (JwtUtils.getRole(getContext()) != null && JwtUtils.getRole(getContext()).equals("HOST")) {
+                buttonFinancialReports.setVisibility(View.VISIBLE);
+            }
         }
     }
 

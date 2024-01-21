@@ -51,6 +51,7 @@
     <string name="title_new_accommodation">New Accommodation</string>
     <string name="log_in_or_sign_up_btn_text">Log in or Sign up</string>
     <string name="sign_out">Sign Out</string>
+    <string name="financial_reports">Financial Reports</string>
     <string name="prompt_change_password">Change Password</string>
     <string name="title_hint">Title</string>
     <string name="location_hint">Location</string>
@@ -126,4 +127,11 @@
     <string name="prompt_accommodation_review">Accommodation Review</string>
     <string name="prompt_new_accommodation">New Accommodation</string>
     <string name="prompt_status">PENDING</string>
+    <string name="profit">45€</string>
+    <string name="reservation_count">5 reservations</string>
+    <string name="export_to_pdf">Export to PDF</string>
+    <string name="accommodation_report">Accommodation Report</string>
+    <string name="total_revenue">Enter a date range and search</string>
+    <string name="total_revenue_monthly">Select an accommodation and year and search</string>
+    <string name="year_input">Enter a year</string>
 </resources>
