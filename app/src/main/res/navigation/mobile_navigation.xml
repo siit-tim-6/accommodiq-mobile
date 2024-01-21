@@ -66,6 +66,9 @@
         <argument
             android:name="accommodationToModify"
             app:argType="com.example.accommodiq.dtos.ModifyAccommodationDto" />
+        <action
+            android:id="@+id/action_navigation_new_accommodation_to_navigation_host_accommodations"
+            app:destination="@id/navigation_host_accommodations" />
     </fragment>
 
     <fragment

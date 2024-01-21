@@ -22,8 +22,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.example.accommodiq.R;
+import com.example.accommodiq.apiConfig.RetrofitClientInstance;
 import com.example.accommodiq.databinding.FragmentNewAccommodationBinding;
 import com.example.accommodiq.dtos.AccommodationDetailsDto;
 import com.example.accommodiq.dtos.LocationDto;
@@ -59,13 +61,14 @@ public class NewAccommodationFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (accommodationDetailsDto != null) {
-            getImagesUris(accommodationDetailsDto.getImages());
-        }
 
         Bundle args = getArguments();
         if (args != null) {
                 accommodationDetailsDto = (ModifyAccommodationDto) args.getSerializable("accommodationToModify");
+        }
+
+        if (accommodationDetailsDto != null) {
+            getImagesUris(accommodationDetailsDto.getImages());
         }
 
         newAccommodationViewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
@@ -134,12 +137,13 @@ public class NewAccommodationFragment extends Fragment {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void getImagesUris(List<String> images) {
         List<Uri> imageUris = new ArrayList<>();
         for (String image : images) {
-            imageUris.add(Uri.parse(image));
+            imageUris.add(Uri.parse(RetrofitClientInstance.getServerIp(requireContext()) + "/images/" + image));
         }
-        uploadedImageUris.addAll(imageUris);
+        binding.textViewSelectedImages.setText("Selected Images: " + imageUris.size());
     }
 
     private void populateFields() {
@@ -212,6 +216,37 @@ public class NewAccommodationFragment extends Fragment {
     }
 
     private void createAndSendAccommodationData() {
+        if (this.accommodationDetailsDto != null && this.uploadedImageUris.isEmpty()) {
+            sendWithoutImages();
+        }
+        else {
+            sendWithImages();
+        }
+    }
+
+    private void sendWithoutImages() {
+        ModifyAccommodationDto dto = createAccommodationFromInput();
+        dto.setImages(accommodationDetailsDto.getImages());
+        newAccommodationViewModel.createNewAccommodation(dto, new Callback<AccommodationDetailsDto>() {
+            @Override
+            public void onResponse(@NonNull Call<AccommodationDetailsDto> call, @NonNull Response<AccommodationDetailsDto> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
+                    Navigation.findNavController(requireView()).navigate(R.id.action_navigation_new_accommodation_to_navigation_host_accommodations);
+                } else {
+                    Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<AccommodationDetailsDto> call, @NonNull Throwable t) {
+                // Handle the network or other errors here
+                Toast.makeText(getContext(), "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void sendWithImages() {
         newAccommodationViewModel.uploadImages(uploadedImageUris, getContext(), new Callback<List<String>>() {
             @Override
             public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
@@ -225,7 +260,7 @@ public class NewAccommodationFragment extends Fragment {
                         public void onResponse(@NonNull Call<AccommodationDetailsDto> call, @NonNull Response<AccommodationDetailsDto> response) {
                             if (response.isSuccessful()) {
                                 Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
-                                if (accommodationDetailsDto == null) resetFields();
+                                Navigation.findNavController(requireView()).navigate(R.id.action_navigation_new_accommodation_to_navigation_host_accommodations);
                             } else {
                                 Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
                             }
@@ -270,28 +305,6 @@ public class NewAccommodationFragment extends Fragment {
         }
 
         return true;
-    }
-
-    private void resetFields() {
-        binding.editTextName.setText("");
-        binding.editTextDescription.setText("");
-        binding.editTextAddress.setText("");
-        binding.editTextMinGuests.setText("");
-        binding.editTextMaxGuests.setText("");
-        binding.automaticallyAcceptCB.setChecked(false);
-
-        // Reset the spinner to the default value
-        binding.spinnerAccommodationType.setSelection(0);
-
-        // Clear the checkboxes
-        binding.checkBoxAC.setChecked(false);
-        binding.checkBoxBreakfast.setChecked(false);
-        binding.checkBoxKitchen.setChecked(false);
-        binding.checkBoxBalcony.setChecked(false);
-
-        // Clear the image URIs and update the display
-        uploadedImageUris.clear();
-        binding.textViewSelectedImages.setText("Selected Images: 0");
     }
 
     private LocationDto getLocationObject(String location) {
