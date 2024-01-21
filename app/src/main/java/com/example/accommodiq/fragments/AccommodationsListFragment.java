@@ -45,6 +45,8 @@ public class AccommodationsListFragment extends ListFragment {
     private Long dateFrom = null;
     private Long dateTo = null;
 
+    public AccommodationsListFragment() {}
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceBundle) {
@@ -63,7 +65,7 @@ public class AccommodationsListFragment extends ListFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (JwtUtils.getRole(requireContext()).equals("ADMIN")) {
+        if (JwtUtils.getRole(requireContext()) != null && JwtUtils.getRole(requireContext()).equals("ADMIN")) {
             Navigation.findNavController(requireView()).navigate(R.id.navigation_user_reports);
         }
 

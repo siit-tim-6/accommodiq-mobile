@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 
 import com.example.accommodiq.R;
@@ -46,6 +47,14 @@ import com.example.accommodiq.models.Review;
 import com.example.accommodiq.services.interfaces.ReviewApiService;
 import com.example.accommodiq.ui.account.ProfileFragment;
 import com.example.accommodiq.utils.DateUtils;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -58,7 +67,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AccommodationDetailsFragment extends Fragment {
+public class AccommodationDetailsFragment extends Fragment implements OnMapReadyCallback {
     private AccommodationDetailsDto accommodation;
     private long accommodationId;
     private AccommodationClient accommodationClient;
@@ -95,6 +104,29 @@ public class AccommodationDetailsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceBundle) {
         return inflater.inflate(R.layout.fragment_accommodation_details, container, false);
+    }
+
+    private void createMapAndInflate() {
+        SupportMapFragment mMapFragment = SupportMapFragment.newInstance();
+
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.map_container, mMapFragment).commit();
+
+        mMapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        LatLng markerLocation = new LatLng(accommodation.getLocation().getLatitude(), accommodation.getLocation().getLongitude());
+
+        googleMap.addMarker(new MarkerOptions()
+                .title(accommodation.getTitle())
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                .position(markerLocation));
+
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(markerLocation).zoom(14).build();
+
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     @Override
@@ -245,6 +277,7 @@ public class AccommodationDetailsFragment extends Fragment {
                     locationTextView.setText(accommodation.getLocation().getAddress());
                     String minPrice = "From " + accommodation.getMinPrice() + ((accommodation.getPricingType().equals("PER_GUEST")) ? " / guest" : "") + " / night";
                     minPriceTextView.setText(minPrice);
+                    createMapAndInflate();
                     boolean canReport = accommodation.getHost().getId() == JwtUtils.getLoggedInId(getActivity());
                     ReviewsAdapter reviewsAdapter = new ReviewsAdapter(
                             getContext(),

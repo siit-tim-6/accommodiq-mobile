@@ -174,7 +174,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private boolean canReportReview() {
-        return JwtUtils.getLoggedInId(getContext()) == accountId && JwtUtils.getRole(getContext()).equals("HOST");
+        return JwtUtils.getLoggedInId(getContext()) == accountId && JwtUtils.getRole(getContext()) != null && JwtUtils.getRole(getContext()).equals("HOST");
     }
 
     private void updateUIButtonsVisibility() {

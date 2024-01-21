@@ -181,11 +181,12 @@
             android:orientation="vertical"
             android:gravity="center">
 
-            <ImageView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                app:srcCompat="@drawable/map"
-                android:scaleType="centerCrop"/>
+                android:orientation="vertical"
+                android:id="@+id/map_container"
+                android:nestedScrollingEnabled="true" />
 
             <TextView
                 android:id="@+id/accommodation_details_location"
