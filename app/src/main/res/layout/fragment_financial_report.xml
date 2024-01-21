@@ -46,6 +46,15 @@
             android:textSize="11sp"/>
     </LinearLayout>
 
+    <TextView
+        android:layout_margin="5dp"
+        android:id="@+id/financial_report_total_revenue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/total_revenue"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
     <org.eazegraph.lib.charts.PieChart
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/reports_pie_chart"
@@ -60,7 +69,8 @@
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         tools:listitem="@layout/financial_report_card" />
 
 </LinearLayout>
