@@ -189,6 +189,10 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationCardDto> {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(context, "Reservation " + status + " successfully!", Toast.LENGTH_SHORT).show();
                     reservations.remove(reservation);
+                    String previousGuestName = reservation.getGuestName();
+                    int previousCancellations = reservation.getPastCancellations();
+                    response.body().setGuestName(previousGuestName);
+                    response.body().setPastCancellations(previousCancellations);
                     reservations.add(response.body());
                     if (Objects.equals(status, "CANCELLED")) {
                         cancellableReservationIds.remove(reservation.getId());
