@@ -1,16 +1,26 @@
 package com.example.accommodiq.fragments.financialReports;
 
+import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.pdf.PdfDocument;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.ListFragment;
 
+import android.os.Environment;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +39,10 @@ import com.example.accommodiq.dtos.FinancialReportMonthlyEntryDto;
 import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.models.PieModel;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,6 +126,45 @@ public class FinancialReportMonthlyFragment extends ListFragment {
             Long selectedAccommodationId = (((AccommodationTitleDto) accommodationSelect.getSelectedItem()).getId());
             searchEntries(selectedAccommodationId, selectedYear, chart, totalRevenue, totalReservations);
         });
+
+        exportToPdfBtn.setOnClickListener(v -> {
+            convertXmlToPdf(view);
+        });
+    }
+
+    private void convertXmlToPdf(View view) {
+        int viewWidth = view.getMeasuredWidth();
+        int viewHeight = view.getMeasuredHeight();
+
+        PdfDocument document = new PdfDocument();
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(viewWidth, viewHeight, 1).create();
+
+        PdfDocument.Page page = document.startPage(pageInfo);
+        Canvas canvas = page.getCanvas();
+
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+
+        view.draw(canvas);
+
+        document.finishPage(page);
+
+        File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        String fileName = "financial-report-" + Instant.now().toEpochMilli() + ".pdf";
+        File filePath = new File(downloadsDir, fileName);
+
+        try {
+            // Save the document to a file
+            FileOutputStream fos = new FileOutputStream(filePath);
+            document.writeTo(fos);
+            document.close();
+            fos.close();
+            // PDF conversion successful
+            Toast.makeText(getContext(), "PDF saved successfully in Downloads", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Error while saving to PDF", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void searchEntries(Long accommodationId, int year, PieChart chart, TextView totalRevenue, TextView totalReservations) {
