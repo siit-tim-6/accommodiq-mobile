@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_accommodationListFragment"
+        android:icon="@drawable/icon_search"
+        android:title="@string/title_search" />
+
+    <item
+        android:id="@+id/navigation_my_profile"
+        android:icon="@drawable/icon_my_profile"
+        android:title="@string/title_my_profile" />
+
+</menu>

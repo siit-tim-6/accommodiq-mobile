@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_user_reports"
+        android:icon="@drawable/icon_account_block"
+        android:menuCategory="secondary"
+        android:title="@string/prompt_reports" />
+
+    <item
+        android:id="@+id/navigation_accommodation_review"
+        android:icon="@drawable/icon_accommodation_review"
+        android:menuCategory="secondary"
+        android:title="@string/title_accommodation_review" />
+
+
+    <item
+        android:id="@+id/navigation_accommodation_review_approval"
+        android:icon="@drawable/icon_accommodation_review_report"
+        android:menuCategory="secondary"
+        android:title="@string/prompt_review_approval" />
+
+    <item
+        android:id="@+id/navigation_host_review_approval"
+        android:icon="@drawable/icon_host_review_report"
+        android:menuCategory="secondary"
+        android:title="@string/prompt_host_reviews" />
+
+
+    <item
+        android:id="@+id/navigation_my_profile"
+        android:icon="@drawable/icon_my_profile"
+        android:menuCategory="secondary"
+        android:title="@string/title_my_profile" />
+
+
+</menu>

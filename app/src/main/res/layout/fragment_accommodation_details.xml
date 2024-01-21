@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/accommodation_details_image"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:contentDescription="@string/city_center_apartment"
+                app:srcCompat="@drawable/accommodation_image"
+                app:shapeAppearanceOverlay="@style/roundedImageView"
+                android:scaleType="centerCrop"/>
+
+            <ImageButton
+                android:id="@+id/favorite_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/heart_icon"
+                android:layout_gravity="end"
+                android:background="@android:color/transparent"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:contentDescription="@string/favorite_button" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/accommodation_details_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
+            android:textStyle="bold"
+            android:text="@string/city_center_apartment"
+            android:textSize="28sp"
+            android:textAlignment="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/accommodation_details_host"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/host"
+                android:fontFamily="@font/inter"/>
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+                style="?android:attr/ratingBarStyleSmall"
+                android:numStars="5"
+                android:rating="4.92"
+                android:max="5"
+                android:progressTint="@color/black"
+                android:id="@+id/accommodation_details_host_stars"
+                android:paddingTop="2dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="5dp" />
+
+            <TextView
+                android:id="@+id/accommodation_details_host_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rating"
+                android:layout_marginEnd="5dp"
+                android:fontFamily="@font/inter"/>
+
+            <TextView
+                android:id="@+id/accommodation_details_host_review_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/review_count"
+                android:fontFamily="@font/inter"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:gravity="center">
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:numStars="5"
+                android:rating="4.92"
+                android:max="5"
+                android:progressTint="@color/black"
+                android:id="@+id/accommodation_details_rating_stars" />
+
+            <TextView
+                android:id="@+id/accommodation_details_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/rating"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/inter"/>
+
+            <TextView
+                android:id="@+id/accommodation_details_review_count"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/review_count"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:fontFamily="@font/inter"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:id="@+id/accommodation_details_guests"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/guests"
+                app:drawableStartCompat="@drawable/guest_icon"
+                android:drawablePadding="2dp"
+                android:fontFamily="@font/inter"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"/>
+
+            <TextView
+                android:id="@+id/accommodation_details_benefits"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wifi"
+                app:drawableStartCompat="@drawable/benefits_icon"
+                android:drawablePadding="2dp"
+                android:fontFamily="@font/inter"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/accommodation_details_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/description"
+            android:justificationMode="inter_word"
+            android:fontFamily="@font/inter" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:orientation="vertical"
+                android:id="@+id/map_container"
+                android:nestedScrollingEnabled="true" />
+
+            <TextView
+                android:id="@+id/accommodation_details_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/location_address"
+                android:drawablePadding="5dp"
+                app:drawableStartCompat="@drawable/location_icon"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/inter"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/date_range_picker_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select_dates"
+                android:backgroundTint="@color/black"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/inter" />
+
+            <TextView
+                android:id="@+id/date_range_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter"
+                android:text="@string/date_range_hint" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center" >
+
+            <EditText
+                android:id="@+id/accommodation_details_guests_field"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/guests_hint"
+                android:textSize="14sp"
+                android:inputType="number"
+                android:fontFamily="@font/inter"
+                android:importantForAutofill="no"
+                android:layout_marginEnd="15dp"
+                android:drawableStart="@drawable/guest_icon"
+                android:drawablePadding="5dp" />
+
+            <TextView
+                android:id="@+id/accommodation_details_min_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/price_per_night"
+                android:fontFamily="@font/inter"
+                android:layout_marginEnd="15dp" />
+
+            <TextView
+                android:id="@+id/accommodation_details_total_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/total_price"
+                android:fontFamily="@font/inter"
+                android:layout_marginEnd="15dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="10dp">
+
+            <Button
+                android:id="@+id/accommodation_details_reserve"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reserve"
+                android:backgroundTint="@color/black"
+                android:fontFamily="@font/inter" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reviews"
+                android:fontFamily="@font/inter"
+                android:textSize="20sp"/>
+
+            <include
+                android:id="@+id/include_add_review"
+                layout="@layout/add_review" />
+
+            <ListView
+                android:id="@+id/reviews_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/review_card"
+                android:nestedScrollingEnabled="true"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

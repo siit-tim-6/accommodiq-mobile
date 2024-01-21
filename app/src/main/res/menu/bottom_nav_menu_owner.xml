@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_accommodationListFragment"
+        android:icon="@drawable/icon_search"
+        android:menuCategory="secondary"
+        android:title="@string/title_search" />
+
+    <item
+        android:id="@+id/navigation_host_accommodations"
+        android:icon="@drawable/icon_listing"
+        android:menuCategory="secondary"
+        android:title="@string/host_accommodations" />
+
+    <item
+        android:id="@+id/navigation_reservations"
+        android:icon="@drawable/reservations_icon"
+        android:menuCategory="secondary"
+        android:title="@string/title_reservations" />
+
+    <item
+        android:id="@+id/navigation_notifications"
+        android:icon="@drawable/icon_notifications"
+        android:menuCategory="secondary"
+        android:title="@string/title_notifications" />
+
+
+    <item
+        android:id="@+id/navigation_my_profile"
+        android:icon="@drawable/icon_my_profile"
+        android:menuCategory="secondary"
+        android:title="@string/title_my_profile" />
+
+</menu>
