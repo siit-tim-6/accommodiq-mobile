@@ -125,4 +125,5 @@
     <string name="prompt_host_accommodations">Host Accommodations</string>
     <string name="prompt_accommodation_review">Accommodation Review</string>
     <string name="prompt_new_accommodation">New Accommodation</string>
+    <string name="prompt_status">PENDING</string>
 </resources>

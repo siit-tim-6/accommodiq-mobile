@@ -142,6 +142,7 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
             guestsTextView.setText(guests);
             pricePerNightTextView.setText(pricePerNight);
             totalPriceTextView.setText(totalPrice);
+            statusTextView.setText(accommodation.getStatus());
 
             favoriteButton.setTag(accommodation);
             favoriteButtons.add(favoriteButton);
@@ -237,7 +238,7 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationListDto>
                     editButton.setVisibility(View.GONE);
                     editAvailabilityButton.setVisibility(View.GONE);
 
-                    statusTextView.setVisibility(View.VISIBLE);
+                    statusTextView.setVisibility(View.GONE);
                     totalPriceTextView.setVisibility(View.GONE);
 
                     acceptButton.setVisibility(View.GONE);
