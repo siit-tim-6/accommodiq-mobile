@@ -2,6 +2,11 @@ package com.example.accommodiq.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,10 +32,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NotificationsListAdapter extends ArrayAdapter<NotificationDto> {
+public class NotificationsListAdapter extends ArrayAdapter<NotificationDto> implements SensorEventListener {
     private final Context context;
     private final ArrayList<NotificationDto> notifications;
     private final NotificationsClient client;
+
+    private final SensorManager sensorManager;
+    private final Sensor proximitySensor;
+    private final PowerManager.WakeLock wakeLock;
+    private boolean isHandClose = false;  // Track hand proximity state
+
 
     public NotificationsListAdapter(Context context, ArrayList<NotificationDto> notifications) {
         super(context, R.layout.fragment_notification_list, notifications);
@@ -38,6 +49,14 @@ public class NotificationsListAdapter extends ArrayAdapter<NotificationDto> {
         this.context = context;
         this.notifications = notifications;
         this.fetchNotifications();
+
+        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+
+        // Initialize wake lock
+        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, getClass().getSimpleName());
+
     }
 
     private void fetchNotifications() {
@@ -109,5 +128,60 @@ public class NotificationsListAdapter extends ArrayAdapter<NotificationDto> {
         });
         
         return binding.getRoot();
+    }
+
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
+            float distance = event.values[0];
+            if (distance >= 0 && distance < proximitySensor.getMaximumRange()) {
+                // User's hand is close to the sensor
+                if (!isHandClose) {
+                    isHandClose = true;
+                    wakeLock.acquire(10*60*1000L /*10 minutes*/);
+                    Toast.makeText(context, "Hand is close", Toast.LENGTH_SHORT).show();
+//                    seenAllNotifications();  // Call API to mark all notifications as seen
+                }
+            } else {
+                // User's hand is far from the sensor
+                if (isHandClose) {
+                    isHandClose = false;
+                    wakeLock.release();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+        // Not used
+    }
+
+    private void seenAllNotifications() {
+        Call<Void> call = client.seenAllNotifications();
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(context, "Error " + response.message(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // Handle successful response as needed
+             fetchNotifications();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+                Log.d("REZ", t.getMessage() != null ? t.getMessage() : "error");
+            }
+        });
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        sensorManager.unregisterListener(this);
     }
 }
