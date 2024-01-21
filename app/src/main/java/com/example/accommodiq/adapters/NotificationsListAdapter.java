@@ -110,4 +110,21 @@ public class NotificationsListAdapter extends ArrayAdapter<NotificationDto> {
 
         return binding.getRoot();
     }
+
+    public void seenAllNotifications() {
+        Call<Void> call = client.seenAllNotifications();
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                notifications.clear();
+                notifyDataSetChanged();
+                Toast.makeText(context, "All marked as seen", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
