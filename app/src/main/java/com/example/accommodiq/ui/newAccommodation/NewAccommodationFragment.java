@@ -1,5 +1,6 @@
 package com.example.accommodiq.ui.newAccommodation;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Address;
@@ -54,9 +55,13 @@ public class NewAccommodationFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (accommodationDetailsDto != null) {
+            getImagesUris(accommodationDetailsDto.getImages());
+        }
 
         Bundle args = getArguments();
         if (args != null) {
@@ -71,7 +76,7 @@ public class NewAccommodationFragment extends Fragment {
             }
         }).get(NewAccommodationViewModel.class);
 
-        geocoder = new Geocoder(getContext());
+        geocoder = new Geocoder(requireContext());
 
         galleryActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -127,6 +132,14 @@ public class NewAccommodationFragment extends Fragment {
                 createAndSendAccommodationData();
             }
         });
+    }
+
+    private void getImagesUris(List<String> images) {
+        List<Uri> imageUris = new ArrayList<>();
+        for (String image : images) {
+            imageUris.add(Uri.parse(image));
+        }
+        uploadedImageUris.addAll(imageUris);
     }
 
     private void populateFields() {
@@ -192,7 +205,9 @@ public class NewAccommodationFragment extends Fragment {
         newAccommodationDto.setAutomaticAcceptance(automaticAcceptance);
         newAccommodationDto.setBenefits(benefits);
         newAccommodationDto.setType(selectedApartmentType);
-
+        if (accommodationDetailsDto != null) {
+            newAccommodationDto.setId(accommodationDetailsDto.getId());
+        }
         return newAccommodationDto;
     }
 
