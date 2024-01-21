@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.ListFragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,6 +92,10 @@ public class FinancialReportFragment extends ListFragment {
 
         btnSearch.setOnClickListener(v -> {
             searchEntries(chart, totalRevenue);
+        });
+
+        accommodationReportsBtn.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.action_financialReportsFragment_to_financialReportsMonthlyFragment);
         });
     }
 

@@ -20,8 +20,18 @@
         android:name="com.example.accommodiq.fragments.financialReports.FinancialReportFragment"
         android:label="Financial Reports"
         tools:layout="@layout/fragment_financial_report">
-
+        <action
+            android:id="@+id/action_financialReportsFragment_to_financialReportsMonthlyFragment"
+            app:destination="@id/fragment_monthly_financial_reports"
+            />
     </fragment>
+
+    <fragment
+        android:id="@+id/fragment_monthly_financial_reports"
+        android:name="com.example.accommodiq.fragments.financialReports.FinancialReportMonthlyFragment"
+        android:label="Monthly Financial Reports"
+        tools:layout="@layout/fragment_financial_report_monthly"
+        />
 
     <fragment
         android:id="@+id/navigation_notifications"

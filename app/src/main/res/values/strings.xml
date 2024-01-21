@@ -132,4 +132,5 @@
     <string name="export_to_pdf">Export to PDF</string>
     <string name="accommodation_report">Accommodation Report</string>
     <string name="total_revenue">Enter a date range and search</string>
+    <string name="year_input">Enter a year</string>
 </resources>
