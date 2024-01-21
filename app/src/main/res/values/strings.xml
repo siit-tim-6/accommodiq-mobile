@@ -127,4 +127,8 @@
     <string name="prompt_accommodation_review">Accommodation Review</string>
     <string name="prompt_new_accommodation">New Accommodation</string>
     <string name="prompt_status">PENDING</string>
+    <string name="profit">45€</string>
+    <string name="reservation_count">5 reservations</string>
+    <string name="export_to_pdf">Export to PDF</string>
+    <string name="accommodation_report">Accommodation Report</string>
 </resources>

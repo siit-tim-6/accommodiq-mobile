@@ -91,7 +91,7 @@ public class ProfileFragment extends Fragment {
         buttonSignOut = view.findViewById(R.id.signOutBtn);
         buttonFinancialReports = view.findViewById(R.id.financialReportsBtn);
         buttonFinancialReports.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "KLIK", Toast.LENGTH_SHORT).show();
+            Navigation.findNavController(requireView()).navigate(R.id.action_profileFragment_to_financialReportsFragment);
         });
         buttonEditProfile.setOnClickListener(v -> {
             Navigation.findNavController(requireView()).navigate(R.id.action_profileFragment_to_authorizedProfileFragment);
